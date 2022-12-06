@@ -1,0 +1,31 @@
+<div class="btn-group h-100 w-100" dropdown>
+  <button
+    id="button-basic"
+    dropdownToggle
+    type="button"
+    class="btn btn-primary dropdown-toggle p-1"
+    aria-controls="dropdown-basic"
+  >
+    <ng-container *ngIf="activeNetwork; else noCompatibleNetwork">
+      <img src="{{ activeNetwork.asset }}" alt="" srcset="" />
+      {{ activeNetwork.name }}
+    </ng-container>
+    <ng-template #noCompatibleNetwork> No compatible </ng-template>
+
+    <span class="caret"></span>
+  </button>
+  <ul
+    id="dropdown-basic"
+    *dropdownMenu
+    class="dropdown-menu"
+    role="menu"
+    aria-labelledby="button-basic"
+  >
+    <li role="menuitem" *ngFor="let network of networksAvalaible">
+      <a class="dropdown-item" href="#"
+        ><img src="{{ network.asset }}" alt="" srcset="" />
+        {{ network.name }}</a
+      >
+    </li>
+  </ul>
+</div>

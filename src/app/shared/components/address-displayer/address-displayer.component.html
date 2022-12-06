@@ -1,0 +1,17 @@
+<div class="h-100 w-100">
+  <button
+    type="button"
+    class="btn btn-primary d-flex justify-content-center align-items-center h-100 w-100"
+  >
+    {{ truncate(address)
+    }}<span
+      class="material-icons mx-2"
+      (click)="
+        copyAddressToClipboard();
+        $event.stopPropagation();
+        $event.preventDefault()
+      "
+      >content_copy</span
+    >
+  </button>
+</div>
