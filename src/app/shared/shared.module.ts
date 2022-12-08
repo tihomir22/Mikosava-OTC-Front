@@ -9,7 +9,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ListCoinsComponent } from './components/list-coins/list-coins.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { FormsModule } from '@angular/forms';
-
+import { ModalModule } from 'ngx-bootstrap/modal';
 @NgModule({
   declarations: [
     CardComponent,
@@ -22,6 +22,7 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     CollapseModule,
     BsDropdownModule.forRoot(),
+    ModalModule.forRoot(),
     ScrollingModule,
     FormsModule,
   ],

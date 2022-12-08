@@ -9,13 +9,37 @@
       placeholder="Search name or paste coin address"
     />
   </div>
-  <cdk-virtual-scroll-viewport appendOnly itemSize="50" class="coin-viewport">
-    <div *cdkVirtualFor="let coin of filteredCoins" class="coin-item">
+  <div class="list-easy-access">
+    <div
+      class="quick-item"
+      *ngFor="let easyAccessCoin of quickAccessCoins$ | async"
+      (click)="selectCoin.emit(easyAccessCoin)"
+    >
+      <img
+        class="img-logo mx-2"
+        #refImg
+        [src]="easyAccessCoin.imageSrc$ | async"
+      />
+      <span class="coin-name">{{ easyAccessCoin.name }}</span>
+    </div>
+  </div>
+  <cdk-virtual-scroll-viewport
+    appendOnly
+    itemSize="50"
+    class="coin-viewport"
+    [ngStyle]="{ width: widthList + 'px', height: heightList + 'px' }"
+  >
+    <div
+      *cdkVirtualFor="let coin of filteredCoins"
+      class="coin-item"
+      (click)="selectCoin.emit(coin)"
+    >
       <div class="left-side">
         <img class="img-logo mx-3" #refImg [src]="coin.imageSrc$ | async" />
         <span class="coin-name">{{ coin.name }}</span>
       </div>
       <div class="right-side">
+        <span class="px-1">{{ coin.amountOfToken$ | async }}</span>
         <span class="coin-symbol text-muted">{{
           toUpperCase(coin.symbol)
         }}</span>

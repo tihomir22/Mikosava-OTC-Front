@@ -5,5 +5,6 @@ export interface CoingeckoCoin {
   symbol: string;
   name: string;
   platforms: any;
-  imageSrc$?: Observable<any>;
+  imageSrc$?: any;
+  amountOfToken$?: any;
 }

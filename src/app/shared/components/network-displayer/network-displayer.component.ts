@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { filter } from 'rxjs';
 import { State } from 'src/app/reducers';
 import { list } from 'src/app/utils/chains';
+import { ProviderService } from '../../services/provider.service';
 
 @Component({
   selector: 'app-network-displayer',
@@ -21,5 +22,9 @@ export class NetworkDisplayerComponent {
           (network) => network.chainId == data.chainIdConnect
         );
       });
+  }
+
+  public async selectNetwork(network: { chainId: number }) {
+    await ProviderService.changeNetwork(network.chainId);
   }
 }

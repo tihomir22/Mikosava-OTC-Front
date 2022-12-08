@@ -1,17 +1,8 @@
 import { isDevMode } from '@angular/core';
-import {
-  ActionReducer,
-  ActionReducerMap,
-  createFeatureSelector,
-  createReducer,
-  createSelector,
-  MetaReducer,
-  on,
-} from '@ngrx/store';
+import { ActionReducerMap, createReducer, MetaReducer, on } from '@ngrx/store';
 
 import * as AccountActions from '../actions/account.actions';
 import * as CoinsActions from '../actions/coins.actions';
-import { Web3Provider } from 'node_modules/@ethersproject/providers';
 import { CoingeckoCoin } from '../shared/models/CoinGeckoCoin';
 
 export interface Account {
@@ -22,6 +13,8 @@ export interface Account {
 export interface State {
   account: Account;
   coins: Array<CoingeckoCoin>;
+  selectCoinA: CoingeckoCoin;
+  selectCoinB: CoingeckoCoin;
 }
 
 export const reducers: ActionReducerMap<State> = {
@@ -38,6 +31,21 @@ export const reducers: ActionReducerMap<State> = {
     [] as any,
     on(CoinsActions.setAllCoins, (state, { newAllCoins }) => {
       return newAllCoins;
+    }),
+    on(CoinsActions.addNewCoinExternally, (state, { newCoin }) => {
+      return [...new Set([...state, newCoin])];
+    })
+  ),
+  selectCoinA: createReducer(
+    {} as any,
+    on(CoinsActions.selectCoinA, (state, { selectACoin }) => {
+      return { ...state, ...selectACoin };
+    })
+  ),
+  selectCoinB: createReducer(
+    {} as any,
+    on(CoinsActions.selectCoinB, (state, { selectBCoin }) => {
+      return { ...state, ...selectBCoin };
     })
   ),
 };

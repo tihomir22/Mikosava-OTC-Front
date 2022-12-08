@@ -21,7 +21,11 @@
     role="menu"
     aria-labelledby="button-basic"
   >
-    <li role="menuitem" *ngFor="let network of networksAvalaible">
+    <li
+      role="menuitem"
+      *ngFor="let network of networksAvalaible"
+      (click)="selectNetwork(network)"
+    >
       <a class="dropdown-item" href="#"
         ><img src="{{ network.asset }}" alt="" srcset="" />
         {{ network.name }}</a

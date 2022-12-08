@@ -10,8 +10,7 @@
           <input
             type="text"
             class="form-control"
-            name=""
-            id=""
+            [(ngModel)]="amountA"
             aria-describedby="helpId"
             placeholder=""
           />
@@ -19,10 +18,18 @@
             >I want to exchange my...</small
           >
         </div>
-        <div>
-          <span class="badge badge-pill badge-secondary bg-primary mx-3"
-            >Coin A</span
+        <div (click)="selectCoin('A')">
+          <span
+            class="badge badge-pill badge-secondary bg-primary mx-3 coin-pill"
           >
+            <img
+              *ngIf="!!(ACoin | async)?.name"
+              class="img-logo mx-2"
+              #refImg
+              [src]="(ACoin | async)?.imageSrc$ | async"
+            />
+            {{ (ACoin | async)?.name ?? "No Coin A Selected" }}
+          </span>
         </div>
       </div>
     </div>
@@ -35,8 +42,7 @@
           <input
             type="text"
             class="form-control"
-            name=""
-            id=""
+            [(ngModel)]="amountB"
             aria-describedby="helpId"
             placeholder=""
           />
@@ -45,15 +51,22 @@
           >
         </div>
 
-        <div>
-          <span class="badge badge-pill badge-secondary bg-primary mx-3"
-            >Coin B</span
+        <div (click)="selectCoin('B')">
+          <span
+            class="badge badge-pill badge-secondary bg-primary mx-3 coin-pill"
+          >
+            <img
+              *ngIf="!!(BCoin | async)?.name"
+              class="img-logo mx-2"
+              #refImg
+              [src]="(BCoin | async)?.imageSrc$ | async"
+            />{{ (BCoin | async)?.name ?? "No Coin B Selected" }}</span
           >
         </div>
       </div>
     </div>
     <div class="row">
-      <button type="button" class="btn btn-primary btn-lg btn-block">
+      <button type="button" class="btn btn-primary btn-lg btn-block" (click)="openTrade()">
         Create OTC trade
       </button>
     </div>
