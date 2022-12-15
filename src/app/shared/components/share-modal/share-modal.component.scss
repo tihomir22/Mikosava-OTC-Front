@@ -1,0 +1,9 @@
+@import "../../../../assets/variables.scss";
+
+.link-to-copy {
+  align-items: center;
+  background-color: $gray-background;
+  padding: 5px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}

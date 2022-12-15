@@ -1,0 +1,80 @@
+<div class="h-100 w-100 wrapper-swap">
+  <div class="card w-100 h-100">
+    <div class="card-body d-flex justify-content-center align-items-center">
+      <div class="list-group col-10">
+        <cdk-virtual-scroll-viewport
+          appendOnly
+          itemSize="60"
+          class="coin-viewport"
+          [ngStyle]="{ width: 1200 + 'px', height: 400 + 'px' }"
+        >
+          <div
+            class="list-group-item list-group-item-action row d-flex tradeItem"
+            (click)="clickedTradeItem(trade)"
+            *cdkVirtualFor="let trade of trades | async"
+          >
+            <div class="col">{{ trade.tradeId }}</div>
+            <div class="col">{{ getStatus(trade) }}</div>
+            <div class="col pairA">
+              <span>
+                {{
+                  trade.amountPositionCreator
+                    | parseFromWeiToDecimalNumber : trade.coinCreator
+                    | async
+                }}
+              </span>
+              <app-coin-img-badge
+                [src]="
+                  (trade.coinCreator | fromAddressToCg | async)?.imageSrc$ ?? ''
+                "
+                [coinLabel]="
+                  (trade.coinCreator | fromAddressToCg | async)?.name ?? ''
+                "
+                [defaultLabel]="'Loading...'"
+              ></app-coin-img-badge>
+            </div>
+            <div class="col pairB">
+              <span>
+                {{
+                  trade.amountPositionCounterpart
+                    | parseFromWeiToDecimalNumber : trade.coinCounterpart
+                    | async
+                }}
+              </span>
+              <app-coin-img-badge
+                [src]="
+                  (trade.coinCounterpart | fromAddressToCg | async)
+                    ?.imageSrc$ ?? ''
+                "
+                [coinLabel]="
+                  (trade.coinCounterpart | fromAddressToCg | async)?.name ?? ''
+                "
+                [defaultLabel]="'Loading...'"
+              ></app-coin-img-badge>
+            </div>
+            <div class="col">
+              {{ +trade.validUntil / 1000 | date : "short" }}
+            </div>
+            <div class="col actions">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="openShareModal(trade)"
+              >
+                <i-bs [name]="iconNames.ShareFill"></i-bs>
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                [disabled]="trade.cancelled"
+                (click)="cancelTrade(trade)"
+              >
+                <i-bs [name]="iconNames.XCircleFill"></i-bs>
+              </button>
+            </div>
+          </div>
+        </cdk-virtual-scroll-viewport>
+      </div>
+    </div>
+  </div>
+</div>

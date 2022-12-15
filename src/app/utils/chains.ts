@@ -1,7 +1,10 @@
+import { environment } from 'src/environments/environment';
+
 export const list = [
   {
     chainId: 80001,
     name: 'Mumbai Testnet',
+    interal_name_id: 'matic-testnet',
     testnet: true,
     asset: '/assets/icons/matic.png',
     platformName: 'polygon-pos',
@@ -24,6 +27,17 @@ export const list = [
 
 export const getNetwork = (networkId: number) => {
   return list.find((network) => network.chainId == networkId);
+};
+
+export const getFeeForInternalPlatformId = (internalPlatformId: string) => {
+  let found = list.find((entry) => entry.interal_name_id == internalPlatformId);
+  if (found) {
+    //Matic
+    if (found.interal_name_id == 'matic-testnet') {
+      return environment.MATIC_FEE;
+    }
+  }
+  return -1;
 };
 
 //TEST MUMBAI TESTNET COIN 0x111111111117dc0aa78b770fa6a738034120c302

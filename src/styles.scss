@@ -2,6 +2,8 @@
 @import "material-icons/iconfont/material-icons.css";
 @import "/node_modules/bootstrap/dist/css/bootstrap.min.css";
 @import "ngx-toastr/toastr";
+@import "../src/assets/variables.scss";
+@import "/node_modules/ngx-bootstrap/datepicker/bs-datepicker.scss";
 
 .material-icons {
   font-size: 16px !important;
@@ -15,6 +17,14 @@
     height: 40px !important;
   }
 }
-.modal-content{
+.modal-content {
   width: fit-content !important;
+}
+
+.wrapper-swap {
+  flex-direction: column;
+}
+
+.otc-card {
+  width: 600px;
 }

@@ -1,3 +1,31 @@
-.wrapper-swap {
-  flex-direction: column;
+.availableUntil {
+  display: flex;
+  align-items: center;
+  .checkbox-wrapper {
+    flex-grow: 1;
+    .custom-checkbox {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      input {
+        margin-top: 4px;
+      }
+    }
+  }
+
+  .badge-wrapper {
+    flex-grow: 2;
+    display: flex;
+    justify-content: end;
+    .badge {
+      margin: 0px 5px;
+      cursor: pointer;
+    }
+  }
+}
+
+.coin-pill {
+  img {
+    max-width: 32px;
+  }
 }

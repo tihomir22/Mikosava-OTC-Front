@@ -23,11 +23,15 @@ export class AppComponent {
       let signer = await data.getSigner();
       let address = await signer.getAddress();
       let chainId = await signer.getChainId();
+      data.on('accountsChanged', (accounts: Array<string>) => {
+        console.log(accounts);
+      });
       data.on('network', (newNetwork, oldNetwork) => {
         this.store.dispatch(
           AccountActions.setNewNetwork({ networkId: newNetwork.chainId })
         );
       });
+
       let account: Account = {
         address: address,
         chainIdConnect: chainId,

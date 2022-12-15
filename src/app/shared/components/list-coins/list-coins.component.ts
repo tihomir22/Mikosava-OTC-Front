@@ -32,6 +32,7 @@ import { CoingeckoCoin } from '../../models/CoinGeckoCoin';
 import erc20Object from '../../../../assets/ERC20.json';
 import { ProviderService } from '../../services/provider.service';
 import * as CoinsActions from '../../../actions/coins.actions';
+import { CoinsService } from '../../services/coins.service';
 
 @Component({
   selector: 'app-list-coins',
@@ -51,41 +52,16 @@ export class ListCoinsComponent {
   @Input() heightList: number = 200;
   @Output() selectCoin = new EventEmitter<CoingeckoCoin>();
 
-  constructor(private store: Store<State>, private http: HttpClient) {
-    combineLatest([
-      this.store.select((data) => data.coins),
-      this.store.select((data) => data.account),
-    ])
-      .pipe(
-        filter(([coins, account]) => {
-          return !!account && Object.values(account).length > 0;
-        }),
-        map(([coins, account]) =>
-          coins
-            .filter((coin) => {
-              let foundActiveNetwork = getNetwork(account.chainIdConnect);
-              return foundActiveNetwork
-                ? Object.keys(coin.platforms).includes(
-                    foundActiveNetwork.platformName
-                  )
-                : false;
-            })
-            .map((coin) => {
-              let coinCloned = { ...coin };
-              let foundActiveNetwork = getNetwork(account.chainIdConnect);
-              coinCloned.imageSrc$ = this.getImage(coin.id);
-              coinCloned.amountOfToken$ = this.getAmountOfToken(
-                coin.platforms[foundActiveNetwork!.platformName]
-              );
-              return coinCloned;
-            })
-        )
-      )
-      .subscribe((data) => {
-        this.originalCoins = data;
-        this.filteredCoins = [...this.originalCoins];
-        this.searchValue = '';
-      });
+  constructor(
+    private store: Store<State>,
+    private http: HttpClient,
+    private coins: CoinsService
+  ) {
+    this.coins.getAllCoinsForCurrentNetwork().subscribe((data) => {
+      this.originalCoins = data;
+      this.filteredCoins = [...this.originalCoins];
+      this.searchValue = '';
+    });
   }
 
   ngOnInit(): void {}
@@ -108,26 +84,6 @@ export class ListCoinsComponent {
           return activeCoins;
         })
       );
-  }
-
-  public getAmountOfToken(tokenAddress: string) {
-    return from(ProviderService.getWebProvider(false)).pipe(
-      switchMap((provider) => {
-        return of([
-          provider,
-          new ethers.Contract(tokenAddress, erc20Object.abi, provider),
-        ]);
-      }),
-      switchMap(([provider, contract]) => {
-        return from(
-          (contract as any)['balanceOf'](provider.getSigner().getAddress())
-        ).pipe(map((value: any) => value.toNumber()));
-      }),
-      catchError((err) => {
-        return of(0);
-      }),
-      tap((entry) => console.log('Executed'))
-    );
   }
 
   public async searchChanged(event: string) {
@@ -163,6 +119,7 @@ export class ListCoinsComponent {
                 let coin: CoingeckoCoin = {
                   id: symbol.toLowerCase(),
                   symbol: symbol,
+                  decimals,
                   name: name,
                   platforms: { [foundActiveNetwork!.platformName]: event },
                   amountOfToken$: balanceOf,
@@ -182,19 +139,5 @@ export class ListCoinsComponent {
           coin.symbol.toLowerCase().includes(event.toLowerCase())
       );
     }
-  }
-
-  public getImage(coinId: string) {
-    return this.http
-      .get(
-        `https://api.coingecko.com/api/v3/coins/${coinId}?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false&sparkline=false`
-      )
-      .pipe(
-        catchError((err) => {
-          return of({ image: { small: '/assets/icons/question-mark.png' } });
-        }),
-        map((res: any) => res['image']['small']),
-        tap((entry) => console.log('Executed ', entry))
-      );
   }
 }

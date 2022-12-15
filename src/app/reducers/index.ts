@@ -1,3 +1,4 @@
+import { state } from '@angular/animations';
 import { isDevMode } from '@angular/core';
 import { ActionReducerMap, createReducer, MetaReducer, on } from '@ngrx/store';
 
@@ -37,14 +38,20 @@ export const reducers: ActionReducerMap<State> = {
     })
   ),
   selectCoinA: createReducer(
-    {} as any,
+    null as any,
     on(CoinsActions.selectCoinA, (state, { selectACoin }) => {
+      if (!selectACoin) {
+        return null;
+      }
       return { ...state, ...selectACoin };
     })
   ),
   selectCoinB: createReducer(
-    {} as any,
+    null as any,
     on(CoinsActions.selectCoinB, (state, { selectBCoin }) => {
+      if (!selectBCoin) {
+        return null;
+      }
       return { ...state, ...selectBCoin };
     })
   ),

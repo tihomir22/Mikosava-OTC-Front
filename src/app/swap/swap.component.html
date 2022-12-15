@@ -1,6 +1,160 @@
 <div
   class="h-100 w-100 d-flex justify-content-center align-items-center wrapper-swap"
 >
-  <app-card></app-card>
-  <!-- <app-list-coins></app-list-coins> -->
+  <div class="card otc-card" [formGroup]="formGroup">
+    <div class="card-body">
+      <h4 class="card-title">Create OTC trade</h4>
+      <div class="row my-2">
+        <div
+          class="col-12 w-100 d-flex justify-content-center align-items-center"
+        >
+          <div class="form-group w-100">
+            <label for=""></label>
+            <input
+              type="text"
+              formControlName="acoin"
+              class="form-control"
+              aria-describedby="helpId"
+              placeholder=""
+            />
+            <small id="helpId" class="form-text text-muted"
+              >I want to exchange my...</small
+            >
+          </div>
+          <div (click)="selectCoin('A')">
+            <app-coin-img-badge
+              [src]="((ACoin | async)?.imageSrc$ | async) ?? ''"
+              [coinLabel]="(ACoin | async)?.name ?? ''"
+              [defaultLabel]="'No Coin A Selected'"
+            ></app-coin-img-badge>
+          </div>
+        </div>
+      </div>
+      <div class="row my-2">
+        <div
+          class="col-12 w-100 d-flex justify-content-center align-items-center"
+        >
+          <div class="form-group w-100">
+            <label for=""></label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="bcoin"
+              aria-describedby="helpId"
+              placeholder=""
+            />
+            <small id="helpId" class="form-text text-muted"
+              >For the following coin</small
+            >
+          </div>
+
+          <div (click)="selectCoin('B')">
+            <app-coin-img-badge
+              [src]="((BCoin | async)?.imageSrc$ | async) ?? ''"
+              [coinLabel]="(BCoin | async)?.name ?? ''"
+              [defaultLabel]="'No Coin B Selected'"
+            ></app-coin-img-badge>
+          </div>
+        </div>
+      </div>
+      <div class="row availableUntil">
+        <div class="col checkbox-wrapper">
+          <label class="custom-control custom-checkbox py-2">
+            <input
+              type="checkbox"
+              value="checkedValue"
+              class="custom-control-input"
+              formControlName="availableUntil"
+            />
+            <span
+              class="custom-control-indicator mx-2"
+              tooltip="You can define the availability of the trade until a specific time."
+              ><i-bs [name]="iconNames.QuestionCircle"></i-bs
+            ></span>
+            <span class="custom-control-description">Available until:</span>
+          </label>
+        </div>
+
+        <div class="col badge-wrapper" *ngIf="!!formGroup.value.availableUntil">
+          <span
+            class="badge badge-pill badge-primary bg-primary"
+            [ngClass]="{
+              'bg-secondary': formGroup.value.selectAvailableUntil == '15'
+            }"
+            (click)="onClickChipTimeFrameAvailableUntil(15)"
+            >15 Min</span
+          >
+          <span
+            class="badge badge-pill badge-primary bg-primary"
+            [ngClass]="{
+              'bg-secondary': formGroup.value.selectAvailableUntil == '30'
+            }"
+            (click)="onClickChipTimeFrameAvailableUntil(30)"
+            >30 Min</span
+          >
+          <span
+            class="badge badge-pill badge-primary bg-primary"
+            [ngClass]="{
+              'bg-secondary': formGroup.value.selectAvailableUntil == '60'
+            }"
+            (click)="onClickChipTimeFrameAvailableUntil(60)"
+            >1h</span
+          >
+          <span
+            class="badge badge-pill badge-primary bg-primary"
+            [ngClass]="{
+              'bg-secondary': formGroup.value.selectAvailableUntil == '1440'
+            }"
+            (click)="onClickChipTimeFrameAvailableUntil(1440)"
+            >24h</span
+          >
+          <span
+            class="badge badge-pill badge-primary bg-primary"
+            [ngClass]="{
+              'bg-secondary': formGroup.value.selectAvailableUntil == 'custom'
+            }"
+            bsDatepicker
+            [(bsValue)]="formGroup.value.selectCustomAvalaible"
+            [bsConfig]="{ adaptivePosition: true }"
+            (click)="onClickChipTimeFrameAvailableUntil(-1)"
+            >Custom</span
+          >
+        </div>
+      </div>
+      <div
+        class="row availableUntilDetails"
+        *ngIf="returnAvailableDetails() != ''"
+      >
+        <div class="col">
+          {{ returnAvailableDetails() }}
+        </div>
+      </div>
+      <div class="row">
+        <button
+          *ngIf="allowance >= amountCoinAParsed"
+          type="button"
+          class="btn btn-primary btn-lg btn-block"
+          (click)="openTrade()"
+          [disabled]="
+            !formGroup.valid ||
+            !(ACoin | async) ||
+            !(BCoin | async) ||
+            (!!formGroup.get('availableUntil') &&
+              !formGroup.get('selectAvailableUntil'))
+          "
+        >
+          Create OTC trade
+        </button>
+
+        <button
+          type="button"
+          *ngIf="allowance < amountCoinAParsed"
+          class="btn btn-secondary btn-lg btn-block"
+          (click)="approve()"
+        >
+          Approve
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

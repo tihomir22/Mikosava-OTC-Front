@@ -1,0 +1,22 @@
+<div class="wrapper p-5">
+  <div class="row">
+    <div class="col" *ngIf="url">
+      <qrcode
+        [qrdata]="url"
+        [width]="256"
+        [errorCorrectionLevel]="'M'"
+      ></qrcode>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div
+        class="link-to-copy d-flex justify-content-between"
+        (click)="copyAddressToClipboard()"
+      >
+        <span>{{ url }}</span>
+        <span class="material-icons mx-2">content_copy</span>
+      </div>
+    </div>
+  </div>
+</div>

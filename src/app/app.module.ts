@@ -14,9 +14,10 @@ import { ToastrModule } from 'ngx-toastr';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { HttpClientModule } from '@angular/common/http';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-
+import { UserListComponent } from './user-list/user-list.component';
+import { NgxBootstrapIconsModule, allIcons } from 'ngx-bootstrap-icons';
 @NgModule({
-  declarations: [AppComponent, SwapComponent],
+  declarations: [AppComponent, SwapComponent, UserListComponent],
   imports: [
     ScrollingModule,
     BrowserModule,
@@ -24,6 +25,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     BrowserAnimationsModule,
     AppRoutingModule,
     SharedModule,
+    NgxBootstrapIconsModule.pick(allIcons),
     StoreModule.forRoot(reducers, {
       metaReducers,
     }),
