@@ -36,8 +36,8 @@ export class SwapComponent {
   );
 
   public formGroup: FormGroup = this.fb.group({
-    acoin: [null, [Validators.required, Validators.min(0)]],
-    bcoin: [null, [Validators.required, Validators.min(0)]],
+    acoin: [0, [Validators.required, Validators.min(0)]],
+    bcoin: [0, [Validators.required, Validators.min(0)]],
     availableUntil: [false, []],
     selectAvailableUntil: [null, []],
     selectCustomAvalaible: [null, []],

@@ -1,6 +1,7 @@
 import { state } from '@angular/animations';
 import { isDevMode } from '@angular/core';
 import { ActionReducerMap, createReducer, MetaReducer, on } from '@ngrx/store';
+import { BigNumber } from 'ethers';
 
 import * as AccountActions from '../actions/account.actions';
 import * as CoinsActions from '../actions/coins.actions';
@@ -9,6 +10,7 @@ import { CoingeckoCoin } from '../shared/models/CoinGeckoCoin';
 export interface Account {
   address: string;
   chainIdConnect: number;
+  balance: BigInt;
 }
 
 export interface State {

@@ -22,6 +22,8 @@
     "@metamask/detect-provider": "^1.2.0",
     "@ngrx/store": "^15.0.0",
     "@ngrx/store-devtools": "^15.0.0",
+    "@ngx-translate/core": "^14.0.0",
+    "@ngx-translate/http-loader": "^7.0.0",
     "@popperjs/core": "^2.11.6",
     "@schematics/angular": "^15.0.2",
     "angularx-qrcode": "^15.0.0",

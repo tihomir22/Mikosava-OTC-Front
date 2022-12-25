@@ -19,6 +19,7 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -44,6 +45,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     QRCodeModule,
     TooltipModule,
     DatePipe,
+    TranslateModule,
+
     NgxBootstrapIconsModule.pick(allIcons),
   ],
   exports: [
@@ -56,9 +59,11 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     CoinImgBadgeComponent,
     FromAddressToCgPipe,
     TooltipModule,
+    ShareModalComponent,
     PopoverModule,
     DatePipe,
     ParseFromWeiToDecimalNumberPipe,
   ],
+  providers: [ParseFromWeiToDecimalNumberPipe],
 })
 export class SharedModule {}

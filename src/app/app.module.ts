@@ -12,12 +12,24 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { ToastrModule } from 'ngx-toastr';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { UserListComponent } from './user-list/user-list.component';
 import { NgxBootstrapIconsModule, allIcons } from 'ngx-bootstrap-icons';
+import { CloseTradeComponent } from './close-trade/close-trade.component';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
 @NgModule({
-  declarations: [AppComponent, SwapComponent, UserListComponent],
+  declarations: [
+    AppComponent,
+    SwapComponent,
+    UserListComponent,
+    CloseTradeComponent,
+  ],
   imports: [
     ScrollingModule,
     BrowserModule,
@@ -25,6 +37,14 @@ import { NgxBootstrapIconsModule, allIcons } from 'ngx-bootstrap-icons';
     BrowserAnimationsModule,
     AppRoutingModule,
     SharedModule,
+    TranslateModule.forRoot({
+      defaultLanguage:'en',
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
     NgxBootstrapIconsModule.pick(allIcons),
     StoreModule.forRoot(reducers, {
       metaReducers,

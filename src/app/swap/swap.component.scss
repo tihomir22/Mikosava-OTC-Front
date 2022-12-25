@@ -1,3 +1,5 @@
+@import '../../assets/variables.scss';
+
 .availableUntil {
   display: flex;
   align-items: center;
@@ -24,6 +26,10 @@
   }
 }
 
+.coin-selector-wrapper {
+  padding: 10px;
+  background-color: $ternary;
+}
 .coin-pill {
   img {
     max-width: 32px;

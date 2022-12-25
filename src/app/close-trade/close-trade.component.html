@@ -1,0 +1,82 @@
+<div class="h-100 w-100 wrap" *ngIf="viewedTrade">
+  <div class="row d-flex justify-content-center">
+    <div class="col-6">
+      <app-share-modal [trade]="viewedTrade" [url]="getURL()"></app-share-modal>
+    </div>
+  </div>
+  <div class="row close-trade">
+    <div class="card col-3">
+      <app-coin-img-badge
+        [src]="
+          (viewedTrade.coinCreator | fromAddressToCg | async)?.imageSrc$ ?? ''
+        "
+        [coinLabel]="
+          (viewedTrade.coinCreator | fromAddressToCg | async)?.name ?? ''
+        "
+        [defaultLabel]="'Loading...'"
+      ></app-coin-img-badge>
+      <p>
+        {{
+          viewedTrade.amountPositionCreator
+            | parseFromWeiToDecimalNumber : viewedTrade.coinCreator
+            | async
+        }}
+      </p>
+    </div>
+
+    <div class="col-2 swap-symbol text-center">X</div>
+
+    <div class="card col-3">
+      <app-coin-img-badge
+        [src]="
+          (viewedTrade.coinCounterpart | fromAddressToCg | async)?.imageSrc$ ??
+          ''
+        "
+        [coinLabel]="
+          (viewedTrade.coinCounterpart | fromAddressToCg | async)?.name ?? ''
+        "
+        [defaultLabel]="'Loading...'"
+      ></app-coin-img-badge>
+      <p>
+        {{
+          viewedTrade.amountPositionCounterpart
+            | parseFromWeiToDecimalNumber : viewedTrade.coinCounterpart
+            | async
+        }}
+      </p>
+    </div>
+  </div>
+
+  <div class="row stats py-4">
+    <div class="card col-4" *ngIf="!!(getAccount | async)">
+      {{ +viewedTrade.validUntil / 1000 | date : "short" }}
+      <button
+        type="button"
+        class="btn btn-primary btn-lg btn-block"
+        *ngIf="
+          (getAccount | async)?.address != viewedTrade.creator &&
+          allowance >= viewedTrade.amountPositionCounterpart
+        "
+        (click)="exchange()"
+      >
+        Exchange
+      </button>
+      <button
+        type="button"
+        *ngIf="allowance < viewedTrade.amountPositionCounterpart"
+        class="btn btn-secondary btn-lg btn-block"
+        (click)="approve()"
+      >
+        Approve
+      </button>
+      <button
+        type="button"
+        *ngIf="(getAccount | async)?.address == viewedTrade.creator"
+        class="btn btn-danger btn-lg btn-block"
+        (click)="cancell()"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>

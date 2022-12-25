@@ -3,13 +3,11 @@
 >
   <div class="card otc-card" [formGroup]="formGroup">
     <div class="card-body">
-      <h4 class="card-title">Create OTC trade</h4>
       <div class="row my-2">
         <div
-          class="col-12 w-100 d-flex justify-content-center align-items-center"
+          class="col-12 w-100 d-flex justify-content-center align-items-center coin-selector-wrapper"
         >
           <div class="form-group w-100">
-            <label for=""></label>
             <input
               type="text"
               formControlName="acoin"
@@ -17,9 +15,6 @@
               aria-describedby="helpId"
               placeholder=""
             />
-            <small id="helpId" class="form-text text-muted"
-              >I want to exchange my...</small
-            >
           </div>
           <div (click)="selectCoin('A')">
             <app-coin-img-badge
@@ -32,10 +27,9 @@
       </div>
       <div class="row my-2">
         <div
-          class="col-12 w-100 d-flex justify-content-center align-items-center"
+          class="col-12 w-100 d-flex justify-content-center align-items-center coin-selector-wrapper"
         >
           <div class="form-group w-100">
-            <label for=""></label>
             <input
               type="text"
               class="form-control"
@@ -43,9 +37,6 @@
               aria-describedby="helpId"
               placeholder=""
             />
-            <small id="helpId" class="form-text text-muted"
-              >For the following coin</small
-            >
           </div>
 
           <div (click)="selectCoin('B')">

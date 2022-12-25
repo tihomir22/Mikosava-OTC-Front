@@ -68,7 +68,7 @@ export class UserListComponent {
     });
     bsModalRef.content!.trade = trade;
     bsModalRef.content!.url =
-      window.location.origin + '/otcTrade/' + trade.tradeId;
+      window.location.origin + '/trade/' + trade.tradeId;
   }
 
   public async cancelTrade(trade: MikosavaTrade) {

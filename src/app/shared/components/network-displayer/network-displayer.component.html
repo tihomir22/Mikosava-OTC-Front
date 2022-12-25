@@ -3,21 +3,25 @@
     id="button-basic"
     dropdownToggle
     type="button"
-    class="btn btn-primary dropdown-toggle p-1"
+    [ngClass]="{ 'text-primary': !!activeNetwork, 'text-danger': !activeNetwork }"
+    class="btn dropdown-toggle p-1 d-flex justify-content-between align-items-center"
     aria-controls="dropdown-basic"
   >
     <ng-container *ngIf="activeNetwork; else noCompatibleNetwork">
       <img src="{{ activeNetwork.asset }}" alt="" srcset="" />
-      {{ activeNetwork.name }}
+      <span>{{ activeNetwork.name }}</span>
     </ng-container>
-    <ng-template #noCompatibleNetwork> No compatible </ng-template>
+    <ng-template #noCompatibleNetwork>
+      <i-bs [name]="iconNames.ExclamationDiamond"></i-bs
+      ><span>{{ "ACCOUNT.NO_COMPATIBLE_NETWORK" | translate }}</span>
+    </ng-template>
 
     <span class="caret"></span>
   </button>
   <ul
     id="dropdown-basic"
     *dropdownMenu
-    class="dropdown-menu"
+    class="dropdown-menu w-100"
     role="menu"
     aria-labelledby="button-basic"
   >

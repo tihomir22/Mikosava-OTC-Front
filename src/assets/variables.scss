@@ -1,1 +1,19 @@
 $gray-background: rgb(213, 213, 213);
+
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+
+$primary: #30397e;
+$secondary: #9aaafe;
+$ternary: #b4bade;
+$quaternary: #eef0fe;
+$fivernary: #fdfdfe;
+$large-text: 25px;
+
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "danger": $danger,
+);
+
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";

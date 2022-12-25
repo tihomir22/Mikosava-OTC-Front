@@ -1,0 +1,14 @@
+.wrap {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  .close-trade {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .stats {
+    display: flex;
+    justify-content: center;
+  }
+}

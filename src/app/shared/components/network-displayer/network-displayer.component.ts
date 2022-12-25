@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { IconNamesEnum } from 'ngx-bootstrap-icons';
 import { filter } from 'rxjs';
 import { State } from 'src/app/reducers';
 import { list } from 'src/app/utils/chains';
@@ -13,6 +14,9 @@ import { ProviderService } from '../../services/provider.service';
 export class NetworkDisplayerComponent {
   public networksAvalaible = list;
   public activeNetwork = null as any;
+  public iconNames = IconNamesEnum;
+
+
   constructor(private store: Store<State>) {
     this.store
       .select((action: State) => action.account)
