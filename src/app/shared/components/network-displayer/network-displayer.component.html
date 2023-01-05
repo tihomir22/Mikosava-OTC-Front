@@ -3,7 +3,10 @@
     id="button-basic"
     dropdownToggle
     type="button"
-    [ngClass]="{ 'text-primary': !!activeNetwork, 'text-danger': !activeNetwork }"
+    [ngClass]="{
+      'text-primary': !!activeNetwork,
+      'text-danger': !activeNetwork
+    }"
     class="btn dropdown-toggle p-1 d-flex justify-content-between align-items-center"
     aria-controls="dropdown-basic"
   >
@@ -30,9 +33,9 @@
       *ngFor="let network of networksAvalaible"
       (click)="selectNetwork(network)"
     >
-      <a class="dropdown-item" href="#"
+      <div class="dropdown-item"
         ><img src="{{ network.asset }}" alt="" srcset="" />
-        {{ network.name }}</a
+        {{ network.name }}</div
       >
     </li>
   </ul>

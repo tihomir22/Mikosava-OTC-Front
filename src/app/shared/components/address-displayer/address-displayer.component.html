@@ -1,9 +1,6 @@
-<div class="h-100 w-100">
-  <button
-    type="button"
-    class="btn btn-primary d-flex justify-content-center align-items-center h-100 w-100"
-  >
-    {{ truncate(address)
+<ng-template #bodyAddressDisplayer let-addressParam>
+  <div class="raw-container">
+    {{ truncate(addressParam)
     }}<span
       class="material-icons mx-2"
       (click)="
@@ -13,5 +10,26 @@
       "
       >content_copy</span
     >
-  </button>
+  </div>
+</ng-template>
+
+<div class="h-100 w-100">
+  <ng-container *ngIf="isButton; else nonButton">
+    <button
+      type="button"
+      class="btn btn-primary d-flex justify-content-center align-items-center h-100 w-100"
+    >
+      <ng-container
+        *ngTemplateOutlet="
+          bodyAddressDisplayer;
+          context: { $implicit: address }
+        "
+      ></ng-container>
+    </button>
+  </ng-container>
+  <ng-template #nonButton>
+    <ng-container
+      *ngTemplateOutlet="bodyAddressDisplayer; context: { $implicit: address }"
+    ></ng-container>
+  </ng-template>
 </div>

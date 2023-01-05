@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { Store } from '@ngrx/store';
 import { ethers } from 'ethers';
-import { firstValueFrom } from 'rxjs';
+import { filter, firstValueFrom } from 'rxjs';
 import { State } from 'src/app/reducers';
 import { getNetwork, list } from 'src/app/utils/chains';
 
@@ -48,10 +48,27 @@ export class ProviderService {
   public async getTools() {
     const provider = await ProviderService.getWebProvider(false);
     const signer = await provider.getSigner();
-    const account = await firstValueFrom(
-      this.store.select((store) => store.account)
-    );
+    const account = await this.getAccount();
     let foundActiveNetwork = getNetwork(account.chainIdConnect);
     return [provider, signer, account, foundActiveNetwork as any];
+  }
+
+  public async getAccount() {
+    const account = await firstValueFrom(this.getAccountStream());
+    return account;
+  }
+
+  public async getSigner() {
+    const provider = await ProviderService.getWebProvider(false);
+    const signer = await provider.getSigner();
+    return signer;
+  }
+
+  public getAccountStream() {
+    return this.store
+      .select((store) => store.account)
+      .pipe(
+        filter((account) => !!account && Object.values(account).length > 0)
+      );
   }
 }

@@ -1,5 +1,20 @@
 {
   "ACCOUNT": {
     "NO_COMPATIBLE_NETWORK": "No compatible network"
+  },
+  "COINS": {
+    "NO_COIN_SELECTED": "No coin selected"
+  },
+  "TRADE": {
+    "WILL_BE_VALID_UNTIL": "Trade will be valid until: ",
+    "OPEN_TRADE": "Open trade",
+    "OPEN_NEW_TRADE": "Open new trade",
+    "AVAILABLE_TIME": "Activate timer",
+    "MY_TRADES": "My trades",
+    "TRADING_POSITION": "Trading position",
+    "TRADING_POSITION_GO_BACK": "Go back",
+    "NOT_FOUND_TRADES_SUBTITLE": "It's damm empty",
+    "NOT_FOUND_TRADES": "Looks like you did not trade yet. Start, it's easy! :)",
+    "TOOLTIP_AVAILABILITY": "You can define the availability of the trade until a specific time."
   }
 }

@@ -1,0 +1,23 @@
+<div class="status-displayer d-flex">
+  <i-bs
+    *ngIf="getStatus(trade) == 'Sold'"
+    class="text-success"
+    [name]="iconNames.Check2All"
+  ></i-bs>
+  <i-bs
+    *ngIf="getStatus(trade) == 'Cancelled'"
+    class="text-danger"
+    [name]="iconNames.XLg"
+  ></i-bs>
+  <i-bs
+    *ngIf="getStatus(trade) == 'Open'"
+    class="text-warning"
+    [name]="iconNames.Check2"
+  ></i-bs>
+  <i-bs
+    *ngIf="getStatus(trade) == 'Expired'"
+    class="text-primary"
+    [name]="iconNames.HourglassBottom"
+  ></i-bs>
+  <span class="mx-1 text-status">{{ getStatus(trade) }}</span>
+</div>

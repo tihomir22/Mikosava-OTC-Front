@@ -9,6 +9,7 @@ import {
   Observable,
   of,
   switchMap,
+  tap,
 } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { State } from '../reducers';
@@ -20,6 +21,7 @@ import { IconNamesEnum } from 'ngx-bootstrap-icons';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ShareModalComponent } from '../shared/components/share-modal/share-modal.component';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-list',
@@ -27,20 +29,39 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./user-list.component.scss'],
 })
 export class UserListComponent {
-  public trades: Observable<Array<MikosavaTrade>> = from(this.loadMyTrades());
+  public trades: Observable<Array<MikosavaTrade>> = from(
+    this.loadMyTrades()
+  ).pipe(
+    tap((trades) => {
+      this.tradesLoaded = true;
+      console.log(trades);
+      of(trades);
+    })
+  );
   public iconNames = IconNamesEnum;
+  public tradesLoaded = false;
 
   constructor(
     private store: Store<State>,
     private coins: CoinsService,
     private provider: ProviderService,
     private modalService: BsModalService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
+    this.provider.getAccountStream().subscribe((data) => {
+      this.tradesLoaded = false;
+      this.trades = from(this.loadMyTrades()).pipe(
+        tap((trades) => {
+          this.tradesLoaded = true;
+          console.log(trades);
+        })
+      );
+    });
   }
 
   public async loadMyTrades() {
@@ -52,14 +73,6 @@ export class UserListComponent {
       signer
     );
     return otcContract['fetchMyCoinTrades']();
-  }
-  public getStatus(trade: MikosavaTrade) {
-    if (trade.cancelled) {
-      return 'Cancelled';
-    } else if (trade.sold) {
-      return 'Sold';
-    }
-    return 'Open';
   }
 
   public openShareModal(trade: MikosavaTrade) {
@@ -93,7 +106,11 @@ export class UserListComponent {
     }
   }
 
-  public clickedTradeItem(trade:MikosavaTrade){
+  public clickedTradeItem(trade: MikosavaTrade) {
+    this.router.navigate(['/trade/' + trade.tradeId]);
+  }
 
+  public redirectToTrade() {
+    this.router.navigate(['/swap']);
   }
 }

@@ -1,4 +1,4 @@
-@import '../../assets/variables.scss';
+@import "../../assets/variables.scss";
 
 .availableUntil {
   display: flex;
@@ -28,10 +28,27 @@
 
 .coin-selector-wrapper {
   padding: 10px;
-  background-color: $ternary;
+  border-radius: 5px;
+  background-color: lighten($ternary, 10%);
 }
+
+.text-valid-until {
+  font-weight: bold;
+}
+
 .coin-pill {
   img {
     max-width: 32px;
+  }
+}
+
+.wrapper-coin-quantity {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  flex-direction: column;
+  .quantity {
+    margin-top: -5px;
+    margin-right: 5px;
   }
 }

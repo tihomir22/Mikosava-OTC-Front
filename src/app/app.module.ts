@@ -19,6 +19,9 @@ import { NgxBootstrapIconsModule, allIcons } from 'ngx-bootstrap-icons';
 import { CloseTradeComponent } from './close-trade/close-trade.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { LandingComponent } from './landing/landing.component';
+import { EffectsModule } from '@ngrx/effects';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -29,6 +32,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SwapComponent,
     UserListComponent,
     CloseTradeComponent,
+    LandingComponent,
   ],
   imports: [
     ScrollingModule,
@@ -38,7 +42,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     SharedModule,
     TranslateModule.forRoot({
-      defaultLanguage:'en',
+      defaultLanguage: 'en',
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
@@ -54,7 +58,9 @@ export function HttpLoaderFactory(http: HttpClient) {
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
     ToastrModule.forRoot({ positionClass: 'toast-bottom-center' }),
+    NgxSkeletonLoaderModule.forRoot({ animation: 'pulse' }),
     BsDropdownModule.forRoot(),
+    EffectsModule.forRoot([]),
   ],
   providers: [],
   bootstrap: [AppComponent],

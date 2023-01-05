@@ -1,14 +1,42 @@
+@import "../../assets/variables.scss";
+
 .wrap {
   display: flex;
   justify-content: center;
-  flex-direction: column;
+  align-items: center;
+
+  .go-back {
+    cursor: pointer;
+  }
+  .close-trade-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    .id-trade {
+      color: $primary;
+      font-size: $large-text;
+    }
+    .status-visualizer {
+      font-size: $small-text;
+    }
+  }
   .close-trade {
     display: flex;
     justify-content: space-around;
     align-items: center;
   }
-  .stats {
+  .action-buttons {
+    width: 100%;
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    button {
+      width: 100%;
+    }
+  }
+  .main-card{
+    width: 350px;
   }
 }

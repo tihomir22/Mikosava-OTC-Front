@@ -20,6 +20,11 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { StatusDisplayerComponent } from './components/status-displayer/status-displayer.component';
+import { ValidUntilProgressbarComponent } from './components/valid-until-progressbar/valid-until-progressbar.component';
+import { SortPipe } from './pipes/sort.pipe';
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -30,6 +35,10 @@ import { TranslateModule } from '@ngx-translate/core';
     FromAddressToCgPipe,
     ParseFromWeiToDecimalNumberPipe,
     ShareModalComponent,
+    NotFoundComponent,
+    StatusDisplayerComponent,
+    ValidUntilProgressbarComponent,
+    SortPipe,
   ],
   imports: [
     CommonModule,
@@ -46,7 +55,7 @@ import { TranslateModule } from '@ngx-translate/core';
     TooltipModule,
     DatePipe,
     TranslateModule,
-
+    NgxSkeletonLoaderModule,
     NgxBootstrapIconsModule.pick(allIcons),
   ],
   exports: [
@@ -62,7 +71,10 @@ import { TranslateModule } from '@ngx-translate/core';
     ShareModalComponent,
     PopoverModule,
     DatePipe,
+    NotFoundComponent,
     ParseFromWeiToDecimalNumberPipe,
+    StatusDisplayerComponent,
+    ValidUntilProgressbarComponent,
   ],
   providers: [ParseFromWeiToDecimalNumberPipe],
 })

@@ -43,11 +43,11 @@
           <a class="nav-link" href="#">Documentation</a>
         </li>
       </ul>
-      <div class="actions d-flex justify-content-end align-items-center">
+      <div class="actions d-flex justify-content-center align-items-center">
         <div class="mx-2 h-100">
           <app-network-displayer></app-network-displayer>
         </div>
-        <div class="h-100 mx-2">
+        <div class="h-100 mx-2 d-none d-lg-block">
           <span class="text-primary large-text"
             >{{ balance$ | async }} {{ nativeCurrencyName$ | async }}</span
           >

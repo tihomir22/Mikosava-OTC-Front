@@ -9,26 +9,25 @@ import { ethers } from 'ethers';
 import { Observable, of, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { State } from '../reducers';
-import { getTools } from '../utils/utils';
 import MikosavaABI from '../../assets/MikosavaOTC.json';
 import { MikosavaTrade } from '../shared/models/MikosavaTrade';
+import { ProviderService } from '../shared/services/provider.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TradeResolver implements Resolve<MikosavaTrade> {
-  constructor(private store: Store<State>) {}
+  constructor(private store: Store<State>, private provider: ProviderService) {}
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<MikosavaTrade> {
     let tradeId = route.paramMap.get('idTrade');
-    return of(getTools(this.store)).pipe(
-      switchMap((data) => {
-        return data;
+    return of(this.provider.getSigner()).pipe(
+      switchMap((signer) => {
+        return signer;
       }),
-      switchMap((tools) => {
-        let [provider, signer, account, foundActiveNetwork] = tools;
+      switchMap((signer) => {
         const otcContract = new ethers.Contract(
           environment.MATIC_DEPLOYED_ADDRESS_OTC,
           MikosavaABI.abi,

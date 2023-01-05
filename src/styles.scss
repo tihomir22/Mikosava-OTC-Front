@@ -4,47 +4,9 @@
 @import "ngx-toastr/toastr";
 @import "../src/assets/variables.scss";
 @import "/node_modules/ngx-bootstrap/datepicker/bs-datepicker.scss";
+@import "/node_modules/animate.css/animate.min.css";
+@import "./assets/shared-classes.scss";
 
-.material-icons {
-  font-size: 16px !important;
-}
-.material-icons-xl {
-  @extend .material-icons;
-  font-size: 25px !important;
-}
-.actions {
-  button {
-    height: 40px !important;
-  }
-}
-.modal-content {
-  width: fit-content !important;
-}
-
-.wrapper-swap {
-  flex-direction: column;
-}
-
-.otc-card {
-  width: 600px;
-}
-
-.qrcode {
-  display: flex;
-  justify-content: center;
-}
-
-.bg-ternary {
-  background-color: $ternary;
-}
-
-input {
-  height: 60px;
-  font-size: $large-text !important;
-}
-.large-text {
-  font-size: $large-text;
-}
 
 //0x8460719c22DDD92D7F2632bA3C8baF2C8a5dE8cC
 //0xa217838eaFcCe6184659BDc593FcEb25f9DAf4C4

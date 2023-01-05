@@ -1,0 +1,111 @@
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+
+
+@import "../../../node_modules/bootstrap/scss/mixins/breakpoints";
+.wrapperMainDivs {
+  display: flex;
+  justify-content: space-around;
+  height: 100%;
+  .wallet-nft {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.wrapperLanding {
+  height: 100vh !important;
+  .background-flare {
+    background-image: url("../../assets/flare-background.png");
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 0;
+    opacity: 64%;
+  }
+  .wrapper-logo-centered {
+    display: flex;
+    justify-content: start;
+    .background-logo-1 {
+      background-image: url("../../assets/Mikosava-Logo/only-logo-512.png");
+      background-repeat: no-repeat;
+      height: 500px;
+      width: 510px;
+      bottom: 2%;
+      left: 3%;
+      position: absolute;
+      z-index: 1;
+      opacity: 25%;
+    }
+  }
+  .background-logo-2 {
+    background-image: url("../../assets/Mikosava-Logo/mikosava-border-logo-only.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 250px;
+    width: 250px;
+    top: 3%;
+    right: 5%;
+    position: absolute;
+    z-index: 1;
+    opacity: 25%;
+  }
+  .section {
+    position: relative;
+    z-index: 1;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .content-section {
+      height: fit-content;
+    }
+  }
+  .section-1 {
+    h1 {
+      font-family: "Roboto", sans-serif;
+      font-size: 200px;
+      @include media-breakpoint-between(lg, xl) {
+        font-size: 170px;
+      }
+      @include media-breakpoint-between(sm, lg) {
+        font-size: 100px;
+      }
+      @include media-breakpoint-between(xs, sm) {
+        font-size: 60px;
+      }
+      text-align: center;
+      background: linear-gradient(
+        45deg,
+        rgba(2, 0, 36, 1) 0%,
+        rgba(106, 131, 254, 1) 80%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0px;
+    }
+    strong {
+      background: linear-gradient(
+        240deg,
+        rgba(2, 0, 36, 1) 0%,
+        rgba(106, 131, 254, 1) 80%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    h2 {
+      text-align: center;
+      font-family: "Inter", sans-serif;
+      @include media-breakpoint-between(xs, sm) {
+        font-size: 12px;
+      }
+    }
+    .action-buttons {
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      gap: 10px;
+    }
+  }
+}

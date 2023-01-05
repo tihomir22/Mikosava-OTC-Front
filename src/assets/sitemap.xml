@@ -1,0 +1,17 @@
+<!-- public/sitemap.xml -->
+<xml version="1.0" encoding="UTF-8">
+   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+     <url>
+       <loc>https://mikosava.com/</loc>
+       <lastmod>2022-03-23</lastmod>
+     </url>
+      <url>
+       <loc>https://mikosava.com/app</loc>
+       <lastmod>2022-03-23</lastmod>
+     </url>
+      <url>
+       <loc>https://mikosava.com/referral</loc>
+       <lastmod>2022-03-23</lastmod>
+     </url>
+   </urlset>
+   </xml>

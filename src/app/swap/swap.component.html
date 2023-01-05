@@ -3,25 +3,29 @@
 >
   <div class="card otc-card" [formGroup]="formGroup">
     <div class="card-body">
+      <span class="text-primary">{{ "TRADE.OPEN_TRADE" | translate }}</span>
       <div class="row my-2">
         <div
           class="col-12 w-100 d-flex justify-content-center align-items-center coin-selector-wrapper"
         >
           <div class="form-group w-100">
             <input
-              type="text"
+              type="number"
+              min="0"
               formControlName="acoin"
               class="form-control"
               aria-describedby="helpId"
-              placeholder=""
+              placeholder="0"
             />
           </div>
-          <div (click)="selectCoin('A')">
+          <div (click)="selectCoin('A')" class="wrapper-coin-quantity">
             <app-coin-img-badge
               [src]="((ACoin | async)?.imageSrc$ | async) ?? ''"
               [coinLabel]="(ACoin | async)?.name ?? ''"
-              [defaultLabel]="'No Coin A Selected'"
             ></app-coin-img-badge>
+            <span class="quantity text-primary" *ngIf="ACoin | async">{{
+              ((ACoin | async)?.amountOfToken$ | async) ?? 0
+            }}</span>
           </div>
         </div>
       </div>
@@ -31,26 +35,29 @@
         >
           <div class="form-group w-100">
             <input
-              type="text"
+              type="number"
+              min="0"
               class="form-control"
               formControlName="bcoin"
               aria-describedby="helpId"
-              placeholder=""
+              placeholder="0"
             />
           </div>
 
-          <div (click)="selectCoin('B')">
+          <div (click)="selectCoin('B')" class="wrapper-coin-quantity">
             <app-coin-img-badge
               [src]="((BCoin | async)?.imageSrc$ | async) ?? ''"
               [coinLabel]="(BCoin | async)?.name ?? ''"
-              [defaultLabel]="'No Coin B Selected'"
             ></app-coin-img-badge>
+            <span class="quantity text-primary" *ngIf="BCoin | async">{{
+              ((BCoin | async)?.amountOfToken$ | async) ?? 0
+            }}</span>
           </div>
         </div>
       </div>
       <div class="row availableUntil">
         <div class="col checkbox-wrapper">
-          <label class="custom-control custom-checkbox py-2">
+          <label class="custom-control custom-checkbox pb-2">
             <input
               type="checkbox"
               value="checkedValue"
@@ -59,10 +66,12 @@
             />
             <span
               class="custom-control-indicator mx-2"
-              tooltip="You can define the availability of the trade until a specific time."
+              tooltip="{{ 'TRADE.TOOLTIP_AVAILABILITY' | translate }}"
               ><i-bs [name]="iconNames.QuestionCircle"></i-bs
             ></span>
-            <span class="custom-control-description">Available until:</span>
+            <span class="custom-control-description">{{
+              "TRADE.AVAILABLE_TIME" | translate
+            }}</span>
           </label>
         </div>
 
@@ -113,14 +122,16 @@
         </div>
       </div>
       <div
-        class="row availableUntilDetails"
+        class="row availableUntilDetails my-2"
         *ngIf="returnAvailableDetails() != ''"
       >
-        <div class="col">
+        <div class="col text-center text-primary text-valid-until">
+          {{ "TRADE.WILL_BE_VALID_UNTIL" | translate }}
           {{ returnAvailableDetails() }}
         </div>
       </div>
       <div class="row">
+
         <button
           *ngIf="allowance >= amountCoinAParsed"
           type="button"

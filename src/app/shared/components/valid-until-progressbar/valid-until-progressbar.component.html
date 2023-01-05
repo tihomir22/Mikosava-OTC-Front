@@ -1,0 +1,19 @@
+<div
+  class="progress w-100"
+  tooltip="{{ 'TRADE.WILL_BE_VALID_UNTIL' | translate }}{{
+    +trade.validUntil / 1000 | date : 'short'
+  }}"
+>
+  <div
+    class="progress-bar"
+    [ngClass]="{
+      'bg-danger': hasPassed,
+      'progress-bar-animated progress-bar-striped': !hasPassed
+    }"
+    role="progressbar"
+    [style]="'width: ' + now + '%'"
+    [attr.aria-valuenow]="now"
+    [attr.aria-valuemin]="min"
+    [attr.aria-valuemax]="max"
+  ></div>
+</div>

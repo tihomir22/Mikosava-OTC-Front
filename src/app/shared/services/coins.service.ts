@@ -16,12 +16,17 @@ import { State } from 'src/app/reducers';
 import { getNetwork } from 'src/app/utils/chains';
 import { ProviderService } from './provider.service';
 import erc20Object from '../../../assets/ERC20.json';
+import { ParseFromWeiToDecimalNumberPipe } from '../pipes/parse-from-wei-to-decimal-number.pipe';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CoinsService {
-  constructor(private store: Store<State>, private http: HttpClient) {}
+  constructor(
+    private store: Store<State>,
+    private http: HttpClient,
+    private fromWeiToUnit: ParseFromWeiToDecimalNumberPipe
+  ) {}
 
   public getAllCoinsForCurrentNetwork() {
     return combineLatest([
@@ -35,10 +40,11 @@ export class CoinsService {
         coins
           .filter((coin) => {
             let foundActiveNetwork = getNetwork(account.chainIdConnect);
+            let coinAddress = coin.platforms[foundActiveNetwork!.platformName];
             return foundActiveNetwork
               ? Object.keys(coin.platforms).includes(
                   foundActiveNetwork.platformName
-                )
+                ) && coinAddress != foundActiveNetwork.nativeCurrency.address
               : false;
           })
           .map((coin) => {
@@ -79,9 +85,13 @@ export class CoinsService {
       switchMap(([provider, contract]) => {
         return from(
           (contract as any)['balanceOf'](provider.getSigner().getAddress())
-        ).pipe(map((value: any) => value.toNumber()));
+        ).pipe(
+          map((value: any) => this.fromWeiToUnit.transform(value, tokenAddress))
+        );
       }),
+      switchMap((value) => value),
       catchError((err) => {
+        console.error(err);
         return of(0);
       }),
       tap((entry) => console.log('Executed'))

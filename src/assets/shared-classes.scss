@@ -1,0 +1,162 @@
+@import "./animated-border.scss";
+
+.material-icons {
+  font-size: 16px !important;
+}
+.material-icons-xl {
+  @extend .material-icons;
+  font-size: 25px !important;
+}
+.actions {
+  button {
+    height: 40px !important;
+  }
+}
+modal-container {
+  width: 100%;
+  padding: 10px;
+  .modal-content {
+    left: -5px;
+    width: 100%;
+  }
+}
+
+.wrapper-swap {
+  flex-direction: column;
+}
+
+.otc-card {
+  width: 350px;
+  @include media-breakpoint-up(sm) {
+    width: 550px;
+  }
+}
+
+.qrcode {
+  display: flex;
+  justify-content: center;
+}
+
+.bg-ternary {
+  background-color: $ternary;
+}
+
+input[type="text"],
+input[type="number"] {
+  height: 60px;
+  font-size: $large-text !important;
+  color: $primary !important;
+}
+.large-text {
+  font-size: $large-text;
+}
+
+ngx-skeleton-loader {
+  span {
+    margin: 0px !important;
+  }
+}
+
+app-swap {
+  input {
+    background-color: lighten($ternary, 10%) !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+
+.card-body {
+  padding: 30px 30px 15px 30px !important;
+}
+
+.card {
+  border-radius: 10px;
+}
+
+.list-group-item {
+  color: $primary !important;
+  .coin-label {
+    color: $primary !important;
+  }
+}
+
+app-close-trade {
+  .coin-label {
+    color: $primary !important;
+  }
+  app-share-modal {
+    .wrapper {
+      padding: 0px !important;
+    }
+  }
+}
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.col-direction {
+  flex-direction: column;
+}
+
+app-coin-img-badge {
+  app-address-displayer {
+    .raw-container {
+      color: $primary;
+    }
+  }
+}
+
+app-user-list {
+  .tradeItem {
+    height: 120px !important;
+    @include media-breakpoint-up(lg) {
+      height: 60px !important;
+    }
+  }
+  .status-displayer {
+    .text-status {
+      display: none !important;
+      @include media-breakpoint-up(lg) {
+        display: block !important;
+      }
+    }
+  }
+  app-coin-img-badge {
+    img {
+      display: none !important;
+      @include media-breakpoint-up(lg) {
+        display: block !important;
+      }
+    }
+  }
+}
+
+.bs-datepicker-head {
+  background-color: $secondary !important;
+}
+
+td.week span {
+  color: $primary !important;
+}
+
+app-list-coins,
+app-swap {
+  .img-logo {
+    max-width: 32px;
+    max-height: 32px;
+  }
+}

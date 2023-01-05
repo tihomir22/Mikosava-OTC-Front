@@ -1,9 +1,8 @@
 <div class="mikosava-basic">
-  <div>
+  <div *ngIf="isNotMainPage()">
     <app-navbar></app-navbar>
   </div>
   <div class="d-flex h-100 w-100">
-    <!-- <div class="sidebar"></div> -->
     <div class="bg-light h-100 w-100">
       <router-outlet></router-outlet>
     </div>

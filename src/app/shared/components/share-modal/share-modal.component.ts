@@ -9,8 +9,17 @@ import { MikosavaTrade } from '../../models/MikosavaTrade';
   styleUrls: ['./share-modal.component.scss'],
 })
 export class ShareModalComponent {
-  @Input() trade: MikosavaTrade = null as any;
-  @Input() url: string = '';
+  @Input() set trade(data: MikosavaTrade) {
+    if (data) {
+      this.url = window.location.origin + '/trade/' + data.tradeId;
+      this._trade = data;
+    }
+  }
+  @Input() showQR: boolean = true;
+  @Input() showClipboard: boolean = true;
+  @Input() widthQr: number = 256;
+  public _trade?: MikosavaTrade;
+  public url: string = '';
 
   constructor(private toastr: ToastrService) {}
 

@@ -9,6 +9,7 @@ import { catchError, interval, map, of, switchMap } from 'rxjs';
 import responseJson from '../assets/response_1670352296126.json';
 import { TranslateService } from '@ngx-translate/core';
 import { ethers } from 'ethers';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -21,7 +22,8 @@ export class AppComponent {
     private provider: ProviderService,
     private store: Store<any>,
     private http: HttpClient,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router
   ) {
     this.translate.use('en');
     this.addProviderEvents();
@@ -52,17 +54,25 @@ export class AppComponent {
     let chainId = await signer.getChainId();
     let balance = await provider.getBalance(address);
 
-    provider.on('network', (newNetwork, oldNetwork) => {
-      this.store.dispatch(
-        AccountActions.setNewNetwork({ networkId: newNetwork.chainId })
-      );
-    });
-
     let account: Account = {
       address: address,
       chainIdConnect: chainId,
       balance: balance as any,
     };
+
+    provider.on('network', async (newNetwork, oldNetwork) => {
+      this.store.dispatch(
+        AccountActions.setNewNetwork({ networkId: newNetwork.chainId })
+      );
+      let balanceUpdated = await provider.getBalance(address);
+      let accountCloned = { ...account };
+      accountCloned.balance = balanceUpdated as any;
+      accountCloned.chainIdConnect = newNetwork.chainId;
+      this.store.dispatch(
+        AccountActions.setAccount({ newAccount: accountCloned })
+      );
+    });
+
     this.store.dispatch(AccountActions.setAccount({ newAccount: account }));
 
     if (!this.globalListenersSet) {
@@ -73,7 +83,15 @@ export class AppComponent {
           await this.addProviderEvents();
         }
       );
+      (window as any).ethereum.addListener('receipt', () => {
+        console.log('suave');
+      });
+
       this.globalListenersSet = true;
     }
+  }
+
+  public isNotMainPage() {
+    return this.router.url != '/';
   }
 }

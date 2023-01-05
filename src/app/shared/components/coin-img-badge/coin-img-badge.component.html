@@ -1,4 +1,31 @@
-<span class="badge badge-pill badge-secondary bg-primary mx-3 coin-pill">
-  <img class="img-logo mx-2" #refImg [src]="src" />
-  {{ coinLabel && coinLabel.length > 0 ? coinLabel : defaultLabel }}
-</span>
+<div
+  class="badge badge-pill badge-secondary mx-1 coin-pill d-flex"
+  [ngClass]="{ 'bg-primary': !coinLabel }"
+>
+  <img class="img-logo mx-2" #refImg [src]="src" *ngIf="src" />
+  <ng-container
+    *ngIf="coinLabel && coinLabel.length > 0; else defaultLabelTemplate"
+  >
+    <div class="d-flex justify-content-center col-direction">
+      <span class="coin-label d-flex">{{ coinLabel }}</span>
+      <span class="coin-address" *ngIf="coinAddress"
+        ><app-address-displayer
+          [address]="coinAddress"
+          [isButton]="false"
+        ></app-address-displayer
+      ></span>
+    </div>
+  </ng-container>
+  <ng-template #defaultLabelTemplate>
+    <ng-container *ngIf="defaultLabel == defaultValueForLabel; else loaded">
+      <div class="loading-item">
+        <ngx-skeleton-loader count="1"></ngx-skeleton-loader>
+      </div>
+    </ng-container>
+    <ng-template #loaded>
+      {{ defaultLabel }}
+    </ng-template>
+  </ng-template>
+
+  <i-bs *ngIf="!coinLabel && !readOnly" [name]="iconNames.CaretDownFill"></i-bs>
+</div>

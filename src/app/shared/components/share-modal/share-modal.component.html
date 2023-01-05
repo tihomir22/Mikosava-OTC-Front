@@ -1,14 +1,14 @@
-<div class="wrapper p-5">
-  <div class="row">
+<div class="wrapper p-5-local">
+  <div class="row" *ngIf="showQR">
     <div class="col" *ngIf="url">
       <qrcode
         [qrdata]="url"
-        [width]="256"
+        [width]="widthQr"
         [errorCorrectionLevel]="'M'"
       ></qrcode>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="showClipboard">
     <div class="col">
       <div
         class="link-to-copy d-flex justify-content-between"

@@ -22,6 +22,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { IconNamesEnum } from 'ngx-bootstrap-icons';
 import moment from 'moment';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-swap',
   templateUrl: './swap.component.html',
@@ -36,8 +37,8 @@ export class SwapComponent {
   );
 
   public formGroup: FormGroup = this.fb.group({
-    acoin: [0, [Validators.required, Validators.min(0)]],
-    bcoin: [0, [Validators.required, Validators.min(0)]],
+    acoin: [null, [Validators.required, Validators.min(0)]],
+    bcoin: [null, [Validators.required, Validators.min(0)]],
     availableUntil: [false, []],
     selectAvailableUntil: [null, []],
     selectCustomAvalaible: [null, []],
@@ -51,7 +52,9 @@ export class SwapComponent {
     private modalService: BsModalService,
     private store: Store<State>,
     private fb: FormBuilder,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private providerService: ProviderService,
+    private router: Router
   ) {
     this.formGroup
       .get('acoin')
@@ -64,6 +67,8 @@ export class SwapComponent {
         }
       });
   }
+
+
 
   public onClickChipTimeFrameAvailableUntil(timeSelectedInMinutes: number) {
     if (timeSelectedInMinutes == -1) {
@@ -140,18 +145,9 @@ export class SwapComponent {
     }
   }
 
-  private async getTools() {
-    const provider = await ProviderService.getWebProvider(false);
-    const signer = await provider.getSigner();
-    const account = await firstValueFrom(
-      this.store.select((store) => store.account)
-    );
-    let foundActiveNetwork = getNetwork(account.chainIdConnect);
-    return [provider, signer, account, foundActiveNetwork as any];
-  }
-
   private async calculateAllowance(coin: CoingeckoCoin): Promise<BigInt> {
-    const [, signer, , foundActiveNetwork] = await this.getTools();
+    const [, signer, , foundActiveNetwork] =
+      await this.providerService.getTools();
 
     const coinAContract = returnERC20InstanceFromAddress(
       coin.platforms[foundActiveNetwork!.platformName],
@@ -173,7 +169,8 @@ export class SwapComponent {
   }
 
   private async returnParsedAmountCoinA() {
-    const [, signer, , foundActiveNetwork] = await this.getTools();
+    const [, signer, , foundActiveNetwork] =
+      await this.providerService.getTools();
     let selectedACoin = await firstValueFrom(this.ACoin);
     const coinAContract = returnERC20InstanceFromAddress(
       selectedACoin.platforms[foundActiveNetwork!.platformName],
@@ -184,7 +181,8 @@ export class SwapComponent {
   }
 
   public async approve() {
-    const [, signer, , foundActiveNetwork] = await this.getTools();
+    const [, signer, , foundActiveNetwork] =
+      await this.providerService.getTools();
     let selectedACoin = await firstValueFrom(this.ACoin);
 
     const coinAContract = returnERC20InstanceFromAddress(
@@ -210,7 +208,8 @@ export class SwapComponent {
   }
 
   public async openTrade() {
-    const [provider, signer, , foundActiveNetwork] = await this.getTools();
+    const [provider, signer, , foundActiveNetwork] =
+      await this.providerService.getTools();
     let selectedACoin = await firstValueFrom(this.ACoin);
     let selectedBCoin = await firstValueFrom(this.BCoin);
 
@@ -232,11 +231,11 @@ export class SwapComponent {
 
     const decimals = await coinAContract['decimals']();
     const decimalsCoinB = await coinBContract['decimals']();
-    const name = await coinAContract['name']();
-    const symbol = await coinAContract['symbol']();
-    const balanceOf = await coinAContract['balanceOf'](
-      provider.getSigner().getAddress()
-    );
+    // const name = await coinAContract['name']();
+    // const symbol = await coinAContract['symbol']();
+    // const balanceOf = await coinAContract['balanceOf'](
+    //   provider.getSigner().getAddress()
+    // );
 
     let amountParsedA = BigInt(this.formGroup.value.acoin * 10 ** decimals);
 
@@ -267,6 +266,9 @@ export class SwapComponent {
         CoinsActions.selectCoinB({ selectBCoin: null as any })
       );
       this.formGroup.reset();
+      setTimeout(() => {
+        this.router.navigate(['/list']);
+      }, 1000);
     } catch (error: any) {
       this.toastr.error(error.reason);
     }

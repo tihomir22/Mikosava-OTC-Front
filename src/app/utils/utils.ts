@@ -1,8 +1,4 @@
-import { Store } from '@ngrx/store';
-import { firstValueFrom } from 'rxjs';
-import { State } from '../reducers';
-import { ProviderService } from '../shared/services/provider.service';
-import { getNetwork } from './chains';
+import { MikosavaTrade } from '../shared/models/MikosavaTrade';
 
 export const truncateAddress = (address: string) => {
   const truncateRegex = /^(0x[a-zA-Z0-9]{4})[a-zA-Z0-9]+([a-zA-Z0-9]{4})$/;
@@ -25,12 +21,18 @@ export const copyClipboard = (val: string) => {
   document.body.removeChild(selBox);
 };
 
-export const getTools = async (store: Store<State>) => {
-  const provider = await ProviderService.getWebProvider(false);
-  const signer = await provider.getSigner();
-  const account = await firstValueFrom(
-    store.select((storeParam) => storeParam.account)
-  );
-  let foundActiveNetwork = getNetwork(account.chainIdConnect);
-  return [provider, signer, account, foundActiveNetwork as any];
+export const isExpired = (trade: MikosavaTrade) => {
+  return +new Date() * 1000 > +trade.validUntil && +trade.validUntil != 0;
+};
+
+export const getStatus = (trade: MikosavaTrade) => {
+  const expired = isExpired(trade);
+  if (trade.cancelled) {
+    return 'Cancelled';
+  } else if (trade.sold) {
+    return 'Sold';
+  } else if (expired) {
+    return 'Expired';
+  }
+  return 'Open';
 };

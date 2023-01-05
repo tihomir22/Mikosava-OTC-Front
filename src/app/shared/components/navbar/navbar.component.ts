@@ -13,7 +13,7 @@ import { ProviderService } from '../../services/provider.service';
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
-  @Input() public isCollapsed: boolean = false;
+  @Input() public isCollapsed: boolean = true;
   private account$: Observable<Account>;
   public balance$: Observable<string>;
   public nativeCurrencyName$: Observable<any>;

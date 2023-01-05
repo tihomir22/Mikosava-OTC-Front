@@ -2,7 +2,7 @@
   <div class="form-group">
     <input
       type="text"
-      class="form-control"
+      class="form-control search-control"
       aria-describedby="helpId"
       [(ngModel)]="searchValue"
       (ngModelChange)="searchChanged($event)"
@@ -20,14 +20,14 @@
         #refImg
         [src]="easyAccessCoin.imageSrc$ | async"
       />
-      <span class="coin-name">{{ easyAccessCoin.name }}</span>
+      <span class="coin-name">{{ easyAccessCoin.symbol | uppercase }}</span>
     </div>
   </div>
   <cdk-virtual-scroll-viewport
     appendOnly
     itemSize="50"
     class="coin-viewport"
-    [ngStyle]="{ width: widthList + 'px', height: heightList + 'px' }"
+    [ngStyle]="{ width: 100 + '%', height: heightList + 'px' }"
   >
     <div
       *cdkVirtualFor="let coin of filteredCoins"
@@ -39,7 +39,7 @@
         <span class="coin-name">{{ coin.name }}</span>
       </div>
       <div class="right-side">
-        <span class="px-1">{{ coin.amountOfToken$ | async }}</span>
+        <span class="px-1">{{ coin.amountOfToken$ | async | number }}</span>
         <span class="coin-symbol text-muted">{{
           toUpperCase(coin.symbol)
         }}</span>

@@ -1,29 +1,53 @@
-<div class="h-100 w-100 wrapper-swap">
-  <div class="card w-100 h-100">
+<div class="h-100 w-100 wrapper-swap px-3">
+  <div class="card col-12 col-lg-8">
     <div class="card-body d-flex justify-content-center align-items-center">
-      <div class="list-group col-10">
+      <div class="list-group w-100">
+        <div class="header mb-2">
+          <span class="text-primary">{{ "TRADE.MY_TRADES" | translate }}</span>
+          <button
+            type="button"
+            class="btn btn-primary"
+            [ngClass]="{
+              'animate__animated animate__pulse animate__infinite':
+                (trades | async)?.length == 0
+            }"
+            (click)="redirectToTrade()"
+          >
+            {{ "TRADE.OPEN_NEW_TRADE" | translate }}
+          </button>
+        </div>
         <cdk-virtual-scroll-viewport
           appendOnly
           itemSize="60"
           class="coin-viewport"
-          [ngStyle]="{ width: 1200 + 'px', height: 400 + 'px' }"
+          [ngClass]="{ 'd-none': (trades | async)?.length == 0 }"
+          [ngStyle]="{ width: 100 + '%', height: 300 + 'px' }"
         >
+          <ngx-skeleton-loader
+            count="10"
+            *ngIf="!tradesLoaded"
+          ></ngx-skeleton-loader>
           <div
             class="list-group-item list-group-item-action row d-flex tradeItem"
-            (click)="clickedTradeItem(trade)"
+            (dblclick)="clickedTradeItem(trade)"
             *cdkVirtualFor="let trade of trades | async"
           >
-            <div class="col">{{ trade.tradeId }}</div>
-            <div class="col">{{ getStatus(trade) }}</div>
-            <div class="col pairA">
+            <div class="col flex-grow-0">#{{ trade.tradeId }}</div>
+            <div class="col flex-grow-2">
+              <app-status-displayer [trade]="trade"></app-status-displayer>
+            </div>
+
+            <div class="col pairA flex-grow-4 justify-content-center">
               <span>
                 {{
                   trade.amountPositionCreator
                     | parseFromWeiToDecimalNumber : trade.coinCreator
                     | async
+                    | number
                 }}
               </span>
               <app-coin-img-badge
+                [readOnly]="true"
                 [src]="
                   (trade.coinCreator | fromAddressToCg | async)?.imageSrc$ ?? ''
                 "
@@ -33,15 +57,20 @@
                 [defaultLabel]="'Loading...'"
               ></app-coin-img-badge>
             </div>
-            <div class="col pairB">
+            <div class="col flex-grow-0 d-none d-lg-flex">
+              <i-bs [name]="iconNames.ArrowLeftRight"></i-bs>
+            </div>
+            <div class="col pairB flex-grow-4 justify-content-center">
               <span>
                 {{
                   trade.amountPositionCounterpart
                     | parseFromWeiToDecimalNumber : trade.coinCounterpart
                     | async
+                    | number
                 }}
               </span>
               <app-coin-img-badge
+                [readOnly]="true"
                 [src]="
                   (trade.coinCounterpart | fromAddressToCg | async)
                     ?.imageSrc$ ?? ''
@@ -52,28 +81,52 @@
                 [defaultLabel]="'Loading...'"
               ></app-coin-img-badge>
             </div>
-            <div class="col">
-              {{ +trade.validUntil / 1000 | date : "short" }}
+            <div class="col flex-grow-1 justify-content-center">
+              <ng-container *ngIf="trade.validUntil == 0; else validUntilSet">
+                <i-bs
+                  width="2rem"
+                  height="2rem"
+                  [name]="iconNames.Infinity"
+                ></i-bs>
+              </ng-container>
+              <ng-template #validUntilSet>
+                <app-valid-until-progressbar class="w-100"
+                  [trade]="trade"
+                ></app-valid-until-progressbar>
+              </ng-template>
             </div>
-            <div class="col actions">
+            <div class="col actions flex-grow-1 d-flex justify-content-end">
               <button
                 type="button"
-                class="btn btn-primary"
-                (click)="openShareModal(trade)"
+                class="btn text-secondary px-1"
+                (click)="clickedTradeItem(trade)"
               >
-                <i-bs [name]="iconNames.ShareFill"></i-bs>
+                <i-bs [name]="iconNames.Eye"></i-bs>
               </button>
               <button
                 type="button"
-                class="btn btn-danger"
-                [disabled]="trade.cancelled"
+                class="btn text-primary px-1"
+                (click)="openShareModal(trade)"
+              >
+                <i-bs [name]="iconNames.QrCode"></i-bs>
+              </button>
+              <button
+                type="button"
+                class="btn text-danger cancel-btn px-1"
+                [disabled]="trade.cancelled || trade.sold"
                 (click)="cancelTrade(trade)"
               >
-                <i-bs [name]="iconNames.XCircleFill"></i-bs>
+                <i-bs [name]="iconNames.XCircle"></i-bs>
               </button>
             </div>
           </div>
         </cdk-virtual-scroll-viewport>
+        <div class="empty-list w-100" *ngIf="(trades | async)?.length == 0">
+          <app-not-found
+            [subtext]="'TRADE.NOT_FOUND_TRADES_SUBTITLE' | translate"
+            [text]="'TRADE.NOT_FOUND_TRADES' | translate"
+          ></app-not-found>
+        </div>
       </div>
     </div>
   </div>
