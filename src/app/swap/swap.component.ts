@@ -68,8 +68,6 @@ export class SwapComponent {
       });
   }
 
-
-
   public onClickChipTimeFrameAvailableUntil(timeSelectedInMinutes: number) {
     if (timeSelectedInMinutes == -1) {
       //custom
@@ -195,7 +193,9 @@ export class SwapComponent {
       signer
     );
     const decimals = await coinAContract['decimals']();
-    let amountParsedA = BigInt(this.formGroup.value.acoin * 10 ** decimals);
+    let amountParsedA = BigInt(
+      this.formGroup.value.acoin * 1.1 * 10 ** decimals
+    );
 
     let tx = await coinAContract['approve'](
       otcContract.address,
