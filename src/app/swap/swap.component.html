@@ -24,7 +24,7 @@
               [coinLabel]="(ACoin | async)?.name ?? ''"
             ></app-coin-img-badge>
             <span class="quantity text-primary" *ngIf="ACoin | async">{{
-              ((ACoin | async)?.amountOfToken$ | async) ?? 0
+              ((ACoin | async)?.amountOfToken$ | async) ?? 0 | number
             }}</span>
           </div>
         </div>
@@ -50,7 +50,7 @@
               [coinLabel]="(BCoin | async)?.name ?? ''"
             ></app-coin-img-badge>
             <span class="quantity text-primary" *ngIf="BCoin | async">{{
-              ((BCoin | async)?.amountOfToken$ | async) ?? 0
+              ((BCoin | async)?.amountOfToken$ | async) ?? 0 | number
             }}</span>
           </div>
         </div>
@@ -131,7 +131,6 @@
         </div>
       </div>
       <div class="row">
-
         <button
           *ngIf="allowance >= amountCoinAParsed"
           type="button"

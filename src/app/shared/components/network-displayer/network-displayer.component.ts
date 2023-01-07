@@ -4,6 +4,7 @@ import { IconNamesEnum } from 'ngx-bootstrap-icons';
 import { filter } from 'rxjs';
 import { State } from 'src/app/reducers';
 import { list } from 'src/app/utils/chains';
+import { environment } from 'src/environments/environment';
 import { ProviderService } from '../../services/provider.service';
 
 @Component({
@@ -12,10 +13,14 @@ import { ProviderService } from '../../services/provider.service';
   styleUrls: ['./network-displayer.component.scss'],
 })
 export class NetworkDisplayerComponent {
-  public networksAvalaible = list;
+  public networksAvalaible = list.filter((network) => {
+    if (environment.mainnet && network.testnet) {
+      return false;
+    }
+    return true;
+  });
   public activeNetwork = null as any;
   public iconNames = IconNamesEnum;
-
 
   constructor(private store: Store<State>) {
     this.store

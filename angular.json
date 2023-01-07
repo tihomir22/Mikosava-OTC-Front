@@ -67,6 +67,22 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "testnet": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.testnet.ts"
+                }
+              ]
+            },
+            "mainnet": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.mainnet.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -79,6 +95,12 @@
             },
             "development": {
               "browserTarget": "MikosavaOTC:build:development"
+            },
+            "testnet": {
+              "browserTarget": "MikosavaOTC:build:testnet"
+            },
+            "mainnet": {
+              "browserTarget": "MikosavaOTC:build:mainnet"
             }
           },
           "defaultConfiguration": "development"

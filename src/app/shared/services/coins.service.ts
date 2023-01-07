@@ -6,6 +6,7 @@ import {
   catchError,
   combineLatest,
   filter,
+  forkJoin,
   from,
   map,
   of,
@@ -69,8 +70,7 @@ export class CoinsService {
         catchError((err) => {
           return of({ image: { small: '/assets/icons/question-mark.png' } });
         }),
-        map((res: any) => res['image']['small']),
-        tap((entry) => console.log('Executed ', entry))
+        map((res: any) => res['image']['small'])
       );
   }
 
@@ -83,18 +83,22 @@ export class CoinsService {
         ]);
       }),
       switchMap(([provider, contract]) => {
-        return from(
-          (contract as any)['balanceOf'](provider.getSigner().getAddress())
-        ).pipe(
+        return forkJoin([
+          provider.getSigner().getAddress(),
+          of(provider),
+          of(contract),
+        ]);
+      }),
+      switchMap((data) => {
+        const [address, provider, contract] = data as any;
+        return from((contract as any)['balanceOf'](address)).pipe(
           map((value: any) => this.fromWeiToUnit.transform(value, tokenAddress))
         );
       }),
       switchMap((value) => value),
       catchError((err) => {
-        console.error(err);
         return of(0);
-      }),
-      tap((entry) => console.log('Executed'))
+      })
     );
   }
 }

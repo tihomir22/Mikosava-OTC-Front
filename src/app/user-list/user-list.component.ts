@@ -29,15 +29,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./user-list.component.scss'],
 })
 export class UserListComponent {
-  public trades: Observable<Array<MikosavaTrade>> = from(
-    this.loadMyTrades()
-  ).pipe(
-    tap((trades) => {
-      this.tradesLoaded = true;
-      console.log(trades);
-      of(trades);
-    })
-  );
+  public trades: Array<MikosavaTrade> = [];
   public iconNames = IconNamesEnum;
   public tradesLoaded = false;
 
@@ -51,16 +43,9 @@ export class UserListComponent {
   ) {}
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
     this.provider.getAccountStream().subscribe((data) => {
       this.tradesLoaded = false;
-      this.trades = from(this.loadMyTrades()).pipe(
-        tap((trades) => {
-          this.tradesLoaded = true;
-          console.log(trades);
-        })
-      );
+      this.loadMyTrades();
     });
   }
 
@@ -72,7 +57,8 @@ export class UserListComponent {
       MikosavaABI.abi,
       signer
     );
-    return otcContract['fetchMyCoinTrades']();
+    this.trades = await otcContract['fetchMyCoinTrades']();
+    this.tradesLoaded = true;
   }
 
   public openShareModal(trade: MikosavaTrade) {
@@ -100,7 +86,7 @@ export class UserListComponent {
       this.toastr.success(
         `The trade ${trade.tradeId} has been cancelled successfully!`
       );
-      this.trades = from(this.loadMyTrades());
+      this.loadMyTrades();
     } catch (error: any) {
       this.toastr.error(error.reason);
     }

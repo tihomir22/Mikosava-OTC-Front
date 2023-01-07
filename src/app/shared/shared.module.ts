@@ -75,6 +75,7 @@ import { SortPipe } from './pipes/sort.pipe';
     ParseFromWeiToDecimalNumberPipe,
     StatusDisplayerComponent,
     ValidUntilProgressbarComponent,
+    SortPipe,
   ],
   providers: [ParseFromWeiToDecimalNumberPipe],
 })

@@ -9,7 +9,7 @@
             class="btn btn-primary"
             [ngClass]="{
               'animate__animated animate__pulse animate__infinite':
-                (trades | async)?.length == 0
+                trades?.length == 0
             }"
             (click)="redirectToTrade()"
           >
@@ -20,7 +20,7 @@
           appendOnly
           itemSize="60"
           class="coin-viewport"
-          [ngClass]="{ 'd-none': (trades | async)?.length == 0 }"
+          [ngClass]="{ 'd-none': trades?.length == 0 }"
           [ngStyle]="{ width: 100 + '%', height: 300 + 'px' }"
         >
           <ngx-skeleton-loader
@@ -30,7 +30,7 @@
           <div
             class="list-group-item list-group-item-action row d-flex tradeItem"
             (dblclick)="clickedTradeItem(trade)"
-            *cdkVirtualFor="let trade of trades | async"
+            *cdkVirtualFor="let trade of trades | sort : 'tradeId' : 'DESC'"
           >
             <div class="col flex-grow-0">#{{ trade.tradeId }}</div>
             <div class="col flex-grow-2">
@@ -90,7 +90,8 @@
                 ></i-bs>
               </ng-container>
               <ng-template #validUntilSet>
-                <app-valid-until-progressbar class="w-100"
+                <app-valid-until-progressbar
+                  class="w-100"
                   [trade]="trade"
                 ></app-valid-until-progressbar>
               </ng-template>
@@ -121,7 +122,7 @@
             </div>
           </div>
         </cdk-virtual-scroll-viewport>
-        <div class="empty-list w-100" *ngIf="(trades | async)?.length == 0">
+        <div class="empty-list w-100" *ngIf="trades?.length == 0">
           <app-not-found
             [subtext]="'TRADE.NOT_FOUND_TRADES_SUBTITLE' | translate"
             [text]="'TRADE.NOT_FOUND_TRADES' | translate"

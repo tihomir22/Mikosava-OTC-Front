@@ -1,11 +1,22 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { ethers } from 'ethers';
-import { firstValueFrom, forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import {
+  firstValueFrom,
+  forkJoin,
+  from,
+  lastValueFrom,
+  map,
+  Observable,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { getNetwork } from 'src/app/utils/chains';
 import { CoingeckoCoin } from '../models/CoinGeckoCoin';
 import { CoinsService } from '../services/coins.service';
 import { ProviderService } from '../services/provider.service';
 import erc20Object from '../../../assets/ERC20.json';
+import { Account } from 'src/app/reducers';
 @Pipe({
   name: 'fromAddressToCg',
 })
@@ -15,23 +26,20 @@ export class FromAddressToCgPipe implements PipeTransform {
     private coinsService: CoinsService
   ) {}
 
-  transform(address: string, ...args: any[]): Promise<CoingeckoCoin> {
-    return this.getCoinfGeckoCoinInfoHelper(address);
+  transform(address: string, ...args: any[]): Observable<CoingeckoCoin> {
+    return this.getCoinGeckoCoinInfo(address);
   }
 
-  public async getCoinfGeckoCoinInfoHelper(
-    coinAddress: string
-  ): Promise<CoingeckoCoin> {
-    let coinCKObservable: Observable<CoingeckoCoin> =
-      await this.getCoinGeckoCoinInfo(coinAddress);
-    return await firstValueFrom(coinCKObservable);
-  }
+  public getCoinGeckoCoinInfo(coinAddress: string) {
+    let provider: any;
+    let account: Account;
+    let foundActiveNetwork: any;
 
-  public async getCoinGeckoCoinInfo(coinAddress: string) {
-    const [provider, signer, account, foundActiveNetwork] =
-      await this.providerService.getTools();
-
-    return this.coinsService.getAllCoinsForCurrentNetwork().pipe(
+    return from(this.providerService.getTools()).pipe(
+      switchMap((tools) => {
+        [provider, , account, foundActiveNetwork] = tools;
+        return this.coinsService.getAllCoinsForCurrentNetwork();
+      }),
       switchMap((coinsFromCoinGecko) => {
         let foundCoin = coinsFromCoinGecko.find((coinCG) => {
           let foundActiveNetwork = getNetwork(account.chainIdConnect);
@@ -40,7 +48,7 @@ export class FromAddressToCgPipe implements PipeTransform {
           );
         });
         if (foundCoin) {
-          return foundCoin;
+          return of(foundCoin);
         } else {
           const erc20 = new ethers.Contract(
             coinAddress,
@@ -66,9 +74,9 @@ export class FromAddressToCgPipe implements PipeTransform {
               };
               return coin;
             })
-          ) as any;
+          );
         }
       })
-    ) as Observable<any>;
+    );
   }
 }

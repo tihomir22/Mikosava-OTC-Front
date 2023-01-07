@@ -266,9 +266,7 @@ export class SwapComponent {
         CoinsActions.selectCoinB({ selectBCoin: null as any })
       );
       this.formGroup.reset();
-      setTimeout(() => {
-        this.router.navigate(['/list']);
-      }, 1000);
+      window.location.href = '/list';
     } catch (error: any) {
       this.toastr.error(error.reason);
     }
