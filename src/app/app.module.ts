@@ -22,6 +22,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { LandingComponent } from './landing/landing.component';
 import { EffectsModule } from '@ngrx/effects';
+import { CookieService } from 'ngx-cookie-service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -62,7 +63,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BsDropdownModule.forRoot(),
     EffectsModule.forRoot([]),
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

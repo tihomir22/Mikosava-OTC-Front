@@ -25,6 +25,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { StatusDisplayerComponent } from './components/status-displayer/status-displayer.component';
 import { ValidUntilProgressbarComponent } from './components/valid-until-progressbar/valid-until-progressbar.component';
 import { SortPipe } from './pipes/sort.pipe';
+import { CookiesConsentComponent } from './components/cookies-consent/cookies-consent.component';
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -39,6 +40,7 @@ import { SortPipe } from './pipes/sort.pipe';
     StatusDisplayerComponent,
     ValidUntilProgressbarComponent,
     SortPipe,
+    CookiesConsentComponent,
   ],
   imports: [
     CommonModule,
@@ -74,6 +76,7 @@ import { SortPipe } from './pipes/sort.pipe';
     NotFoundComponent,
     ParseFromWeiToDecimalNumberPipe,
     StatusDisplayerComponent,
+    CookiesConsentComponent,
     ValidUntilProgressbarComponent,
     SortPipe,
   ],

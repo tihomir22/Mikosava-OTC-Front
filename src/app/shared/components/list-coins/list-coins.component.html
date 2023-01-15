@@ -15,12 +15,8 @@
       *ngFor="let easyAccessCoin of quickAccessCoins$ | async"
       (click)="selectCoin.emit(easyAccessCoin)"
     >
-      <img
-        class="img-logo mx-2"
-        #refImg
-        [src]="easyAccessCoin.imageSrc$ | async"
-      />
-      <span class="coin-name">{{ easyAccessCoin.symbol | uppercase }}</span>
+      <img class="img-logo mx-2" #refImg [src]="easyAccessCoin.image" />
+      <div class="coin-name">{{ easyAccessCoin.symbol | uppercase }}</div>
     </div>
   </div>
   <cdk-virtual-scroll-viewport
@@ -35,8 +31,8 @@
       (click)="selectCoin.emit(coin)"
     >
       <div class="left-side">
-        <img class="img-logo mx-3" #refImg [src]="coin.imageSrc$ | async" />
-        <span class="coin-name">{{ coin.name }}</span>
+        <img class="img-logo mx-3" #refImg [src]="coin.image" />
+        <div class="coin-name ellipsify">{{ coin.name }}</div>
       </div>
       <div class="right-side">
         <span class="px-1">{{ coin.amountOfToken$ | async | number }}</span>

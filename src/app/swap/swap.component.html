@@ -20,7 +20,7 @@
           </div>
           <div (click)="selectCoin('A')" class="wrapper-coin-quantity">
             <app-coin-img-badge
-              [src]="((ACoin | async)?.imageSrc$ | async) ?? ''"
+              [src]="(ACoin | async)?.image ?? ''"
               [coinLabel]="(ACoin | async)?.name ?? ''"
             ></app-coin-img-badge>
             <span class="quantity text-primary" *ngIf="ACoin | async">{{
@@ -46,7 +46,7 @@
 
           <div (click)="selectCoin('B')" class="wrapper-coin-quantity">
             <app-coin-img-badge
-              [src]="((BCoin | async)?.imageSrc$ | async) ?? ''"
+              [src]="(BCoin | async)?.image ?? ''"
               [coinLabel]="(BCoin | async)?.name ?? ''"
             ></app-coin-img-badge>
             <span class="quantity text-primary" *ngIf="BCoin | async">{{

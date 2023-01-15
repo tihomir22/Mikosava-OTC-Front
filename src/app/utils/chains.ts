@@ -1,8 +1,13 @@
 import { environment } from 'src/environments/environment';
 
+export enum ChainIds {
+  MAINNET_POLYGON = 137,
+  TESTNET_POLYGON = 80001,
+}
+
 export const list = [
   {
-    chainId: 80001,
+    chainId: ChainIds.TESTNET_POLYGON,
     name: 'Mumbai Testnet',
     interal_name_id: 'matic-testnet',
     testnet: true,
@@ -29,7 +34,7 @@ export const list = [
     ],
   },
   {
-    chainId: 137,
+    chainId: ChainIds.MAINNET_POLYGON,
     name: 'Polygon Mainnet',
     interal_name_id: 'matic-mainnet',
     testnet: false,

@@ -5,6 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class SortPipe implements PipeTransform {
   transform(array: any, field: string, type: 'ASC' | 'DESC'): any[] {
+    console.log(array)
     if (!Array.isArray(array)) {
       return array;
     }
@@ -18,6 +19,7 @@ export class SortPipe implements PipeTransform {
         return 0;
       }
     });
+    console.log(sortClone)
     return sortClone;
   }
 }

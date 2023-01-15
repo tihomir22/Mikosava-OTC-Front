@@ -64,8 +64,7 @@
               [readOnly]="true"
               [coinAddress]="viewedTrade.coinCreator"
               [src]="
-                (viewedTrade.coinCreator | fromAddressToCg | async)
-                  ?.imageSrc$ ?? ''
+                (viewedTrade.coinCreator | fromAddressToCg | async)?.image ?? ''
               "
               [coinLabel]="
                 (viewedTrade.coinCreator | fromAddressToCg | async)?.name ?? ''
@@ -98,7 +97,7 @@
               [coinAddress]="viewedTrade.coinCounterpart"
               [src]="
                 (viewedTrade.coinCounterpart | fromAddressToCg | async)
-                  ?.imageSrc$ ?? ''
+                  ?.image ?? ''
               "
               [coinLabel]="
                 (viewedTrade.coinCounterpart | fromAddressToCg | async)?.name ??

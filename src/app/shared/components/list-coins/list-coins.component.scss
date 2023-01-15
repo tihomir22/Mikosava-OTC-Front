@@ -28,7 +28,12 @@
 .coin-name {
   font-size: 20px;
   font-weight: bolder;
+  max-width: 250px;
 }
 .no-coin-image {
   vertical-align: text-bottom;
+}
+
+.left-side{
+  display: flex;
 }

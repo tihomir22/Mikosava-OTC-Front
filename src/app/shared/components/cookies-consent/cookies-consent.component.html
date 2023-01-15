@@ -1,0 +1,22 @@
+<div
+  class="alert text-center cookiealert"
+  role="alert"
+  [ngClass]="{ show: show }"
+>
+  <b>Do you like cookies?</b>
+  <img class="mx-1" src="/assets/cookie.png" alt="" srcset="" /> We use cookies
+  to ensure you get the best experience on our website.
+  <a
+    href="https://docs.google.com/document/d/1T5CfnUtBi-B7vbGp0ZcFqjM4MXH6OkCfBT72Ts5_rEY/edit?usp=sharing"
+    target="_blank"
+    >Learn more</a
+  >
+
+  <button
+    type="button"
+    class="btn btn-primary btn-sm acceptcookies"
+    (click)="accept()"
+  >
+    I agree
+  </button>
+</div>

@@ -4,8 +4,8 @@ export interface CoingeckoCoin {
   id: string;
   symbol: string;
   name: string;
-  decimals: BigInt;
+  decimals?: BigInt;
   platforms: any;
-  imageSrc$?: any;
+  image?: string;
   amountOfToken$?: any;
 }

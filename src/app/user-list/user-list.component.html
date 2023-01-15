@@ -9,18 +9,16 @@
             class="btn btn-primary"
             [ngClass]="{
               'animate__animated animate__pulse animate__infinite':
-                trades?.length == 0
+                trades.length == 0
             }"
             (click)="redirectToTrade()"
           >
             {{ "TRADE.OPEN_NEW_TRADE" | translate }}
           </button>
         </div>
-        <cdk-virtual-scroll-viewport
-          appendOnly
-          itemSize="60"
+        <div
           class="coin-viewport"
-          [ngClass]="{ 'd-none': trades?.length == 0 }"
+          [ngClass]="{ 'd-none': trades.length == 0 }"
           [ngStyle]="{ width: 100 + '%', height: 300 + 'px' }"
         >
           <ngx-skeleton-loader
@@ -30,7 +28,7 @@
           <div
             class="list-group-item list-group-item-action row d-flex tradeItem"
             (dblclick)="clickedTradeItem(trade)"
-            *cdkVirtualFor="let trade of trades | sort : 'tradeId' : 'DESC'"
+            *ngFor="let trade of trades | sort : 'sortTradeId' : 'DESC'"
           >
             <div class="col flex-grow-0">#{{ trade.tradeId }}</div>
             <div class="col flex-grow-2">
@@ -49,7 +47,7 @@
               <app-coin-img-badge
                 [readOnly]="true"
                 [src]="
-                  (trade.coinCreator | fromAddressToCg | async)?.imageSrc$ ?? ''
+                  (trade.coinCreator | fromAddressToCg | async)?.image ?? ''
                 "
                 [coinLabel]="
                   (trade.coinCreator | fromAddressToCg | async)?.name ?? ''
@@ -72,8 +70,7 @@
               <app-coin-img-badge
                 [readOnly]="true"
                 [src]="
-                  (trade.coinCounterpart | fromAddressToCg | async)
-                    ?.imageSrc$ ?? ''
+                  (trade.coinCounterpart | fromAddressToCg | async)?.image ?? ''
                 "
                 [coinLabel]="
                   (trade.coinCounterpart | fromAddressToCg | async)?.name ?? ''
@@ -97,32 +94,61 @@
               </ng-template>
             </div>
             <div class="col actions flex-grow-1 d-flex justify-content-end">
-              <button
-                type="button"
-                class="btn text-secondary px-1"
-                (click)="clickedTradeItem(trade)"
-              >
-                <i-bs [name]="iconNames.Eye"></i-bs>
-              </button>
-              <button
-                type="button"
-                class="btn text-primary px-1"
-                (click)="openShareModal(trade)"
-              >
-                <i-bs [name]="iconNames.QrCode"></i-bs>
-              </button>
-              <button
-                type="button"
-                class="btn text-danger cancel-btn px-1"
-                [disabled]="trade.cancelled || trade.sold"
-                (click)="cancelTrade(trade)"
-              >
-                <i-bs [name]="iconNames.XCircle"></i-bs>
-              </button>
+              <div class="btn-group" dropdown placement="left" container="body">
+                <button
+                  id="button-animated"
+                  dropdownToggle
+                  type="button"
+                  class="hidden-button"
+                  aria-controls="dropdown-animated"
+                >
+                <i-bs [name]="iconNames.ThreeDotsVertical" class="mx-2"></i-bs>
+                </button>
+                <ul
+                  id="dropdown-animated"
+                  *dropdownMenu
+                  class="dropdown-menu trade-actions-dropdown"
+                  role="menu"
+                  aria-labelledby="button-animated"
+                >
+                  <li role="menuitem">
+                    <a
+                      class="dropdown-item text-secondary"
+                      (click)="clickedTradeItem(trade)"
+                      ><i-bs [name]="iconNames.Eye" class="mx-2"></i-bs>Open
+                      trade</a
+                    >
+                  </li>
+                  <li role="menuitem">
+                    <a
+                      class="dropdown-item text-primary"
+                      (click)="openShareModal(trade)"
+                      ><i-bs [name]="iconNames.QrCode" class="mx-2"></i-bs
+                      >Share</a
+                    >
+                  </li>
+                  <li
+                    role="menuitem"
+                    [ngClass]="{ disabled: trade.cancelled || trade.sold }"
+                  >
+                    <a
+                      class="dropdown-item cancel-btn {{
+                        trade.cancelled || trade.sold
+                          ? 'disabled'
+                          : 'text-danger'
+                      }}"
+                      (click)="cancelTrade(trade)"
+                      ><i-bs [name]="iconNames.XCircle" class="mx-2"></i-bs
+                      >Cancel</a
+                    >
+                  </li>
+                </ul>
+              </div>
+
             </div>
           </div>
-        </cdk-virtual-scroll-viewport>
-        <div class="empty-list w-100" *ngIf="trades?.length == 0">
+        </div>
+        <div class="empty-list w-100" *ngIf="trades.length == 0">
           <app-not-found
             [subtext]="'TRADE.NOT_FOUND_TRADES_SUBTITLE' | translate"
             [text]="'TRADE.NOT_FOUND_TRADES' | translate"

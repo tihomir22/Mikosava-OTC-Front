@@ -29,7 +29,6 @@ import {
 import { Account, State } from 'src/app/reducers';
 import { getNetwork, list } from 'src/app/utils/chains';
 import { CoingeckoCoin } from '../../models/CoinGeckoCoin';
-import erc20Object from '../../../../assets/ERC20.json';
 import { ProviderService } from '../../services/provider.service';
 import * as CoinsActions from '../../../actions/coins.actions';
 import { CoinsService } from '../../services/coins.service';
@@ -52,11 +51,7 @@ export class ListCoinsComponent {
   @Input() heightList: number = 200;
   @Output() selectCoin = new EventEmitter<CoingeckoCoin>();
 
-  constructor(
-    private store: Store<State>,
-    private http: HttpClient,
-    private coins: CoinsService
-  ) {
+  constructor(private store: Store<State>, private coins: CoinsService) {
     this.coins.getAllCoinsForCurrentNetwork().subscribe((data) => {
       this.originalCoins = data;
       this.filteredCoins = [...this.originalCoins];
@@ -105,25 +100,10 @@ export class ListCoinsComponent {
                 this.filteredCoins = foundCoins;
               } else {
                 const provider = await ProviderService.getWebProvider(false);
-                const erc20 = new ethers.Contract(
-                  event,
-                  erc20Object.abi,
-                  provider
+                const coin = await firstValueFrom(
+                  this.coins.getERC20Info(event, provider, account)
                 );
-                const decimals = await erc20['decimals']();
-                const name = await erc20['name']();
-                const symbol = await erc20['symbol']();
-                const balanceOf = await erc20['balanceOf'](
-                  provider.getSigner().getAddress()
-                );
-                let coin: CoingeckoCoin = {
-                  id: symbol.toLowerCase(),
-                  symbol: symbol,
-                  decimals,
-                  name: name,
-                  platforms: { [foundActiveNetwork!.platformName]: event },
-                  amountOfToken$: balanceOf,
-                };
+
                 this.store.dispatch(
                   CoinsActions.addNewCoinExternally({ newCoin: coin })
                 );

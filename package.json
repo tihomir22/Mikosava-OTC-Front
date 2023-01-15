@@ -41,6 +41,7 @@
     "moment": "^2.29.4",
     "ngx-bootstrap": "^6.2.0",
     "ngx-bootstrap-icons": "^1.9.1",
+    "ngx-cookie-service": "^15.0.0",
     "ngx-skeleton-loader": "^6.0.0",
     "ngx-toastr": "^16.0.1",
     "rxjs": "~7.5.0",

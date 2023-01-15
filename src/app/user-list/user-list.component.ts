@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import {
   firstValueFrom,
   forkJoin,
@@ -22,11 +22,13 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { ShareModalComponent } from '../shared/components/share-modal/share-modal.component';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss'],
+  providers: [{ provide: BsDropdownConfig, useValue: { isAnimated: true, autoClose: true } }]
 })
 export class UserListComponent {
   public trades: Array<MikosavaTrade> = [];
@@ -57,7 +59,13 @@ export class UserListComponent {
       MikosavaABI.abi,
       signer
     );
-    this.trades = await otcContract['fetchMyCoinTrades']();
+    this.trades = (await otcContract['fetchMyCoinTrades']()).map(
+      (entry: MikosavaTrade) => {
+        let clonedTrade = { ...entry };
+        (clonedTrade as any)['sortTradeId'] = Number(entry.tradeId);
+        return clonedTrade;
+      }
+    );
     this.tradesLoaded = true;
   }
 

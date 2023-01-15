@@ -161,6 +161,21 @@ app-swap {
   }
 }
 
-.toast-bottom-center{
+.toast-bottom-center {
   width: 100% !important;
+}
+
+.ellipsify {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trade-actions-dropdown {
+  left: -140px !important;
+}
+
+.hidden-button {
+  border: none;
+  background: none;
 }
