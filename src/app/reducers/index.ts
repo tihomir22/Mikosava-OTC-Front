@@ -5,6 +5,8 @@ import { BigNumber } from 'ethers';
 
 import * as AccountActions from '../actions/account.actions';
 import * as CoinsActions from '../actions/coins.actions';
+import * as NftActions from '../actions/nfts.actions';
+import { MikosavaNft } from '../shared/components/list-nfts/list-nfts.component';
 import { CoingeckoCoin } from '../shared/models/CoinGeckoCoin';
 
 export interface Account {
@@ -18,9 +20,18 @@ export interface State {
   coins: Array<CoingeckoCoin>;
   selectCoinA: CoingeckoCoin;
   selectCoinB: CoingeckoCoin;
+  selectNFTA: MikosavaNft;
+  selectNFTB: MikosavaNft;
+  nftCollectionsAdded: string[];
 }
 
 export const reducers: ActionReducerMap<State> = {
+  nftCollectionsAdded: createReducer(
+    [] as string[],
+    on(NftActions.addNewNftCollectionAddress, (state, { addresses }) => {
+      return [...new Set([...state, ...addresses])];
+    })
+  ),
   account: createReducer(
     {} as any,
     on(AccountActions.setAccount, (state, { newAccount }) => {
@@ -55,6 +66,24 @@ export const reducers: ActionReducerMap<State> = {
         return null;
       }
       return { ...state, ...selectBCoin };
+    })
+  ),
+  selectNFTA: createReducer(
+    null as any,
+    on(NftActions.selectNftA, (state, { selectANFT }) => {
+      if (!selectANFT) {
+        return null;
+      }
+      return { ...state, ...selectANFT };
+    })
+  ),
+  selectNFTB: createReducer(
+    null as any,
+    on(NftActions.selectNftB, (state, { selectBNFT }) => {
+      if (!selectBNFT) {
+        return null;
+      }
+      return { ...state, ...selectBNFT };
     })
   ),
 };

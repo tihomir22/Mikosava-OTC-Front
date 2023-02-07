@@ -1,0 +1,79 @@
+@import "../../../../assets/variables.scss";
+
+
+
+.active {
+  opacity: 0.5;
+  border: 1px solid $secondary;
+  transition: all 0.1s;
+}
+.nft-viewport {
+  overflow: auto;
+  min-width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .still-loading {
+    width: 100px;
+    height: 100px;
+  }
+}
+.groupers {
+  overflow: auto;
+  width: 425px;
+  .addressSwitcher {
+    overflow: auto;
+    width: 100%;
+    .chip-button {
+      margin: 0px 10px;
+      border-radius: 10px;
+    }
+  }
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.view-nft {
+  position: absolute;
+  bottom: 0;
+}
+
+.nft-viewer {
+  width: 350px;
+  margin: 20px 40px;
+  .preview {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    .img-preview {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 10px 5px;
+      img {
+        max-height: 400px;
+        max-width: 250px;
+      }
+      .action-buttons {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: column;
+        width: 100%;
+        padding: 5px;
+        button {
+          margin: 5px 0px;
+          width: 100%;
+        }
+      }
+    }
+    .details-preview {
+      margin: 10px 0px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      max-height: 450px;
+    }
+  }
+}

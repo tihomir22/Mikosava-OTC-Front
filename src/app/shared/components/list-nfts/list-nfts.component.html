@@ -1,0 +1,164 @@
+<div class="wraper-list-coins">
+  <div class="form-group" *ngIf="allowToSelectNft">
+    <input
+      type="text"
+      class="form-control search-control text-center"
+      aria-describedby="helpId"
+      [(ngModel)]="searchValue"
+      (ngModelChange)="searchChanged($event)"
+      placeholder="Search or paste contract address"
+    />
+  </div>
+
+  <div
+    class="nft-viewport p-2"
+    [ngStyle]="{ width: 100 + '%', height: heightList + 'px' }"
+  >
+    <ng-container *ngIf="!!filteredGroupErc721; else notLoaded">
+      <div class="wrapper" [formGroup]="form">
+        <div
+          class="groupers"
+          [ngStyle]="{ height: heightList - 30 + 'px' }"
+          *ngIf="allowToSelectNft"
+        >
+          <div
+            class="btn-group py-2 addressSwitcher"
+            btnRadioGroup
+            formControlName="selectionDisplay"
+          >
+            <label
+              btnRadio="wallet"
+              class="btn btn-primary no-wrap-text chip-button"
+              >My wallet</label
+            >
+            <label
+              *ngFor="let address of collectionAddress$ | async"
+              btnRadio="{{ address }}"
+              class="btn btn-primary no-wrap-text chip-button"
+              >{{ truncate(address) }}
+            </label>
+          </div>
+          <div class="nft-group-wrap">
+            <ng-container
+              *ngIf="
+                form.value.selectionDisplay == 'wallet';
+                else displayExternalCollection
+              "
+            >
+              <app-collection-list
+                [groupedNft]="filteredGroupErc721"
+                [selectedNft]="selectTempNft"
+                (selectNft)="selectNft($event)"
+              ></app-collection-list>
+            </ng-container>
+            <ng-template #displayExternalCollection>
+              <app-collection-list
+                [selectedKeys]="[form.value.selectionDisplay]"
+                [groupedNft]="dynamicGroupedNft"
+                [selectedNft]="selectTempNft"
+                (selectNft)="selectNft($event)"
+              ></app-collection-list>
+            </ng-template>
+          </div>
+        </div>
+        <div class="nft-viewer" *ngIf="!!selectTempNft">
+          <div class="header mb-2">
+            <i-bs
+              class="go-back"
+              width="2rem"
+              height="2rem"
+              (click)="unSelect()"
+              [name]="iconNames.ArrowLeft"
+              tooltip="{{ 'TRADE.TRADING_POSITION_GO_BACK' | translate }}"
+            ></i-bs>
+            <strong class="text-primary"
+              >{{ "NFT.VIEW_NFT" | translate }}
+              {{ " #" + selectTempNft.tokenId }}</strong
+            >
+          </div>
+          <div class="preview w-100">
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button
+                type="button"
+                class="btn"
+                (click)="changeType('image')"
+                [ngClass]="{ 'btn-primary': viewingModeNft == 'image' }"
+              >
+                Main
+              </button>
+              <button
+                type="button"
+                class="btn"
+                (click)="changeType('details')"
+                [ngClass]="{ 'btn-primary': viewingModeNft == 'details' }"
+              >
+                Details
+              </button>
+            </div>
+            <div class="img-preview" *ngIf="viewingModeNft == 'image'">
+              <img
+                [src]="
+                  selectTempNft.media && selectTempNft.media.length > 0
+                    ? selectTempNft.media[0].raw
+                    : 'assets/alien-from-hole.jpg'
+                "
+                alt=""
+                srcset=""
+              />
+            </div>
+
+            <div
+              class="details-preview py-2"
+              *ngIf="viewingModeNft == 'details'"
+            >
+              <p>
+                <strong class="text-secondary">Title: </strong>
+                <span class="text-primary">{{ selectTempNft.title }}</span>
+              </p>
+              <p>
+                <strong class="text-secondary">Description: </strong>
+                <span class="text-primary">{{
+                  selectTempNft.description
+                }}</span>
+              </p>
+              <p>
+                <strong class="text-secondary">Last updated: </strong>
+                <span class="text-primary">{{
+                  selectTempNft.timeLastUpdated | date
+                }}</span>
+              </p>
+              <p>
+                <strong class="text-secondary">Type: </strong>
+                <span class="text-primary">{{ selectTempNft.tokenType }}</span>
+              </p>
+              <p class="text-secondary text-center">
+                {{ selectTempNft.contract.name }}
+              </p>
+
+              <app-address-displayer
+                [length]="10"
+                [address]="selectTempNft.contract.address"
+              ></app-address-displayer>
+            </div>
+            <div class="action-buttons" *ngIf="allowToSelectNft">
+              <button
+                type="button"
+                (click)="selectNFTNonTMP()"
+                class="btn btn-primary btn-lg btn-block w-100"
+              >
+                Select
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #notLoaded>
+      <div class="still-loading">
+        <div class="spinner-border h-100 w-100" role="status">
+          <span class="sr-only"></span>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

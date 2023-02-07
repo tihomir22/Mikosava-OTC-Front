@@ -1,0 +1,18 @@
+@import "../../../../assets/variables.scss";
+
+.nft-item {
+  height: 64px;
+  width: 64px;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  margin: 10px;
+  border: 1px solid $ternary;
+  border-radius: 10px;
+  position: relative;
+  &:hover {
+    @extend .active;
+  }
+}

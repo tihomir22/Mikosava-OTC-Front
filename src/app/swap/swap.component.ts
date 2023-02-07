@@ -3,15 +3,8 @@ import { Store } from '@ngrx/store';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { State } from 'src/app/reducers';
 import { CoingeckoCoin } from '../shared/models/CoinGeckoCoin';
-import { ListCoinsComponent } from '../shared/components/list-coins/list-coins.component';
 import * as CoinsActions from '../actions/coins.actions';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  firstValueFrom,
-  interval,
-  Observable,
-} from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { ProviderService } from '../shared/services/provider.service';
 import { BigNumber, ethers } from 'ethers';
 import MikosavaABI from '../../assets/MikosavaOTC.json';
@@ -21,162 +14,49 @@ import { environment } from 'src/environments/environment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { IconNamesEnum } from 'ngx-bootstrap-icons';
-import moment from 'moment';
 import { Router } from '@angular/router';
+import moment from 'moment';
+import { CoinsService } from '../shared/services/coins.service';
+import { MikosavaNft } from '../shared/components/list-nfts/list-nfts.component';
+export type TradingType = 'erc20' | 'erc721' | 'mixed';
 @Component({
   selector: 'app-swap',
   templateUrl: './swap.component.html',
   styleUrls: ['./swap.component.scss'],
 })
 export class SwapComponent {
-  public ACoin: Observable<CoingeckoCoin> = this.store.select(
-    (store) => store.selectCoinA
-  );
-  public BCoin: Observable<CoingeckoCoin> = this.store.select(
-    (store) => store.selectCoinB
-  );
-
-  public formGroup: FormGroup = this.fb.group({
+  public amountCoinAParsed: BigInt = BigInt(0);
+  public iconNames = IconNamesEnum;
+  public allowance: BigInt = BigInt(0);
+  public formGroupERC20: FormGroup = this.fb.group({
     acoin: [null, [Validators.required, Validators.min(0)]],
     bcoin: [null, [Validators.required, Validators.min(0)]],
     availableUntil: [false, []],
     selectAvailableUntil: [null, []],
     selectCustomAvalaible: [null, []],
   });
-
-  public allowance: BigInt = BigInt(0);
-  public amountCoinAParsed: BigInt = BigInt(0);
-  public iconNames = IconNamesEnum;
-
+  public ACoin: Observable<CoingeckoCoin> = this.store.select(
+    (store) => store.selectCoinA
+  );
+  public BCoin: Observable<CoingeckoCoin> = this.store.select(
+    (store) => store.selectCoinB
+  );
+  public NFTA: Observable<MikosavaNft> = this.store.select(
+    (store) => store.selectNFTA
+  );
+  public NFTB: Observable<MikosavaNft> = this.store.select(
+    (store) => store.selectNFTB
+  );
+  public activeTradingType: TradingType = 'erc20';
   constructor(
     private modalService: BsModalService,
     private store: Store<State>,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private providerService: ProviderService,
-    private router: Router
-  ) {
-    this.formGroup
-      .get('acoin')
-      ?.valueChanges.pipe(debounceTime(500), distinctUntilChanged())
-      .subscribe(async (valueChangedCoinA) => {
-        let coinSelected = await firstValueFrom(this.ACoin);
-        if (coinSelected && Object.values(coinSelected).length > 0) {
-          this.allowance = await this.calculateAllowance(coinSelected);
-          this.amountCoinAParsed = await this.returnParsedAmountCoinA();
-        }
-      });
-  }
-
-  public onClickChipTimeFrameAvailableUntil(timeSelectedInMinutes: number) {
-    if (timeSelectedInMinutes == -1) {
-      //custom
-      this.formGroup.get('selectAvailableUntil')?.patchValue('custom');
-    } else {
-      this.formGroup
-        .get('selectAvailableUntil')
-        ?.patchValue(timeSelectedInMinutes);
-    }
-  }
-
-  public getValidUntil(): number {
-    if (
-      !this.formGroup.get('availableUntil')?.value ||
-      !this.formGroup.get('selectAvailableUntil')
-    )
-      return 0;
-
-    let isCustom =
-      this.formGroup.get('selectAvailableUntil')?.value == 'custom';
-
-    if (!isCustom) {
-      let parsedMinutes = Number(this.formGroup.value.selectAvailableUntil);
-      return +moment(new Date()).add(parsedMinutes, 'minutes').toDate();
-    } else {
-      return +moment(
-        this.formGroup.value.selectCustomAvalaible ?? new Date()
-      ).toDate();
-    }
-  }
-
-  public returnAvailableDetails(): string {
-    if (
-      !!this.formGroup.get('availableUntil')?.value &&
-      !!this.formGroup.get('selectAvailableUntil')?.value
-    ) {
-      let isCustom =
-        this.formGroup.get('selectAvailableUntil')?.value == 'custom';
-
-      if (!isCustom) {
-        let parsedMinutes = Number(this.formGroup.value.selectAvailableUntil);
-        return moment(new Date())
-          .add(parsedMinutes, 'minutes')
-          .format('DD/MM/YYYY HH:mm')
-          .toString();
-      } else {
-        return moment(this.formGroup.value.selectCustomAvalaible ?? new Date())
-          .format('DD/MM/YYYY HH:mm')
-          .toString();
-      }
-    }
-    return '';
-  }
-
-  public selectCoin(whichOne: 'A' | 'B') {
-    let bsModalRef = this.modalService.show(ListCoinsComponent, {
-      class: 'modal-dialog-centered',
-    });
-    if (bsModalRef.content) {
-      bsModalRef.content.widthList = 550;
-      bsModalRef.content.heightList = 650;
-      bsModalRef.content.selectCoin.subscribe(async (coin) => {
-        this.store.dispatch(
-          whichOne == 'A'
-            ? CoinsActions.selectCoinA({ selectACoin: coin })
-            : CoinsActions.selectCoinB({ selectBCoin: coin })
-        );
-        if (whichOne == 'A') {
-          this.allowance = await this.calculateAllowance(coin);
-        }
-        bsModalRef.hide();
-      });
-    }
-  }
-
-  private async calculateAllowance(coin: CoingeckoCoin): Promise<BigInt> {
-    const [, signer, , foundActiveNetwork] =
-      await this.providerService.getTools();
-
-    const coinAContract = returnERC20InstanceFromAddress(
-      coin.platforms[foundActiveNetwork!.platformName],
-      signer
-    );
-
-    const otcContract = new ethers.Contract(
-      environment.MATIC_DEPLOYED_ADDRESS_OTC,
-      MikosavaABI.abi,
-      signer
-    );
-
-    let allowance = await coinAContract['allowance'](
-      await signer.getAddress(),
-      otcContract.address
-    );
-
-    return allowance;
-  }
-
-  private async returnParsedAmountCoinA() {
-    const [, signer, , foundActiveNetwork] =
-      await this.providerService.getTools();
-    let selectedACoin = await firstValueFrom(this.ACoin);
-    const coinAContract = returnERC20InstanceFromAddress(
-      selectedACoin.platforms[foundActiveNetwork!.platformName],
-      signer
-    );
-    const decimals = await coinAContract['decimals']();
-    return BigInt(this.formGroup.value.acoin * 10 ** decimals);
-  }
+    private router: Router,
+    private coinService: CoinsService
+  ) {}
 
   public async approve() {
     const [, signer, , foundActiveNetwork] =
@@ -194,7 +74,7 @@ export class SwapComponent {
     );
     const decimals = await coinAContract['decimals']();
     let amountParsedA = BigInt(
-      this.formGroup.value.acoin * 1.1 * 10 ** decimals
+      this.formGroupERC20.value.acoin * 1.1 * 10 ** decimals
     );
 
     let tx = await coinAContract['approve'](
@@ -204,7 +84,7 @@ export class SwapComponent {
     this.toastr.info('Approving is on the go');
     const receipt = await tx.wait();
     this.toastr.success('The amount has been approved!');
-    this.allowance = await this.calculateAllowance(selectedACoin);
+    this.allowance = await this.coinService.getAllowanceERC20(selectedACoin);
   }
 
   public async openTrade() {
@@ -237,10 +117,12 @@ export class SwapComponent {
     //   provider.getSigner().getAddress()
     // );
 
-    let amountParsedA = BigInt(this.formGroup.value.acoin * 10 ** decimals);
+    let amountParsedA = BigInt(
+      this.formGroupERC20.value.acoin * 10 ** decimals
+    );
 
     let amountParsedB = BigInt(
-      this.formGroup.value.bcoin * 10 ** decimalsCoinB
+      this.formGroupERC20.value.bcoin * 10 ** decimalsCoinB
     );
 
     try {
@@ -265,10 +147,67 @@ export class SwapComponent {
       this.store.dispatch(
         CoinsActions.selectCoinB({ selectBCoin: null as any })
       );
-      this.formGroup.reset();
+      this.formGroupERC20.reset();
       window.location.href = '/list';
     } catch (error: any) {
       this.toastr.error(error.reason);
     }
+  }
+
+  public openTradeNft() {
+    console.log('YUP');
+  }
+
+  public getValidUntil(): number {
+    if (
+      !this.formGroupERC20.get('availableUntil')?.value ||
+      !this.formGroupERC20.get('selectAvailableUntil')
+    )
+      return 0;
+
+    let isCustom =
+      this.formGroupERC20.get('selectAvailableUntil')?.value == 'custom';
+
+    if (!isCustom) {
+      let parsedMinutes = Number(
+        this.formGroupERC20.value.selectAvailableUntil
+      );
+      return +moment(new Date()).add(parsedMinutes, 'minutes').toDate();
+    } else {
+      return +moment(
+        this.formGroupERC20.value.selectCustomAvalaible ?? new Date()
+      ).toDate();
+    }
+  }
+
+  public returnAvailableDetails(): string {
+    if (
+      !!this.formGroupERC20.get('availableUntil')?.value &&
+      !!this.formGroupERC20.get('selectAvailableUntil')?.value
+    ) {
+      let isCustom =
+        this.formGroupERC20.get('selectAvailableUntil')?.value == 'custom';
+
+      if (!isCustom) {
+        let parsedMinutes = Number(
+          this.formGroupERC20.value.selectAvailableUntil
+        );
+        return moment(new Date())
+          .add(parsedMinutes, 'minutes')
+          .format('DD/MM/YYYY HH:mm')
+          .toString();
+      } else {
+        return moment(
+          this.formGroupERC20.value.selectCustomAvalaible ?? new Date()
+        )
+          .format('DD/MM/YYYY HH:mm')
+          .toString();
+      }
+    }
+    return '';
+  }
+
+  public changeType(newType: TradingType) {
+    this.activeTradingType = newType;
   }
 }

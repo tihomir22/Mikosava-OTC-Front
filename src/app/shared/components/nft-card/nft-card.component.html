@@ -1,0 +1,12 @@
+<ng-container *ngIf="!nft; else displayingNft">
+  <div class="dotted-nft-select" (click)="emptyClick.emit()">
+    <i-bs [name]="iconNames.Plus" [width]="'64px'" [height]="'64px'"></i-bs>
+  </div>
+</ng-container>
+<ng-template #displayingNft>
+  <img
+    [src]="nft.media && nft.media.length > 0 ? nft.media[0].raw : ''"
+    alt=""
+    srcset=""
+  />
+</ng-template>

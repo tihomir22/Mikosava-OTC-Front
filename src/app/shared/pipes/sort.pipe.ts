@@ -5,21 +5,19 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class SortPipe implements PipeTransform {
   transform(array: any, field: string, type: 'ASC' | 'DESC'): any[] {
-    console.log(array)
     if (!Array.isArray(array)) {
       return array;
     }
-    let sortClone = [...array]
+    let sortClone = [...array];
     sortClone.sort((a: any, b: any) => {
-      if (a[field] < b[field]) {
+      if (Number(a[field]) < Number(b[field])) {
         return type == 'ASC' ? -1 : 1;
-      } else if (a[field] > b[field]) {
+      } else if (Number(a[field]) > Number(b[field])) {
         return type == 'ASC' ? 1 : -1;
       } else {
         return 0;
       }
     });
-    console.log(sortClone)
     return sortClone;
   }
 }

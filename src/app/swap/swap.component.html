@@ -1,126 +1,42 @@
 <div
   class="h-100 w-100 d-flex justify-content-center align-items-center wrapper-swap"
 >
-  <div class="card otc-card" [formGroup]="formGroup">
+  <div class="card otc-card shadow" [formGroup]="formGroupERC20">
     <div class="card-body">
-      <span class="text-primary">{{ "TRADE.OPEN_TRADE" | translate }}</span>
-      <div class="row my-2">
-        <div
-          class="col-12 w-100 d-flex justify-content-center align-items-center coin-selector-wrapper"
-        >
-          <div class="form-group w-100">
-            <input
-              type="number"
-              min="0"
-              formControlName="acoin"
-              class="form-control"
-              aria-describedby="helpId"
-              placeholder="0"
-            />
-          </div>
-          <div (click)="selectCoin('A')" class="wrapper-coin-quantity">
-            <app-coin-img-badge
-              [src]="(ACoin | async)?.image ?? ''"
-              [coinLabel]="(ACoin | async)?.name ?? ''"
-            ></app-coin-img-badge>
-            <span class="quantity text-primary" *ngIf="ACoin | async">{{
-              ((ACoin | async)?.amountOfToken$ | async) ?? 0 | number
-            }}</span>
-          </div>
+      <div class="d-flex justify-content-between w-100">
+        <span class="text-primary">{{ "TRADE.OPEN_TRADE" | translate }}</span>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button
+            type="button"
+            class="btn"
+            (click)="changeType('erc20')"
+            [ngClass]="{ 'btn-primary': activeTradingType == 'erc20' }"
+          >
+            Coin
+          </button>
+          <button
+            type="button"
+            class="btn"
+            (click)="changeType('erc721')"
+            [ngClass]="{ 'btn-primary': activeTradingType == 'erc721' }"
+          >
+            NFT
+          </button>
         </div>
       </div>
-      <div class="row my-2">
-        <div
-          class="col-12 w-100 d-flex justify-content-center align-items-center coin-selector-wrapper"
-        >
-          <div class="form-group w-100">
-            <input
-              type="number"
-              min="0"
-              class="form-control"
-              formControlName="bcoin"
-              aria-describedby="helpId"
-              placeholder="0"
-            />
-          </div>
+      <div class="erc20" *ngIf="activeTradingType == 'erc20'">
+        <app-erc20-swap
+          [(allowance)]="allowance"
+          [formERC20]="formGroupERC20"
+        ></app-erc20-swap>
+      </div>
 
-          <div (click)="selectCoin('B')" class="wrapper-coin-quantity">
-            <app-coin-img-badge
-              [src]="(BCoin | async)?.image ?? ''"
-              [coinLabel]="(BCoin | async)?.name ?? ''"
-            ></app-coin-img-badge>
-            <span class="quantity text-primary" *ngIf="BCoin | async">{{
-              ((BCoin | async)?.amountOfToken$ | async) ?? 0 | number
-            }}</span>
-          </div>
-        </div>
+      <div class="nft" *ngIf="activeTradingType == 'erc721'">
+        <app-erc721-swap></app-erc721-swap>
       </div>
-      <div class="row availableUntil">
-        <div class="col checkbox-wrapper">
-          <label class="custom-control custom-checkbox pb-2">
-            <input
-              type="checkbox"
-              value="checkedValue"
-              class="custom-control-input"
-              formControlName="availableUntil"
-            />
-            <span
-              class="custom-control-indicator mx-2"
-              tooltip="{{ 'TRADE.TOOLTIP_AVAILABILITY' | translate }}"
-              ><i-bs [name]="iconNames.QuestionCircle"></i-bs
-            ></span>
-            <span class="custom-control-description">{{
-              "TRADE.AVAILABLE_TIME" | translate
-            }}</span>
-          </label>
-        </div>
 
-        <div class="col badge-wrapper" *ngIf="!!formGroup.value.availableUntil">
-          <span
-            class="badge badge-pill badge-primary bg-primary"
-            [ngClass]="{
-              'bg-secondary': formGroup.value.selectAvailableUntil == '15'
-            }"
-            (click)="onClickChipTimeFrameAvailableUntil(15)"
-            >15 Min</span
-          >
-          <span
-            class="badge badge-pill badge-primary bg-primary"
-            [ngClass]="{
-              'bg-secondary': formGroup.value.selectAvailableUntil == '30'
-            }"
-            (click)="onClickChipTimeFrameAvailableUntil(30)"
-            >30 Min</span
-          >
-          <span
-            class="badge badge-pill badge-primary bg-primary"
-            [ngClass]="{
-              'bg-secondary': formGroup.value.selectAvailableUntil == '60'
-            }"
-            (click)="onClickChipTimeFrameAvailableUntil(60)"
-            >1h</span
-          >
-          <span
-            class="badge badge-pill badge-primary bg-primary"
-            [ngClass]="{
-              'bg-secondary': formGroup.value.selectAvailableUntil == '1440'
-            }"
-            (click)="onClickChipTimeFrameAvailableUntil(1440)"
-            >24h</span
-          >
-          <span
-            class="badge badge-pill badge-primary bg-primary"
-            [ngClass]="{
-              'bg-secondary': formGroup.value.selectAvailableUntil == 'custom'
-            }"
-            bsDatepicker
-            [(bsValue)]="formGroup.value.selectCustomAvalaible"
-            [bsConfig]="{ adaptivePosition: true }"
-            (click)="onClickChipTimeFrameAvailableUntil(-1)"
-            >Custom</span
-          >
-        </div>
-      </div>
+      <div class="mixed" *ngIf="activeTradingType == 'mixed'"></div>
+
       <div
         class="row availableUntilDetails my-2"
         *ngIf="returnAvailableDetails() != ''"
@@ -132,24 +48,34 @@
       </div>
       <div class="row">
         <button
-          *ngIf="allowance >= amountCoinAParsed"
+          *ngIf="allowance >= amountCoinAParsed && activeTradingType == 'erc20'"
           type="button"
           class="btn btn-primary btn-lg btn-block"
           (click)="openTrade()"
           [disabled]="
-            !formGroup.valid ||
+            !formGroupERC20.valid ||
             !(ACoin | async) ||
             !(BCoin | async) ||
-            (!!formGroup.get('availableUntil') &&
-              !formGroup.get('selectAvailableUntil'))
+            (!!formGroupERC20.get('availableUntil') &&
+              !formGroupERC20.get('selectAvailableUntil'))
           "
         >
-          Create OTC trade
+          Open token trade
+        </button>
+
+        <button
+          *ngIf="activeTradingType == 'erc721'"
+          type="button"
+          class="btn btn-primary btn-lg btn-block"
+          (click)="openTrade()"
+          [disabled]="!(NFTA | async) || !(NFTB | async)"
+        >
+          Open NFT trade
         </button>
 
         <button
           type="button"
-          *ngIf="allowance < amountCoinAParsed"
+          *ngIf="allowance < amountCoinAParsed && activeTradingType == 'erc20'"
           class="btn btn-secondary btn-lg btn-block"
           (click)="approve()"
         >

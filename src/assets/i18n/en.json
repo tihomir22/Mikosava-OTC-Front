@@ -5,6 +5,9 @@
   "COINS": {
     "NO_COIN_SELECTED": "No coin selected"
   },
+  "NFT": {
+    "VIEW_NFT": "Viewing "
+  },
   "TRADE": {
     "WILL_BE_VALID_UNTIL": "Trade will be valid until: ",
     "OPEN_TRADE": "Open trade",

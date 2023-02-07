@@ -2,7 +2,7 @@
   <div class="form-group">
     <input
       type="text"
-      class="form-control search-control"
+      class="form-control search-control text-center"
       aria-describedby="helpId"
       [(ngModel)]="searchValue"
       (ngModelChange)="searchChanged($event)"
@@ -23,7 +23,7 @@
     appendOnly
     itemSize="50"
     class="coin-viewport"
-    [ngStyle]="{ width: 100 + '%', height: heightList + 'px' }"
+    [ngStyle]="{ width: widthList + 'px', height: heightList + 'px' }"
   >
     <div
       *cdkVirtualFor="let coin of filteredCoins"

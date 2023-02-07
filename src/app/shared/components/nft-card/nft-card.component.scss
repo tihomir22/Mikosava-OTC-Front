@@ -1,0 +1,19 @@
+@import "../../../../assets/variables.scss";
+
+.dotted-nft-select {
+  height: 250px;
+  @include media-breakpoint-between(xs, sm) {
+    height: 200px;
+  }
+  border-radius: 20px;
+  width: 100%;
+  border: 5px dotted $primary;
+  color: $primary;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+img {
+  height: 250px;
+  width: 100%;
+}

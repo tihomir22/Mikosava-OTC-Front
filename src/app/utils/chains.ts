@@ -3,13 +3,30 @@ import { environment } from 'src/environments/environment';
 export enum ChainIds {
   MAINNET_POLYGON = 137,
   TESTNET_POLYGON = 80001,
+  SMR_EVM_TESTNET = 1076,
 }
 
 export const list = [
+  // {
+  //   chainId: ChainIds.SMR_EVM_TESTNET,
+  //   name: 'Shimmer Testnet',
+  //   interal_name_id: 'shimmer-testnet',
+  //   testnet: true,
+  //   platformName: 'shimmer',
+  //   asset: '/assets/icons/smr.png',
+  //   nativeCurrency: {
+  //     name: 'SMR',
+  //     decimals: 6,
+  //     symbol: 'SMR',
+  //     address: '0x0000000000000000000000000000000000001010',
+  //   },
+  //   easyAccessCoins: [],
+  //   rpcs: ['https://api.sc.testnet.shimmer.network/evm/jsonrpc'],
+  // },
   {
     chainId: ChainIds.TESTNET_POLYGON,
     name: 'Mumbai Testnet',
-    interal_name_id: 'matic-testnet',
+    interal_name_id: 'polygon-mumbai',
     testnet: true,
     asset: '/assets/icons/matic.png',
     platformName: 'polygon-pos',
@@ -36,7 +53,7 @@ export const list = [
   {
     chainId: ChainIds.MAINNET_POLYGON,
     name: 'Polygon Mainnet',
-    interal_name_id: 'matic-mainnet',
+    interal_name_id: 'polygon-mainnet',
     testnet: false,
     asset: '/assets/icons/matic.png',
     platformName: 'polygon-pos',

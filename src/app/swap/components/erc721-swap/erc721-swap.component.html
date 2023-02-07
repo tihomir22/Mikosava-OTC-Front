@@ -1,0 +1,45 @@
+<div class="erc721-swap">
+  <div class="card-a w-100">
+    <app-nft-card
+      class="w-100"
+      [nft]="(NFTA | async)!"
+      (emptyClick)="selectNftFromWallet('A')"
+    ></app-nft-card>
+    <button
+      *ngIf="!!(NFTA | async)!"
+      type="button"
+      name=""
+      id=""
+      class="btn btn-outline-primary my-2"
+      (click)="viewNft(NFTA)"
+    >
+      <i-bs [name]="iconNames.Search" [width]="'16px'" [height]="'16px'"></i-bs
+      >View details
+    </button>
+  </div>
+  <div class="separate-icon mx-2">
+    <i-bs
+      [name]="iconNames.ArrowLeftRight"
+      [width]="'32px'"
+      [height]="'32px'"
+    ></i-bs>
+  </div>
+  <div class="card-b w-100">
+    <app-nft-card
+      class="w-100"
+      [nft]="(NFTB | async)!"
+      (emptyClick)="selectNftFromWallet('B')"
+    ></app-nft-card>
+    <button
+      *ngIf="!!(NFTB | async)!"
+      type="button"
+      name=""
+      id=""
+      class="btn btn-outline-primary my-2"
+      (click)="viewNft(NFTB)"
+    >
+      <i-bs [name]="iconNames.Search" [width]="'16px'" [height]="'16px'"></i-bs>
+      View details
+    </button>
+  </div>
+</div>

@@ -17,7 +17,7 @@ modal-container {
   padding: 10px;
   .modal-content {
     left: -5px;
-    width: 100%;
+    width: fit-content;
   }
 }
 
@@ -27,6 +27,7 @@ modal-container {
 
 .otc-card {
   width: 350px;
+  border-radius: 20px;
   @include media-breakpoint-up(sm) {
     width: 550px;
   }
@@ -178,4 +179,12 @@ app-swap {
 .hidden-button {
   border: none;
   background: none;
+}
+
+.modal-dialog-centered{
+  max-width: min-content !important;
+}
+
+.no-wrap-text {
+  white-space: nowrap;
 }

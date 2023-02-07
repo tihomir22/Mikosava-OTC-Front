@@ -1,5 +1,4 @@
 import { _RecycleViewRepeaterStrategy } from '@angular/cdk/collections';
-import { HttpClient } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,21 +9,10 @@ import {
 import { Store } from '@ngrx/store';
 import { BigNumber, ethers } from 'ethers';
 import {
-  catchError,
-  combineLatest,
-  filter,
-  first,
   firstValueFrom,
-  forkJoin,
-  from,
-  interval,
-  lastValueFrom,
   map,
   Observable,
-  of,
   switchMap,
-  take,
-  tap,
 } from 'rxjs';
 import { Account, State } from 'src/app/reducers';
 import { getNetwork, list } from 'src/app/utils/chains';

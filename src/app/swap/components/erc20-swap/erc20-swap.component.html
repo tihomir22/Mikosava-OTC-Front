@@ -1,0 +1,119 @@
+<div class="erc20-swap" [formGroup]="formERC20" *ngIf="formERC20">
+  <div class="row my-2">
+    <div
+      class="col-12 w-100 d-flex justify-content-center align-items-center coin-selector-wrapper"
+    >
+      <div class="form-group w-100">
+        <input
+          type="number"
+          min="0"
+          formControlName="acoin"
+          class="form-control"
+          aria-describedby="helpId"
+          placeholder="0"
+        />
+      </div>
+      <div (click)="selectCoin('A')" class="wrapper-coin-quantity">
+        <app-coin-img-badge
+          [src]="(ACoin | async)?.image ?? ''"
+          [coinLabel]="(ACoin | async)?.name ?? ''"
+        ></app-coin-img-badge>
+        <span class="quantity text-primary" *ngIf="ACoin | async">{{
+          ((ACoin | async)?.amountOfToken$ | async) ?? 0 | number
+        }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="row my-2">
+    <div
+      class="col-12 w-100 d-flex justify-content-center align-items-center coin-selector-wrapper"
+    >
+      <div class="form-group w-100">
+        <input
+          type="number"
+          min="0"
+          class="form-control"
+          formControlName="bcoin"
+          aria-describedby="helpId"
+          placeholder="0"
+        />
+      </div>
+
+      <div (click)="selectCoin('B')" class="wrapper-coin-quantity">
+        <app-coin-img-badge
+          [src]="(BCoin | async)?.image ?? ''"
+          [coinLabel]="(BCoin | async)?.name ?? ''"
+        ></app-coin-img-badge>
+        <span class="quantity text-primary" *ngIf="BCoin | async">{{
+          ((BCoin | async)?.amountOfToken$ | async) ?? 0 | number
+        }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="row availableUntil">
+    <div class="col checkbox-wrapper">
+      <label class="custom-control custom-checkbox pb-2">
+        <input
+          type="checkbox"
+          value="checkedValue"
+          class="custom-control-input"
+          formControlName="availableUntil"
+        />
+        <span
+          class="custom-control-indicator mx-2"
+          tooltip="{{ 'TRADE.TOOLTIP_AVAILABILITY' | translate }}"
+          ><i-bs [name]="iconNames.QuestionCircle"></i-bs
+        ></span>
+        <span class="custom-control-description">{{
+          "TRADE.AVAILABLE_TIME" | translate
+        }}</span>
+      </label>
+    </div>
+
+    <div class="col badge-wrapper" *ngIf="!!formERC20.value.availableUntil">
+      <span
+        class="badge badge-pill badge-primary bg-primary"
+        [ngClass]="{
+          'bg-secondary': formERC20.value.selectAvailableUntil == '15'
+        }"
+        (click)="onClickChipTimeFrameAvailableUntil(15)"
+        >15 Min</span
+      >
+      <span
+        class="badge badge-pill badge-primary bg-primary"
+        [ngClass]="{
+          'bg-secondary': formERC20.value.selectAvailableUntil == '30'
+        }"
+        (click)="onClickChipTimeFrameAvailableUntil(30)"
+        >30 Min</span
+      >
+      <span
+        class="badge badge-pill badge-primary bg-primary"
+        [ngClass]="{
+          'bg-secondary': formERC20.value.selectAvailableUntil == '60'
+        }"
+        (click)="onClickChipTimeFrameAvailableUntil(60)"
+        >1h</span
+      >
+      <span
+        class="badge badge-pill badge-primary bg-primary"
+        [ngClass]="{
+          'bg-secondary': formERC20.value.selectAvailableUntil == '1440'
+        }"
+        (click)="onClickChipTimeFrameAvailableUntil(1440)"
+        >24h</span
+      >
+      <span
+        class="badge badge-pill badge-primary bg-primary"
+        [ngClass]="{
+          'bg-secondary': formERC20.value.selectAvailableUntil == 'custom'
+        }"
+        bsDatepicker
+        [(bsValue)]="formERC20.value.selectCustomAvalaible"
+        [bsConfig]="{ adaptivePosition: true }"
+        (click)="onClickChipTimeFrameAvailableUntil(-1)"
+        >Custom</span
+      >
+    </div>
+  </div>
+</div>

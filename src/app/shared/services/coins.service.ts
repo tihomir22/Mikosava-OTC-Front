@@ -22,8 +22,10 @@ import { CoingeckoCoin } from '../models/CoinGeckoCoin';
 import { CookieService } from 'ngx-cookie-service';
 import {
   AddressToCoin,
-  CookieCoinStructure,
 } from '../models/CookieCoinStructure';
+import { environment } from 'src/environments/environment';
+import { returnERC20InstanceFromAddress } from 'src/app/utils/tokens';
+import MikosavaABI from '../../../assets/MikosavaOTC.json';
 
 @Injectable({
   providedIn: 'root',
@@ -175,6 +177,29 @@ export class CoinsService {
     latestState[tokenAddress] = customCoin;
 
     this.cookieService.set(chainId.toString(), JSON.stringify(latestState));
+  }
+
+  public async getAllowanceERC20(coin: CoingeckoCoin): Promise<BigInt> {
+    const [, signer, , foundActiveNetwork] =
+      await this.providerService.getTools();
+
+    const coinAContract = returnERC20InstanceFromAddress(
+      coin.platforms[foundActiveNetwork!.platformName],
+      signer
+    );
+
+    const otcContract = new ethers.Contract(
+      environment.MATIC_DEPLOYED_ADDRESS_OTC,
+      MikosavaABI.abi,
+      signer
+    );
+
+    let allowance = await coinAContract['allowance'](
+      await signer.getAddress(),
+      otcContract.address
+    );
+
+    return allowance;
   }
 
   private extractCoinsFromCookiesForCurrentNetwork(

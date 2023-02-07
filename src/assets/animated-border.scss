@@ -31,6 +31,12 @@
   }
 }
 
+app-list-nfts {
+  .animated-border {
+    height: fit-content;
+  }
+}
+
 @property --border-angle {
   syntax: "<angle>";
   inherits: true;

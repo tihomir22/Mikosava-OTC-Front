@@ -12,6 +12,7 @@ import { copyClipboard, truncateAddress } from 'src/app/utils/utils';
 })
 export class AddressDisplayerComponent {
   public truncate = truncateAddress;
+  @Input() length = 5;
   @Input() address: string = '';
   @Input() isButton: boolean = true;
   constructor(private store: Store<State>, private toastr: ToastrService) {

@@ -26,6 +26,10 @@ import { StatusDisplayerComponent } from './components/status-displayer/status-d
 import { ValidUntilProgressbarComponent } from './components/valid-until-progressbar/valid-until-progressbar.component';
 import { SortPipe } from './pipes/sort.pipe';
 import { CookiesConsentComponent } from './components/cookies-consent/cookies-consent.component';
+import { ListNftsComponent } from './components/list-nfts/list-nfts.component';
+import { NftCardComponent } from './components/nft-card/nft-card.component';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { CollectionListComponent } from './components/collection-list/collection-list.component';
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -41,12 +45,16 @@ import { CookiesConsentComponent } from './components/cookies-consent/cookies-co
     ValidUntilProgressbarComponent,
     SortPipe,
     CookiesConsentComponent,
+    ListNftsComponent,
+    NftCardComponent,
+    CollectionListComponent,
   ],
   imports: [
     CommonModule,
     CollapseModule,
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
+    ButtonsModule.forRoot(),
     BsDatepickerModule.forRoot(),
     RouterModule,
     ReactiveFormsModule,
@@ -79,6 +87,7 @@ import { CookiesConsentComponent } from './components/cookies-consent/cookies-co
     CookiesConsentComponent,
     ValidUntilProgressbarComponent,
     SortPipe,
+    NftCardComponent,
   ],
   providers: [ParseFromWeiToDecimalNumberPipe],
 })
