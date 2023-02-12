@@ -5,7 +5,9 @@
 </ng-container>
 <ng-template #displayingNft>
   <img
-    [src]="nft.media && nft.media.length > 0 ? nft.media[0].raw : ''"
+    [src]="
+      itHasAnImage(nft) ? nft.media[0].gateway : 'assets/alien-from-hole.jpg'
+    "
     alt=""
     srcset=""
   />

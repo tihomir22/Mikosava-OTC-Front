@@ -88,8 +88,8 @@ export const getFeeForInternalPlatformId = (internalPlatformId: string) => {
   if (found) {
     //Matic
     if (
-      found.interal_name_id == 'matic-testnet' ||
-      found.interal_name_id == 'matic-mainnet'
+      found.interal_name_id == 'polygon-mumbai' ||
+      found.interal_name_id == 'polygon-mainnet'
     ) {
       return environment.MATIC_FEE;
     }

@@ -1,0 +1,48 @@
+@import "../../../../assets/variables.scss";
+
+.coin-viewport {
+  overflow: auto;
+}
+.list-group-item:nth-child(odd) {
+  background-color: lighten($primary, 60%);
+}
+
+.list-group-item:nth-child(even) {
+  background-color: lighten($secondary, 40%);
+}
+.actions {
+  button {
+    margin: 0px 5px;
+  }
+}
+
+.pairA,
+.pairB {
+  flex-grow: 2;
+}
+
+.tradeItem {
+  height: 60px;
+}
+
+.col {
+  display: flex;
+  align-items: center;
+}
+
+.cancel-btn {
+  border: 0 !important;
+}
+
+.menuitem {
+  display: flex;
+}
+
+.identicon-nft {
+  border: 1px solid $primary;
+  border-radius: 5px;
+}
+
+.details-btn{
+  border: none;
+}

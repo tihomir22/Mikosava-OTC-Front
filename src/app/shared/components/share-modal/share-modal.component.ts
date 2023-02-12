@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { copyClipboard } from 'src/app/utils/utils';
-import { MikosavaTrade } from '../../models/MikosavaTrade';
+import { ListTradeItem } from '../list-trades/list-trades.component';
 
 @Component({
   selector: 'app-share-modal',
@@ -9,7 +9,7 @@ import { MikosavaTrade } from '../../models/MikosavaTrade';
   styleUrls: ['./share-modal.component.scss'],
 })
 export class ShareModalComponent {
-  @Input() set trade(data: MikosavaTrade) {
+  @Input() set trade(data: ListTradeItem) {
     if (data) {
       this.url = window.location.origin + '/trade/' + data.tradeId;
       this._trade = data;
@@ -18,7 +18,7 @@ export class ShareModalComponent {
   @Input() showQR: boolean = true;
   @Input() showClipboard: boolean = true;
   @Input() widthQr: number = 256;
-  public _trade?: MikosavaTrade;
+  public _trade?: ListTradeItem;
   public url: string = '';
 
   constructor(private toastr: ToastrService) {}

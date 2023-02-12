@@ -1,15 +1,19 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { State } from 'src/app/reducers';
+import { Account, State } from 'src/app/reducers';
 import { CoingeckoCoin } from '../shared/models/CoinGeckoCoin';
 import * as CoinsActions from '../actions/coins.actions';
+import * as NftActions from '../actions/nfts.actions';
 import { firstValueFrom, Observable } from 'rxjs';
 import { ProviderService } from '../shared/services/provider.service';
 import { BigNumber, ethers } from 'ethers';
 import MikosavaABI from '../../assets/MikosavaOTC.json';
 import { getFeeForInternalPlatformId, getNetwork } from 'src/app/utils/chains';
-import { returnERC20InstanceFromAddress } from 'src/app/utils/tokens';
+import {
+  returnERC20InstanceFromAddress,
+  returnERC721InstanceFromAddress,
+} from 'src/app/utils/tokens';
 import { environment } from 'src/environments/environment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -87,6 +91,63 @@ export class SwapComponent {
     this.allowance = await this.coinService.getAllowanceERC20(selectedACoin);
   }
 
+  public async openNftTrade() {
+    const [provider, signer, account, foundActiveNetwork] =
+      await this.providerService.getTools();
+
+    const nftA = await firstValueFrom(this.NFTA);
+
+    const nftB = await firstValueFrom(this.NFTB);
+
+    const nftAContract = returnERC721InstanceFromAddress(
+      nftA.contract.address,
+      signer
+    );
+
+    const nftBContract = returnERC721InstanceFromAddress(
+      nftB.contract.address,
+      signer
+    );
+
+    const otcContract = new ethers.Contract(
+      environment.MATIC_DEPLOYED_ADDRESS_OTC,
+      MikosavaABI.abi,
+      signer
+    );
+
+    const approval = await nftAContract['approve'](
+      otcContract.address,
+      nftA.tokenId,
+      { from: (account as Account).address }
+    );
+    this.toastr.info('Approving is on the go');
+    const receipt = await approval.wait();
+    const fees =
+      getFeeForInternalPlatformId(foundActiveNetwork!.interal_name_id) *
+      10 ** foundActiveNetwork!.nativeCurrency.decimals;
+    try {
+      let trade = await otcContract['createOTCNPosition'](
+        nftAContract.address,
+        nftBContract.address,
+        nftA.tokenId,
+        nftB.tokenId,
+        this.getValidUntil() * 1000,
+        true,
+        {
+          value: fees,
+        }
+      );
+      this.toastr.info('The trade is pending...');
+      const receipt = await trade.wait();
+      this.toastr.success('The trade has been opened correctly.');
+      this.store.dispatch(NftActions.selectNftA({ selectANFT: null as any }));
+      this.store.dispatch(NftActions.selectNftB({ selectBNFT: null as any }));
+      window.location.href = '/list';
+    } catch (error: any) {
+      this.toastr.error(error.reason);
+    }
+  }
+
   public async openTrade() {
     const [provider, signer, , foundActiveNetwork] =
       await this.providerService.getTools();
@@ -132,6 +193,7 @@ export class SwapComponent {
         amountParsedA.toString(),
         amountParsedB.toString(),
         this.getValidUntil() * 1000,
+        true,
         {
           value:
             getFeeForInternalPlatformId(foundActiveNetwork!.interal_name_id) *

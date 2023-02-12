@@ -30,6 +30,10 @@ import { ListNftsComponent } from './components/list-nfts/list-nfts.component';
 import { NftCardComponent } from './components/nft-card/nft-card.component';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { CollectionListComponent } from './components/collection-list/collection-list.component';
+import { ListTradesComponent } from './components/list-trades/list-trades.component';
+import { FromMikosavaTradeToListTradeItem } from './pipes/from-mikosava-trade-to-list-trade-item';
+import { FromMikosavaNFTTradeToListTradeItem } from './pipes/from-mikosava-NFT-trade-to-list-trade-item copy';
+import { CloseTradeCommonComponent } from './components/close-trade-common/close-trade-common.component';
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -38,6 +42,7 @@ import { CollectionListComponent } from './components/collection-list/collection
     ListCoinsComponent,
     CoinImgBadgeComponent,
     FromAddressToCgPipe,
+    FromMikosavaTradeToListTradeItem,
     ParseFromWeiToDecimalNumberPipe,
     ShareModalComponent,
     NotFoundComponent,
@@ -48,6 +53,9 @@ import { CollectionListComponent } from './components/collection-list/collection
     ListNftsComponent,
     NftCardComponent,
     CollectionListComponent,
+    ListTradesComponent,
+    FromMikosavaNFTTradeToListTradeItem,
+    CloseTradeCommonComponent,
   ],
   imports: [
     CommonModule,
@@ -74,9 +82,11 @@ import { CollectionListComponent } from './components/collection-list/collection
     NetworkDisplayerComponent,
     ListCoinsComponent,
     ReactiveFormsModule,
+    FormsModule,
     BsDatepickerModule,
     CoinImgBadgeComponent,
     FromAddressToCgPipe,
+    FromMikosavaTradeToListTradeItem,
     TooltipModule,
     ShareModalComponent,
     PopoverModule,
@@ -88,6 +98,10 @@ import { CollectionListComponent } from './components/collection-list/collection
     ValidUntilProgressbarComponent,
     SortPipe,
     NftCardComponent,
+    ListTradesComponent,
+    ButtonsModule,
+    FromMikosavaNFTTradeToListTradeItem,
+    CloseTradeCommonComponent,
   ],
   providers: [ParseFromWeiToDecimalNumberPipe],
 })

@@ -98,27 +98,36 @@
             <div class="img-preview" *ngIf="viewingModeNft == 'image'">
               <img
                 [src]="
-                  selectTempNft.media && selectTempNft.media.length > 0
-                    ? selectTempNft.media[0].raw
+                  itHasAnImage(selectTempNft)
+                    ? selectTempNft.media[0].gateway
                     : 'assets/alien-from-hole.jpg'
                 "
                 alt=""
                 srcset=""
               />
+              <p *ngIf="!itHasAnImage(selectTempNft)">
+                <strong>No image avalaible for this dude.</strong>
+              </p>
             </div>
 
             <div
-              class="details-preview py-2"
+              class="details-preview py-2 shadow"
               *ngIf="viewingModeNft == 'details'"
             >
               <p>
                 <strong class="text-secondary">Title: </strong>
-                <span class="text-primary">{{ selectTempNft.title }}</span>
+                <span class="text-primary">{{
+                  itHasATitle(selectTempNft)
+                    ? selectTempNft.title
+                    : "No title found"
+                }}</span>
               </p>
               <p>
                 <strong class="text-secondary">Description: </strong>
                 <span class="text-primary">{{
-                  selectTempNft.description
+                  itHasADescription(selectTempNft)
+                    ? selectTempNft.description
+                    : "No description found"
                 }}</span>
               </p>
               <p>
@@ -127,10 +136,10 @@
                   selectTempNft.timeLastUpdated | date
                 }}</span>
               </p>
-              <p>
+              <!-- <p>
                 <strong class="text-secondary">Type: </strong>
                 <span class="text-primary">{{ selectTempNft.tokenType }}</span>
-              </p>
+              </p> -->
               <p class="text-secondary text-center">
                 {{ selectTempNft.contract.name }}
               </p>

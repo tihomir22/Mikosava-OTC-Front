@@ -1,0 +1,52 @@
+<app-close-trade-common
+  [viewedTrade]="[viewedTrade] | fromMNTtoLTI : 'single'"
+  [displayExchangeButton]="
+    (getAccount | async)?.address != viewedTrade.creator &&
+    !viewedTrade.cancelled &&
+    !viewedTrade.sold
+  "
+  [disableExchangeButton]="
+    getStatus([viewedTrade] | fromMNTtoLTI : 'single') != 'Open'
+  "
+  [displayCancelButton]="
+    (getAccount | async)?.address == viewedTrade.creator &&
+    !viewedTrade.cancelled &&
+    !viewedTrade.sold
+  "
+  [disableCancelButton]="
+    getStatus([viewedTrade] | fromMNTtoLTI : 'single') != 'Open' &&
+    getStatus([viewedTrade] | fromMNTtoLTI : 'single') != 'Expired'
+  "
+  (goBack)="goBack()"
+  (exchange)="exchange()"
+  (cancell)="cancell()"
+>
+  <div class="card-b w-100">
+    <app-nft-card class="w-100" [nft]="(nftA | async)!"></app-nft-card>
+    <button
+      *ngIf="!!(nftA | async)"
+      type="button"
+      name=""
+      id=""
+      class="btn btn-outline-primary my-2"
+      (click)="viewNftDetails(nftA)"
+    >
+      <i-bs [name]="iconNames.Search" [width]="'16px'" [height]="'16px'"></i-bs>
+      View details
+    </button>
+  </div>
+  <div class="card-b w-100">
+    <app-nft-card class="w-100" [nft]="(nftB | async)!"></app-nft-card>
+    <button
+      *ngIf="!!(nftB | async)"
+      type="button"
+      name=""
+      id=""
+      class="btn btn-outline-primary my-2"
+      (click)="viewNftDetails(nftB)"
+    >
+      <i-bs [name]="iconNames.Search" [width]="'16px'" [height]="'16px'"></i-bs>
+      View details
+    </button>
+  </div>
+</app-close-trade-common>

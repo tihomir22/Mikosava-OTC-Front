@@ -1,0 +1,92 @@
+<div class="h-100 w-100 wrap" *ngIf="viewedTrade">
+  <div class="main-card">
+    <div class="header mb-2">
+      <span class="text-primary">{{
+        "TRADE.TRADING_POSITION" | translate
+      }}</span>
+      <i-bs
+        class="go-back"
+        width="2rem"
+        height="2rem"
+        (click)="goBack.emit()"
+        [name]="iconNames.ArrowLeft"
+        tooltip="{{ 'TRADE.TRADING_POSITION_GO_BACK' | translate }}"
+      ></i-bs>
+    </div>
+    <div class="card animated-border w-100">
+      <div class="card-body close-trade-body">
+        <div class="row d-flex justify-content-center w-100 py-3">
+          <div class="col id-trade">
+            <div>ID: #{{ viewedTrade.tradeId }}</div>
+            <div>
+              <ng-container
+                *ngIf="
+                  viewedTrade.validUntil.toString() == '0';
+                  else validUntilSet
+                "
+              >
+                <i-bs
+                  width="2rem"
+                  height="2rem"
+                  [name]="iconNames.Infinity"
+                ></i-bs>
+              </ng-container>
+              <ng-template #validUntilSet>
+                <app-valid-until-progressbar
+                  [trade]="viewedTrade"
+                ></app-valid-until-progressbar>
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="col">
+            <app-share-modal
+              [trade]="viewedTrade"
+              [showClipboard]="false"
+              [widthQr]="80"
+            ></app-share-modal>
+          </div>
+        </div>
+
+        <div class="row close-trade w-100">
+          <ng-content></ng-content>
+        </div>
+
+        <div class="action-buttons py-4" *ngIf="!!(getAccount | async)">
+          <button
+            type="button"
+            class="btn btn-primary btn-lg btn-block my-1"
+            [disabled]="disableExchangeButton"
+            *ngIf="displayExchangeButton"
+            (click)="exchange.emit()"
+          >
+            Exchange
+          </button>
+          <button
+            type="button"
+            *ngIf="displayApproveButton"
+            class="btn btn-secondary btn-lg btn-block my-1"
+            [disabled]="disableApproveButton"
+            (click)="approve.emit()"
+          >
+            Approve
+          </button>
+          <button
+            type="button"
+            *ngIf="displayCancelButton"
+            class="btn btn-danger btn-lg btn-block my-1"
+            [disabled]="disableCancelButton"
+            (click)="cancell.emit()"
+          >
+            Cancel
+          </button>
+        </div>
+        <div class="row">
+          <div class="status-visualizer">
+            <app-status-displayer [trade]="viewedTrade"></app-status-displayer>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

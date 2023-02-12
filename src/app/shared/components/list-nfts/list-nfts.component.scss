@@ -1,12 +1,6 @@
 @import "../../../../assets/variables.scss";
 
 
-
-.active {
-  opacity: 0.5;
-  border: 1px solid $secondary;
-  transition: all 0.1s;
-}
 .nft-viewport {
   overflow: auto;
   min-width: 400px;
@@ -45,6 +39,7 @@
   width: 350px;
   margin: 20px 40px;
   .preview {
+    min-height: 500px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -74,6 +69,8 @@
       overflow-x: hidden;
       overflow-y: auto;
       max-height: 450px;
+      padding: 10px;
+      border-radius: 10px;
     }
   }
 }

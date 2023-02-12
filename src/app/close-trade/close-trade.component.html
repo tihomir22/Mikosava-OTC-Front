@@ -1,4 +1,4 @@
-<div class="h-100 w-100 wrap" *ngIf="viewedTrade">
+<!-- <div class="h-100 w-100 wrap" *ngIf="viewedTrade">
   <div class="main-card">
     <div class="header mb-2">
       <span class="text-primary">{{
@@ -41,7 +41,7 @@
 
           <div class="col">
             <app-share-modal
-              [trade]="viewedTrade"
+              [trade]="[viewedTrade] | fromMTtoLTI : 'single'"
               [showClipboard]="false"
               [widthQr]="80"
             ></app-share-modal>
@@ -161,4 +161,78 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
+<app-close-trade-common
+  [viewedTrade]="[viewedTrade] | fromMTtoLTI : 'single'"
+  [displayExchangeButton]="
+    (getAccount | async)?.address != viewedTrade.creator &&
+    allowance >= viewedTrade.amountPositionCounterpart &&
+    !viewedTrade.cancelled &&
+    !viewedTrade.sold
+  "
+  [disableExchangeButton]="getStatus(viewedTrade) != 'Open'"
+  [displayApproveButton]="
+    allowance < viewedTrade.amountPositionCounterpart &&
+    !viewedTrade.cancelled &&
+    !viewedTrade.sold
+  "
+  [disableApproveButton]="getStatus(viewedTrade) != 'Open'"
+  [displayCancelButton]="
+    (getAccount | async)?.address == viewedTrade.creator &&
+    !viewedTrade.cancelled &&
+    !viewedTrade.sold
+  "
+  [disableCancelButton]="
+    getStatus(viewedTrade) != 'Open' && getStatus(viewedTrade) != 'Expired'
+  "
+  (goBack)="goBack()"
+  (exchange)="exchange()"
+  (approve)="approve()"
+  (cancell)="cancell()"
+>
+  <div class="d-flex justify-content-center align-items-center text-primary">
+    <span>
+      {{
+        viewedTrade.amountPositionCreator
+          | parseFromWeiToDecimalNumber : viewedTrade.coinCreator
+          | async
+          | number
+      }}
+    </span>
+    <app-coin-img-badge
+      [readOnly]="true"
+      [coinAddress]="viewedTrade.coinCreator"
+      [src]="(viewedTrade.coinCreator | fromAddressToCg | async)?.image ?? ''"
+      [coinLabel]="
+        (viewedTrade.coinCreator | fromAddressToCg | async)?.name ?? ''
+      "
+      [defaultLabel]="'Loading...'"
+    ></app-coin-img-badge>
+  </div>
+  <div
+    class="d-flex justify-content-center align-items-center py-3 text-primary"
+  >
+    <i-bs [name]="iconNames.ArrowDownUp" width="2rem" height="2rem"></i-bs>
+  </div>
+  <div class="d-flex justify-content-center align-items-center text-primary">
+    <span>
+      {{
+        viewedTrade.amountPositionCounterpart
+          | parseFromWeiToDecimalNumber : viewedTrade.coinCounterpart
+          | async
+          | number
+      }}
+    </span>
+    <app-coin-img-badge
+      [readOnly]="true"
+      [coinAddress]="viewedTrade.coinCounterpart"
+      [src]="
+        (viewedTrade.coinCounterpart | fromAddressToCg | async)?.image ?? ''
+      "
+      [coinLabel]="
+        (viewedTrade.coinCounterpart | fromAddressToCg | async)?.name ?? ''
+      "
+      [defaultLabel]="'Loading...'"
+    ></app-coin-img-badge>
+  </div>
+</app-close-trade-common>

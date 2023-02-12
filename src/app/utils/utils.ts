@@ -1,4 +1,6 @@
 import { MikosavaTrade } from '../shared/models/MikosavaTrade';
+import Identicon, { IdenticonOptions } from 'identicon.js';
+import { ListTradeItem } from '../shared/components/list-trades/list-trades.component';
 
 export const truncateAddress = (address: string, length = 5) => {
   let first = address.substring(0, length);
@@ -20,11 +22,11 @@ export const copyClipboard = (val: string) => {
   document.body.removeChild(selBox);
 };
 
-export const isExpired = (trade: MikosavaTrade) => {
+export const isExpired = (trade: MikosavaTrade | ListTradeItem) => {
   return +new Date() * 1000 > +trade.validUntil && +trade.validUntil != 0;
 };
 
-export const getStatus = (trade: MikosavaTrade) => {
+export const getStatus = (trade: MikosavaTrade | ListTradeItem) => {
   const expired = isExpired(trade);
   if (trade.cancelled) {
     return 'Cancelled';
@@ -34,4 +36,15 @@ export const getStatus = (trade: MikosavaTrade) => {
     return 'Expired';
   }
   return 'Open';
+};
+
+export const generateIdenticonB64 = (
+  text: string,
+  options: IdenticonOptions = {
+    size: 64,
+    background: [255, 255, 255, 255],
+    margin: 0.2,
+  }
+) => {
+  return new Identicon(text, options).toString();
 };

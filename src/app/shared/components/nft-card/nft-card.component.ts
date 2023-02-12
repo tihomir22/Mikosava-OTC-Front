@@ -11,4 +11,8 @@ export class NftCardComponent {
   public iconNames = IconNamesEnum;
   @Input() nft!: MikosavaNft;
   @Output() emptyClick = new EventEmitter<void>();
+
+  public itHasAnImage(nft: MikosavaNft) {
+    return nft.media && nft.media.length > 0 && nft.media[0].gateway;
+  }
 }

@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CloseTradeNftComponent } from './close-trade-nft/close-trade-nft.component';
+import { CloseTradeNftResolver } from './close-trade-nft/close-trade-nft.resolver';
 import { CloseTradeComponent } from './close-trade/close-trade.component';
 import { TradeResolver } from './close-trade/trade.resolver';
 import { LandingComponent } from './landing/landing.component';
@@ -14,6 +16,11 @@ const routes: Routes = [
     path: 'trade/:idTrade',
     component: CloseTradeComponent,
     resolve: { idTrade: TradeResolver },
+  },
+  {
+    path: 'nft-trade/:idTradeNft',
+    component: CloseTradeNftComponent,
+    resolve: { idTradeNft: CloseTradeNftResolver },
   },
 ];
 

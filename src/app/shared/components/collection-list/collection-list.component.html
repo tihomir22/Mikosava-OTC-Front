@@ -1,26 +1,34 @@
-<div
-  class="nft-group px-2"
-  *ngFor="let groupAddress of selectedKeys ?? keys(groupedNft)"
->
-  <div class="collection-name">
-    <strong class="text-primary">
-      {{
-        groupedNft[groupAddress] &&
-        groupedNft[groupAddress].length > 0 &&
-        groupedNft[groupAddress][0].contract.name
-          ? groupedNft[groupAddress][0].contract.name
-          : "Unknown collection"
-      }}
-    </strong>
-  </div>
-  <div class="d-flex flex-wrap">
-    <div
-      *ngFor="let nft of groupedNft[groupAddress] | sort : 'tokenId' : 'DESC'"
-      class="nft-item"
-      [ngClass]="{ active: nft == selectedNft }"
-      (click)="selectNft.emit(nft)"
-    >
-      <img [src]="'data:image/png;base64,' + nft.identicon" />
+<ng-container *ngIf="keys(groupedNft).length > 0; else empty">
+  <div
+    class="nft-group px-2"
+    *ngFor="let groupAddress of selectedKeys ?? keys(groupedNft)"
+  >
+    <div class="collection-name">
+      <strong class="text-primary">
+        {{
+          groupedNft[groupAddress] &&
+          groupedNft[groupAddress].length > 0 &&
+          groupedNft[groupAddress][0].contract.name
+            ? groupedNft[groupAddress][0].contract.name
+            : "Unknown collection"
+        }}
+      </strong>
+    </div>
+    <div class="d-flex flex-wrap">
+      <div
+        *ngFor="let nft of groupedNft[groupAddress] | sort : 'tokenId' : 'DESC'"
+        class="nft-item"
+        [ngClass]="{ active: nft == selectedNft }"
+        (click)="selectNft.emit(nft)"
+      >
+        <img [src]="'data:image/png;base64,' + nft.identicon" />
+      </div>
     </div>
   </div>
-</div>
+</ng-container>
+<ng-template #empty>
+  <app-not-found
+    [text]="'You do not have any nfts in your wallet'"
+    [subtext]="'You could try minting your first!'"
+  ></app-not-found>
+</ng-template>

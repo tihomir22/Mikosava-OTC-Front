@@ -1,5 +1,11 @@
 @import "../../../../assets/variables.scss";
 
+.active {
+  opacity: 0.5;
+  border: 1px solid $secondary;
+  transition: all 0.1s;
+}
+
 .nft-item {
   height: 64px;
   width: 64px;
