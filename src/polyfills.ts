@@ -46,7 +46,6 @@
  * Zone JS is required by default for Angular itself.
  */
 import 'zone.js'; // Included with Angular CLI.
-import { secrets } from './environments/secrets';
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
@@ -54,7 +53,3 @@ import { secrets } from './environments/secrets';
 (window as any).process = {
   env: { DEBUG: undefined },
 };
-
-if (secrets) {
-  window.process.env['ALCHEMY_API'] = secrets.ALCHEMY_API;
-}
