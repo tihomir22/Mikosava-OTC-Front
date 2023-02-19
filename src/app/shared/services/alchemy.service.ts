@@ -8,7 +8,7 @@ import {
 } from 'alchemy-sdk';
 import { BehaviorSubject, filter, firstValueFrom, from, of } from 'rxjs';
 import { getNetwork } from 'src/app/utils/chains';
-import { environment } from 'src/environments/environment';
+import { secrets } from 'src/environments/secrets';
 import { AlchemyERC721 } from '../models/Alchemy-ERC721';
 import { ProviderService } from './provider.service';
 
@@ -17,7 +17,10 @@ import { ProviderService } from './provider.service';
 })
 export class AlchemyService {
   private settings = {
-    apiKey: !!process && !!process.env['ALCHEMY_API'] ? process.env['ALCHEMY_API'] : environment.ALCHEMY_API,
+    apiKey:
+      !!process && !!process.env['ALCHEMY_API']
+        ? process.env['ALCHEMY_API']
+        : secrets.ALCHEMY_API,
     network: '' as any,
   };
   private alchemyInstance!: Alchemy;
