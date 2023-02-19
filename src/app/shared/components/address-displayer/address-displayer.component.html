@@ -13,7 +13,7 @@
   </div>
 </ng-template>
 
-<div class="h-100 w-100">
+<div class="h-100 w-100 d-flex">
   <ng-container *ngIf="isButton; else nonButton">
     <button
       type="button"
@@ -26,6 +26,12 @@
         "
       ></ng-container>
     </button>
+    <img
+      class="identicon-img"
+      [src]="
+        'data:image/png;base64,' + transformToIdenticoin(address, options)
+      "
+    />
   </ng-container>
   <ng-template #nonButton>
     <ng-container

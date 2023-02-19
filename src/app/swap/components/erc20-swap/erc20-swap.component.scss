@@ -1,37 +1,7 @@
 @import "../../../../assets/variables.scss";
 
-.availableUntil {
-  display: flex;
-  align-items: center;
-  .checkbox-wrapper {
-    flex-grow: 1;
-    .custom-checkbox {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      input {
-        margin-top: 4px;
-      }
-    }
-  }
-
-  .badge-wrapper {
-    flex-grow: 2;
-    display: flex;
-    justify-content: end;
-    .badge {
-      margin: 0px 5px;
-      cursor: pointer;
-    }
-  }
-}
-
 .coin-selector-wrapper {
   padding: 10px;
   border-radius: 5px;
   background-color: lighten($ternary, 10%);
-}
-
-.text-valid-until {
-  font-weight: bold;
 }

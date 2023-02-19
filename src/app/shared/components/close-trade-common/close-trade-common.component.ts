@@ -20,6 +20,7 @@ export class CloseTradeCommonComponent {
 
   @Input() displayCancelButton = false;
   @Input() disableCancelButton = true;
+  @Input() labelCancel: string = 'Cancel';
 
   @Output() goBack = new EventEmitter<void>();
   @Output() exchange = new EventEmitter<void>();

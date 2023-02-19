@@ -33,7 +33,10 @@ export class Erc20SwapComponent {
   public BCoin: Observable<CoingeckoCoin> = this.store.select(
     (store) => store.selectCoinB
   );
-  public amountCoinAParsed: BigInt = BigInt(0);
+
+  @Input() public amountCoinAParsed: BigInt = BigInt(0);
+  @Output() amountCoinAParsedChange = new EventEmitter<BigInt>();
+
   public iconNames = IconNamesEnum;
 
   constructor(
@@ -57,6 +60,7 @@ export class Erc20SwapComponent {
             coinSelected
           );
           this.amountCoinAParsed = await this.returnParsedAmountCoinA();
+          this.amountCoinAParsedChange.emit(this.amountCoinAParsed);
         }
       });
   }
@@ -79,17 +83,6 @@ export class Erc20SwapComponent {
         }
         bsModalRef.hide();
       });
-    }
-  }
-
-  public onClickChipTimeFrameAvailableUntil(timeSelectedInMinutes: number) {
-    if (timeSelectedInMinutes == -1) {
-      //custom
-      this.formERC20.get('selectAvailableUntil')?.patchValue('custom');
-    } else {
-      this.formERC20
-        .get('selectAvailableUntil')
-        ?.patchValue(timeSelectedInMinutes);
     }
   }
 

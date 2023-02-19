@@ -34,6 +34,7 @@ import { ListTradesComponent } from './components/list-trades/list-trades.compon
 import { FromMikosavaTradeToListTradeItem } from './pipes/from-mikosava-trade-to-list-trade-item';
 import { FromMikosavaNFTTradeToListTradeItem } from './pipes/from-mikosava-NFT-trade-to-list-trade-item copy';
 import { CloseTradeCommonComponent } from './components/close-trade-common/close-trade-common.component';
+import { TimerFormComponent } from './components/timer-form/timer-form.component';
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -56,6 +57,7 @@ import { CloseTradeCommonComponent } from './components/close-trade-common/close
     ListTradesComponent,
     FromMikosavaNFTTradeToListTradeItem,
     CloseTradeCommonComponent,
+    TimerFormComponent,
   ],
   imports: [
     CommonModule,
@@ -102,6 +104,7 @@ import { CloseTradeCommonComponent } from './components/close-trade-common/close
     ButtonsModule,
     FromMikosavaNFTTradeToListTradeItem,
     CloseTradeCommonComponent,
+    TimerFormComponent
   ],
   providers: [ParseFromWeiToDecimalNumberPipe],
 })

@@ -43,7 +43,7 @@
             <app-share-modal
               [trade]="viewedTrade"
               [showClipboard]="false"
-              [widthQr]="80"
+              [widthQr]="100"
             ></app-share-modal>
           </div>
         </div>
@@ -78,7 +78,7 @@
             [disabled]="disableCancelButton"
             (click)="cancell.emit()"
           >
-            Cancel
+            {{ labelCancel }}
           </button>
         </div>
         <div class="row">

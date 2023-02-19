@@ -1,9 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { IdenticonOptions } from 'identicon.js';
 import { ToastrService } from 'ngx-toastr';
 import { filter } from 'rxjs/operators';
 import { State } from 'src/app/reducers';
-import { copyClipboard, truncateAddress } from 'src/app/utils/utils';
+import {
+  copyClipboard,
+  generateIdenticonB64,
+  truncateAddress,
+} from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-address-displayer',
@@ -15,6 +20,12 @@ export class AddressDisplayerComponent {
   @Input() length = 5;
   @Input() address: string = '';
   @Input() isButton: boolean = true;
+  public transformToIdenticoin = generateIdenticonB64;
+  public options: IdenticonOptions = {
+    size: 40,
+    background: [255, 255, 255, 0],
+    margin: 0.2,
+  };
   constructor(private store: Store<State>, private toastr: ToastrService) {
     if (this.address == '') {
       this.store

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { IconNamesEnum } from 'ngx-bootstrap-icons';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -23,12 +23,14 @@ export class Erc721SwapComponent {
   public NFTB: Observable<MikosavaNft> = this.store.select(
     (store) => store.selectNFTB
   );
+  @Input() allowDeleteNfts: boolean = false;
   constructor(
     private modalService: BsModalService,
     private store: Store<State>
   ) {}
 
   public selectNftFromWallet(whichOne: 'A' | 'B') {
+    if (!this.allowDeleteNfts) return;
     let bsModalRef = this.modalService.show(ListNftsComponent, {
       class: 'modal-dialog-centered',
     });
@@ -54,6 +56,17 @@ export class Erc721SwapComponent {
       bsModalRef.content.heightList = 650;
       bsModalRef.content.allowToSelectNft = false;
       bsModalRef.content.selectTempNft = nftToView;
+      bsModalRef.content.unSelectNft.subscribe((data) =>
+        this.modalService.hide()
+      );
     }
+  }
+
+  public deleteSelectedNft(letter: 'A' | 'B') {
+    this.store.dispatch(
+      letter == 'A'
+        ? NftActions.selectNftA({ selectANFT: null as any })
+        : NftActions.selectNftB({ selectBNFT: null as any })
+    );
   }
 }

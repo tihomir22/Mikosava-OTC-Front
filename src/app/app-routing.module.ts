@@ -4,12 +4,14 @@ import { CloseTradeNftComponent } from './close-trade-nft/close-trade-nft.compon
 import { CloseTradeNftResolver } from './close-trade-nft/close-trade-nft.resolver';
 import { CloseTradeComponent } from './close-trade/close-trade.component';
 import { TradeResolver } from './close-trade/trade.resolver';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { LandingComponent } from './landing/landing.component';
 import { SwapComponent } from './swap/swap.component';
 import { UserListComponent } from './user-list/user-list.component';
 
 const routes: Routes = [
   { path: '', component: LandingComponent },
+  { path: 'dashboard', component: DashboardComponent },
   { path: 'swap', component: SwapComponent },
   { path: 'list', component: UserListComponent },
   {

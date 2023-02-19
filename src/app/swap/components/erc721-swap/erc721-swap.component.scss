@@ -1,10 +1,26 @@
 @import "../../../../assets/variables.scss";
 
+.nft-card {
+  position: relative;
+  i-bs {
+    display: none;
+  }
+  &:hover {
+    i-bs {
+      display: block;
+      position: absolute;
+      right: 10px;
+      cursor: pointer;
+    }
+  }
+}
+
 .erc721-swap {
   display: flex;
   padding: 25px 25px;
   @include media-breakpoint-between(xs, sm) {
     padding: 25px 0px;
+    flex-wrap: wrap;
   }
 }
 

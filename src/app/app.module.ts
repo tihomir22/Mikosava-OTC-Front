@@ -26,6 +26,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Erc20SwapComponent } from './swap/components/erc20-swap/erc20-swap.component';
 import { Erc721SwapComponent } from './swap/components/erc721-swap/erc721-swap.component';
 import { CloseTradeNftComponent } from './close-trade-nft/close-trade-nft.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -40,6 +41,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Erc20SwapComponent,
     Erc721SwapComponent,
     CloseTradeNftComponent,
+    DashboardComponent,
   ],
   imports: [
     ScrollingModule,

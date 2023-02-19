@@ -18,6 +18,7 @@ import {
 import { AlchemyService } from '../shared/services/alchemy.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { IconNamesEnum } from 'ngx-bootstrap-icons';
+import * as NftActions from '../actions/nfts.actions';
 
 @Component({
   selector: 'app-close-trade-nft',
@@ -63,13 +64,20 @@ export class CloseTradeNftComponent {
           ) as any
       )
     ) as Observable<MikosavaNft>;
-
   }
 
   ngOnInit(): void {
     this.resolveData$.subscribe(
       (data: any) => (this.viewedTrade = data.idTradeNft)
     );
+    this.setTradeNfts();
+  }
+
+  private async setTradeNfts() {
+    const NFTA = await firstValueFrom(this.nftA);
+    const NFTB = await firstValueFrom(this.nftB);
+    this.store.dispatch(NftActions.selectNftA({ selectANFT: NFTA }));
+    this.store.dispatch(NftActions.selectNftB({ selectBNFT: NFTB }));
   }
 
   public goBack() {

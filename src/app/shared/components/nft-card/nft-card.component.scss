@@ -14,6 +14,9 @@
   display: flex;
 }
 img {
-  height: 250px;
+  height: 200px;
   width: 100%;
+  @include media-breakpoint-between(xs, sm) {
+    max-width: 250px;
+  }
 }

@@ -1,23 +1,32 @@
 <div class="erc721-swap">
   <div class="card-a w-100">
-    <app-nft-card
-      class="w-100"
-      [nft]="(NFTA | async)!"
-      (emptyClick)="selectNftFromWallet('A')"
-    ></app-nft-card>
+    <div class="nft-card">
+      <i-bs
+        *ngIf="allowDeleteNfts && !!(NFTA | async)!"
+        [name]="iconNames.XCircleFill"
+        [width]="'16px'"
+        [height]="'16px'"
+        (click)="deleteSelectedNft('A')"
+      ></i-bs>
+      <app-nft-card
+        class="w-100 d-flex justify-content-center"
+        [nft]="(NFTA | async)!"
+        (click)="selectNftFromWallet('A')"
+      ></app-nft-card>
+    </div>
     <button
       *ngIf="!!(NFTA | async)!"
       type="button"
       name=""
       id=""
-      class="btn btn-outline-primary my-2"
+      class="btn btn-outline-primary my-2 d-flex"
       (click)="viewNft(NFTA)"
     >
       <i-bs [name]="iconNames.Search" [width]="'16px'" [height]="'16px'"></i-bs
-      >View details
+      ><span class="d-flex">View details</span>
     </button>
   </div>
-  <div class="separate-icon mx-2">
+  <div class="separate-icon mx-2 w-100 d-flex justify-content-center">
     <i-bs
       [name]="iconNames.ArrowLeftRight"
       [width]="'32px'"
@@ -25,21 +34,30 @@
     ></i-bs>
   </div>
   <div class="card-b w-100">
-    <app-nft-card
-      class="w-100"
-      [nft]="(NFTB | async)!"
-      (emptyClick)="selectNftFromWallet('B')"
-    ></app-nft-card>
+    <div class="nft-card">
+      <i-bs
+        *ngIf="allowDeleteNfts && !!(NFTB | async)!"
+        [name]="iconNames.XCircleFill"
+        [width]="'16px'"
+        [height]="'16px'"
+        (click)="deleteSelectedNft('B')"
+      ></i-bs>
+      <app-nft-card
+        class="w-100 d-flex justify-content-center"
+        [nft]="(NFTB | async)!"
+        (click)="selectNftFromWallet('B')"
+      ></app-nft-card>
+    </div>
     <button
       *ngIf="!!(NFTB | async)!"
       type="button"
       name=""
       id=""
-      class="btn btn-outline-primary my-2"
+      class="btn btn-outline-primary my-2 d-flex"
       (click)="viewNft(NFTB)"
     >
       <i-bs [name]="iconNames.Search" [width]="'16px'" [height]="'16px'"></i-bs>
-      View details
+      <span class="d-flex">View details</span>
     </button>
   </div>
 </div>

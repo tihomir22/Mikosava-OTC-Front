@@ -35,9 +35,6 @@ export class SwapComponent {
   public formGroupERC20: FormGroup = this.fb.group({
     acoin: [null, [Validators.required, Validators.min(0)]],
     bcoin: [null, [Validators.required, Validators.min(0)]],
-    availableUntil: [false, []],
-    selectAvailableUntil: [null, []],
-    selectCustomAvalaible: [null, []],
   });
   public ACoin: Observable<CoingeckoCoin> = this.store.select(
     (store) => store.selectCoinA
@@ -52,6 +49,7 @@ export class SwapComponent {
     (store) => store.selectNFTB
   );
   public activeTradingType: TradingType = 'erc20';
+  public validUntil: number = 0;
   constructor(
     private modalService: BsModalService,
     private store: Store<State>,
@@ -131,7 +129,7 @@ export class SwapComponent {
         nftBContract.address,
         nftA.tokenId,
         nftB.tokenId,
-        this.getValidUntil() * 1000,
+        this.validUntil * 1000,
         true,
         {
           value: fees,
@@ -142,7 +140,7 @@ export class SwapComponent {
       this.toastr.success('The trade has been opened correctly.');
       this.store.dispatch(NftActions.selectNftA({ selectANFT: null as any }));
       this.store.dispatch(NftActions.selectNftB({ selectBNFT: null as any }));
-      window.location.href = '/list';
+      this.router.navigate(['/list']);
     } catch (error: any) {
       this.toastr.error(error.reason);
     }
@@ -172,11 +170,6 @@ export class SwapComponent {
 
     const decimals = await coinAContract['decimals']();
     const decimalsCoinB = await coinBContract['decimals']();
-    // const name = await coinAContract['name']();
-    // const symbol = await coinAContract['symbol']();
-    // const balanceOf = await coinAContract['balanceOf'](
-    //   provider.getSigner().getAddress()
-    // );
 
     let amountParsedA = BigInt(
       this.formGroupERC20.value.acoin * 10 ** decimals
@@ -192,7 +185,7 @@ export class SwapComponent {
         coinBContract.address,
         amountParsedA.toString(),
         amountParsedB.toString(),
-        this.getValidUntil() * 1000,
+        this.validUntil * 1000,
         true,
         {
           value:
@@ -210,63 +203,10 @@ export class SwapComponent {
         CoinsActions.selectCoinB({ selectBCoin: null as any })
       );
       this.formGroupERC20.reset();
-      window.location.href = '/list';
+      this.router.navigate(['/list']);
     } catch (error: any) {
       this.toastr.error(error.reason);
     }
-  }
-
-  public openTradeNft() {
-    console.log('YUP');
-  }
-
-  public getValidUntil(): number {
-    if (
-      !this.formGroupERC20.get('availableUntil')?.value ||
-      !this.formGroupERC20.get('selectAvailableUntil')
-    )
-      return 0;
-
-    let isCustom =
-      this.formGroupERC20.get('selectAvailableUntil')?.value == 'custom';
-
-    if (!isCustom) {
-      let parsedMinutes = Number(
-        this.formGroupERC20.value.selectAvailableUntil
-      );
-      return +moment(new Date()).add(parsedMinutes, 'minutes').toDate();
-    } else {
-      return +moment(
-        this.formGroupERC20.value.selectCustomAvalaible ?? new Date()
-      ).toDate();
-    }
-  }
-
-  public returnAvailableDetails(): string {
-    if (
-      !!this.formGroupERC20.get('availableUntil')?.value &&
-      !!this.formGroupERC20.get('selectAvailableUntil')?.value
-    ) {
-      let isCustom =
-        this.formGroupERC20.get('selectAvailableUntil')?.value == 'custom';
-
-      if (!isCustom) {
-        let parsedMinutes = Number(
-          this.formGroupERC20.value.selectAvailableUntil
-        );
-        return moment(new Date())
-          .add(parsedMinutes, 'minutes')
-          .format('DD/MM/YYYY HH:mm')
-          .toString();
-      } else {
-        return moment(
-          this.formGroupERC20.value.selectCustomAvalaible ?? new Date()
-        )
-          .format('DD/MM/YYYY HH:mm')
-          .toString();
-      }
-    }
-    return '';
   }
 
   public changeType(newType: TradingType) {

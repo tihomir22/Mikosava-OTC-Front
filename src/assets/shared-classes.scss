@@ -15,6 +15,8 @@
 modal-container {
   width: 100%;
   padding: 10px;
+  display: flex !important;
+  justify-content: center;
   .modal-content {
     left: -5px;
     width: fit-content;
@@ -121,21 +123,7 @@ app-coin-img-badge {
   }
 }
 
-app-user-list {
-  .tradeItem {
-    height: 120px !important;
-    @include media-breakpoint-up(lg) {
-      height: 60px !important;
-    }
-  }
-  .status-displayer {
-    .text-status {
-      display: none !important;
-      @include media-breakpoint-up(lg) {
-        display: block !important;
-      }
-    }
-  }
+app-list-trades {
   app-coin-img-badge {
     img {
       display: none !important;
@@ -187,4 +175,18 @@ app-swap {
 
 .no-wrap-text {
   white-space: nowrap;
+}
+
+app-close-trade-nft {
+  .main-card {
+    width: 550px !important;
+    @include media-breakpoint-between(xs, sm) {
+      width: 400px !important;
+    }
+  }
+  app-share-modal {
+    .wrapper {
+      padding: 0px !important;
+    }
+  }
 }

@@ -27,25 +27,17 @@
       <div class="erc20" *ngIf="activeTradingType == 'erc20'">
         <app-erc20-swap
           [(allowance)]="allowance"
+          [(amountCoinAParsed)]="amountCoinAParsed"
           [formERC20]="formGroupERC20"
         ></app-erc20-swap>
       </div>
 
       <div class="nft" *ngIf="activeTradingType == 'erc721'">
-        <app-erc721-swap></app-erc721-swap>
+        <app-erc721-swap [allowDeleteNfts]="true"></app-erc721-swap>
       </div>
 
       <div class="mixed" *ngIf="activeTradingType == 'mixed'"></div>
-
-      <div
-        class="row availableUntilDetails my-2"
-        *ngIf="returnAvailableDetails() != ''"
-      >
-        <div class="col text-center text-primary text-valid-until">
-          {{ "TRADE.WILL_BE_VALID_UNTIL" | translate }}
-          {{ returnAvailableDetails() }}
-        </div>
-      </div>
+      <app-timer-form [(validUntil)]="validUntil"></app-timer-form>
       <div class="row">
         <button
           *ngIf="allowance >= amountCoinAParsed && activeTradingType == 'erc20'"

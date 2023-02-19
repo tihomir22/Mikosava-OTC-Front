@@ -19,6 +19,8 @@ export class FromMikosavaTradeToListTradeItem implements PipeTransform {
         validUntil: entry.validUntil,
         cancelled: entry.cancelled,
         sold: entry.sold,
+        creator: entry.creator,
+        receiver: entry.counterpart,
         type: 'erc20',
       } as ListTradeItem;
     });

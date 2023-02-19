@@ -198,7 +198,6 @@ export class CoinsService {
       await signer.getAddress(),
       otcContract.address
     );
-
     return allowance;
   }
 

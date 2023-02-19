@@ -46,5 +46,11 @@ export const generateIdenticonB64 = (
     margin: 0.2,
   }
 ) => {
+  if (!text) return '';
   return new Identicon(text, options).toString();
+};
+
+export const isEmptyAddress = (address: string) => {
+  const emptyAddress = /^0x0+$/.test(address);
+  return emptyAddress;
 };

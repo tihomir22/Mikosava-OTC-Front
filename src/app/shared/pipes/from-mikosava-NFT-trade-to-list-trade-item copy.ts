@@ -18,6 +18,8 @@ export class FromMikosavaNFTTradeToListTradeItem implements PipeTransform {
         bTokenAddress: entry.nftAddressB,
         validUntil: entry.validUntil,
         cancelled: entry.cancelled,
+        creator: entry.creator,
+        receiver: entry.counterpart,
         sold: entry.sold,
         type: 'erc721',
       } as ListTradeItem;

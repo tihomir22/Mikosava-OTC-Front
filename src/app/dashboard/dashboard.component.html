@@ -3,14 +3,10 @@
     <div class="card-body d-flex justify-content-center align-items-center">
       <div class="list-group w-100">
         <div class="header mb-2">
-          <span class="text-primary">{{ "TRADE.MY_TRADES" | translate }}</span>
+          <span class="text-primary">{{ "TRADE.ALL_TRADES" | translate }}</span>
           <button
             type="button"
             class="btn btn-primary"
-            [ngClass]="{
-              'animate__animated animate__pulse animate__infinite':
-                trades.length == 0 && nftTrades.length == 0
-            }"
             (click)="redirectToTrade()"
           >
             {{ "TRADE.OPEN_NEW_TRADE" | translate }}
@@ -43,8 +39,8 @@
           <app-list-trades
             *ngIf="form.value.activeType == 'erc20'"
             [trades]="trades | fromMTtoLTI"
-            [tradesLoaded]="tradesLoaded"
             [typeTrades]="form.value.activeType"
+            [tradesLoaded]="tradesLoaded"
             (tradeCancelledSuccessfully)="loadMyTrades()"
           ></app-list-trades>
 

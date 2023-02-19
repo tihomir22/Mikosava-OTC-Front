@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ethers } from 'ethers';
 import { environment } from 'src/environments/environment';
 import { ProviderService } from '../shared/services/provider.service';
@@ -8,32 +10,22 @@ import {
   MikosavaTrade,
 } from '../shared/models/MikosavaTrade';
 import { IconNamesEnum } from 'ngx-bootstrap-icons';
-import { Router } from '@angular/router';
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-user-list',
-  templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.scss'],
-  providers: [
-    {
-      provide: BsDropdownConfig,
-      useValue: { isAnimated: true, autoClose: true },
-    },
-  ],
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss'],
 })
-export class UserListComponent {
+export class DashboardComponent {
+  public form!: FormGroup;
+  public tradesLoaded = false;
   public trades: Array<MikosavaTrade> = [];
   public nftTrades: Array<MikosavaNFTTRade> = [];
   public iconNames = IconNamesEnum;
-  public tradesLoaded = false;
-  public form!: FormGroup;
-
   constructor(
-    private provider: ProviderService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private provider: ProviderService
   ) {
     this.form = this.fb.group({
       activeType: ['erc20', []],
@@ -55,14 +47,15 @@ export class UserListComponent {
       MikosavaABI.abi,
       signer
     );
-    this.trades = (await otcContract['fetchMyCoinTrades']()).map(
+    this.trades = (await otcContract['fetchAllCoinTrades']()).map(
       (entry: MikosavaTrade) => {
+        console.log(entry);
         let clonedTrade = { ...entry };
         (clonedTrade as any)['sortTradeId'] = Number(entry.tradeId);
         return clonedTrade;
       }
     );
-    this.nftTrades = (await otcContract['fetchMyNftTrades']()).map(
+    this.nftTrades = (await otcContract['fetchAllNftTrades']()).map(
       (entry: MikosavaNFTTRade) => {
         let clonedTrade = { ...entry };
         (clonedTrade as any)['sortTradeId'] = Number(entry.tradeId);

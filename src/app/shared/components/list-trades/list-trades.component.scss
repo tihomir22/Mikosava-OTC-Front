@@ -2,6 +2,10 @@
 
 .coin-viewport {
   overflow: auto;
+  height: 300px;
+  @include media-breakpoint-between(xs, sm) {
+    height: 450px;
+  }
 }
 .list-group-item:nth-child(odd) {
   background-color: lighten($primary, 60%);
@@ -10,6 +14,15 @@
 .list-group-item:nth-child(even) {
   background-color: lighten($secondary, 40%);
 }
+
+.list-group-item {
+  .col {
+    @include media-breakpoint-between(xs, sm) {
+      padding: 10px 0px;
+    }
+  }
+}
+
 .actions {
   button {
     margin: 0px 5px;
@@ -22,7 +35,10 @@
 }
 
 .tradeItem {
-  height: 60px;
+  height: 180px !important;
+  @include media-breakpoint-up(lg) {
+    height: 60px !important;
+  }
 }
 
 .col {
@@ -38,11 +54,17 @@
   display: flex;
 }
 
-.identicon-nft {
+.identicon {
+  border-radius: 5px;
+  margin: 0px 5px;
+}
+
+.identicon-img {
   border: 1px solid $primary;
   border-radius: 5px;
 }
 
-.details-btn{
+.details-btn {
   border: none;
+  display: flex;
 }

@@ -1,167 +1,3 @@
-<!-- <div class="h-100 w-100 wrap" *ngIf="viewedTrade">
-  <div class="main-card">
-    <div class="header mb-2">
-      <span class="text-primary">{{
-        "TRADE.TRADING_POSITION" | translate
-      }}</span>
-      <i-bs
-        class="go-back"
-        width="2rem"
-        height="2rem"
-        (click)="goBack()"
-        [name]="iconNames.ArrowLeft"
-        tooltip="{{ 'TRADE.TRADING_POSITION_GO_BACK' | translate }}"
-      ></i-bs>
-    </div>
-    <div class="card animated-border w-100">
-      <div class="card-body close-trade-body">
-        <div class="row d-flex justify-content-center w-100 py-3">
-          <div class="col id-trade">
-            <div>ID: #{{ viewedTrade.tradeId }}</div>
-            <div>
-              <ng-container
-                *ngIf="
-                  viewedTrade.validUntil.toString() == '0';
-                  else validUntilSet
-                "
-              >
-                <i-bs
-                  width="2rem"
-                  height="2rem"
-                  [name]="iconNames.Infinity"
-                ></i-bs>
-              </ng-container>
-              <ng-template #validUntilSet>
-                <app-valid-until-progressbar
-                  [trade]="viewedTrade"
-                ></app-valid-until-progressbar>
-              </ng-template>
-            </div>
-          </div>
-
-          <div class="col">
-            <app-share-modal
-              [trade]="[viewedTrade] | fromMTtoLTI : 'single'"
-              [showClipboard]="false"
-              [widthQr]="80"
-            ></app-share-modal>
-          </div>
-        </div>
-
-        <div class="row close-trade w-100">
-          <div
-            class="d-flex justify-content-center align-items-center text-primary"
-          >
-            <span>
-              {{
-                viewedTrade.amountPositionCreator
-                  | parseFromWeiToDecimalNumber : viewedTrade.coinCreator
-                  | async
-                  | number
-              }}
-            </span>
-            <app-coin-img-badge
-              [readOnly]="true"
-              [coinAddress]="viewedTrade.coinCreator"
-              [src]="
-                (viewedTrade.coinCreator | fromAddressToCg | async)?.image ?? ''
-              "
-              [coinLabel]="
-                (viewedTrade.coinCreator | fromAddressToCg | async)?.name ?? ''
-              "
-              [defaultLabel]="'Loading...'"
-            ></app-coin-img-badge>
-          </div>
-          <div
-            class="d-flex justify-content-center align-items-center py-3 text-primary"
-          >
-            <i-bs
-              [name]="iconNames.ArrowDownUp"
-              width="2rem"
-              height="2rem"
-            ></i-bs>
-          </div>
-          <div
-            class="d-flex justify-content-center align-items-center text-primary"
-          >
-            <span>
-              {{
-                viewedTrade.amountPositionCounterpart
-                  | parseFromWeiToDecimalNumber : viewedTrade.coinCounterpart
-                  | async
-                  | number
-              }}
-            </span>
-            <app-coin-img-badge
-              [readOnly]="true"
-              [coinAddress]="viewedTrade.coinCounterpart"
-              [src]="
-                (viewedTrade.coinCounterpart | fromAddressToCg | async)
-                  ?.image ?? ''
-              "
-              [coinLabel]="
-                (viewedTrade.coinCounterpart | fromAddressToCg | async)?.name ??
-                ''
-              "
-              [defaultLabel]="'Loading...'"
-            ></app-coin-img-badge>
-          </div>
-        </div>
-
-        <div class="action-buttons py-4" *ngIf="!!(getAccount | async)">
-          <button
-            type="button"
-            class="btn btn-primary btn-lg btn-block my-1"
-            [disabled]="getStatus(viewedTrade) != 'Open'"
-            *ngIf="
-              (getAccount | async)?.address != viewedTrade.creator &&
-              allowance >= viewedTrade.amountPositionCounterpart &&
-              !viewedTrade.cancelled &&
-              !viewedTrade.sold
-            "
-            (click)="exchange()"
-          >
-            Exchange
-          </button>
-          <button
-            type="button"
-            *ngIf="
-              allowance < viewedTrade.amountPositionCounterpart &&
-              !viewedTrade.cancelled &&
-              !viewedTrade.sold
-            "
-            class="btn btn-secondary btn-lg btn-block my-1"
-            [disabled]="getStatus(viewedTrade) != 'Open'"
-            (click)="approve()"
-          >
-            Approve
-          </button>
-          <button
-            type="button"
-            *ngIf="
-              (getAccount | async)?.address == viewedTrade.creator &&
-              !viewedTrade.cancelled &&
-              !viewedTrade.sold
-            "
-            class="btn btn-danger btn-lg btn-block my-1"
-            [disabled]="
-              getStatus(viewedTrade) != 'Open' &&
-              getStatus(viewedTrade) != 'Expired'
-            "
-            (click)="cancell()"
-          >
-            Cancel
-          </button>
-        </div>
-        <div class="row">
-          <div class="status-visualizer">
-            <app-status-displayer [trade]="viewedTrade"></app-status-displayer>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
 <app-close-trade-common
   [viewedTrade]="[viewedTrade] | fromMTtoLTI : 'single'"
   [displayExchangeButton]="
@@ -174,7 +10,8 @@
   [displayApproveButton]="
     allowance < viewedTrade.amountPositionCounterpart &&
     !viewedTrade.cancelled &&
-    !viewedTrade.sold
+    !viewedTrade.sold &&
+    getStatus(viewedTrade) != 'Expired'
   "
   [disableApproveButton]="getStatus(viewedTrade) != 'Open'"
   [displayCancelButton]="
@@ -185,6 +22,7 @@
   [disableCancelButton]="
     getStatus(viewedTrade) != 'Open' && getStatus(viewedTrade) != 'Expired'
   "
+  [labelCancel]="getStatus(viewedTrade) == 'Expired' ? 'Retrieve' : 'Cancel'"
   (goBack)="goBack()"
   (exchange)="exchange()"
   (approve)="approve()"

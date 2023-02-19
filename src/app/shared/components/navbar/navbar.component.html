@@ -1,6 +1,8 @@
 <nav class="navbar navbar-expand-md" aria-label="Fourth navbar example">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Mikosava</a>
+    <a class="navbar-brand" href="#">
+      <img src="/assets/favicon-32x32.png" alt="" srcset="" />
+    </a>
     <button
       class="navbar-toggler"
       (click)="isCollapsed = !isCollapsed"
@@ -23,11 +25,11 @@
         <li class="nav-item">
           <a
             class="nav-link"
-            [ngClass]="{ active: isCurrentPathActive('/swap') }"
+            [ngClass]="{ active: isCurrentPathActive('/dashboard') }"
             aria-current="page"
-            [routerLink]="['/swap']"
+            [routerLink]="['/dashboard']"
             routerLinkActive="router-link-active"
-            >Swap</a
+            >Dashboard</a
           >
         </li>
         <li class="nav-item">
@@ -39,6 +41,17 @@
             >My trades</a
           >
         </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            [ngClass]="{ active: isCurrentPathActive('/swap') }"
+            aria-current="page"
+            [routerLink]="['/swap']"
+            routerLinkActive="router-link-active"
+            >Swap</a
+          >
+        </li>
+
         <li class="nav-item">
           <a
             class="nav-link"
