@@ -19,6 +19,7 @@ import { AlchemyService } from '../shared/services/alchemy.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { IconNamesEnum } from 'ngx-bootstrap-icons';
 import * as NftActions from '../actions/nfts.actions';
+import { UtilsService } from '../shared/services/utils.service';
 
 @Component({
   selector: 'app-close-trade-nft',
@@ -42,7 +43,8 @@ export class CloseTradeNftComponent {
     private router: Router,
     private provider: ProviderService,
     private alchemy: AlchemyService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private utils: UtilsService
   ) {
     this.resolveData$ = this.route.data;
 
@@ -109,11 +111,14 @@ export class CloseTradeNftComponent {
       await approval.wait();
       this.toastr.info('Exchange is on the go');
       let tx = await otcContract['closeOTCNPosition'](this.viewedTrade.tradeId);
+      this.utils.displayTransactionDialog(tx.hash);
       await tx.wait();
+      this.modalService.hide();
       this.toastr.success('The trade has been completed!');
       this.router.navigate(['/list']);
     } catch (error: any) {
       this.toastr.error(error.reason);
+      this.modalService.hide();
     }
   }
 
@@ -129,11 +134,14 @@ export class CloseTradeNftComponent {
       let tx = await otcContract['cancellOTCNPosition'](
         this.viewedTrade.tradeId
       );
+      this.utils.displayTransactionDialog(tx.hash);
       const receipt = await tx.wait();
+      this.modalService.hide();
       this.toastr.success('The trade has been cancelled!');
       this.router.navigate(['/list']);
     } catch (error: any) {
       this.toastr.error(error.reason);
+      this.modalService.hide();
     }
   }
 

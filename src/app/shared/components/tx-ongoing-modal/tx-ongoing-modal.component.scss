@@ -1,0 +1,15 @@
+@import "../../../../assets/variables.scss";
+
+.tx-ongoing-modal-wrapper {
+  width: 400px;
+  .wrapper-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0px;
+    .spinner-border {
+      width: 100px;
+      height: 100px;
+      color: $secondary;
+    }
+  }
+}

@@ -16,7 +16,7 @@ import { ProviderService } from './provider.service';
 })
 export class AlchemyService {
   private settings = {
-    apiKey: environment.ALCHEMY_API,
+    apiKey: process.env['ALCHEMY_API'] ?? environment.ALCHEMY_API,
     network: '' as any,
   };
   private alchemyInstance!: Alchemy;

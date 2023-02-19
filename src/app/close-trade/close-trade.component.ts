@@ -12,6 +12,8 @@ import { returnERC20InstanceFromAddress } from '../utils/tokens';
 import { ProviderService } from '../shared/services/provider.service';
 import { IconNamesEnum } from 'ngx-bootstrap-icons';
 import { getStatus } from '../utils/utils';
+import { UtilsService } from '../shared/services/utils.service';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-close-trade',
@@ -39,7 +41,9 @@ export class CloseTradeComponent {
     private store: Store<State>,
     private toastr: ToastrService,
     private router: Router,
-    private provider: ProviderService
+    private provider: ProviderService,
+    private utils: UtilsService,
+    private bsModal: BsModalService
   ) {
     this.resolveData$ = this.route.data;
   }
@@ -60,11 +64,14 @@ export class CloseTradeComponent {
       );
       this.toastr.info('Exchange is on the go');
       let tx = await otcContract['closeOTCCPosition'](this.viewedTrade.tradeId);
+      this.utils.displayTransactionDialog(tx.hash);
       const receipt = await tx.wait();
+      this.bsModal.hide();
       this.toastr.success('The trade has been completed!');
       this.router.navigate(['/list']);
     } catch (error: any) {
       this.toastr.error(error.reason);
+      this.bsModal.hide();
     }
   }
 
@@ -124,11 +131,14 @@ export class CloseTradeComponent {
       let tx = await otcContract['cancellOTCCPosition'](
         this.viewedTrade.tradeId
       );
+      this.utils.displayTransactionDialog(tx.hash);
       const receipt = await tx.wait();
+      this.bsModal.hide();
       this.toastr.success('The trade has been cancelled!');
       this.router.navigate(['/list']);
     } catch (error: any) {
       this.toastr.error(error.reason);
+      this.bsModal.hide();
     }
   }
 

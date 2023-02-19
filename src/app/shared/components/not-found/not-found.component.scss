@@ -7,10 +7,10 @@
   width: 100%;
   align-items: center;
   img {
-    border-radius: 50%;
-    max-height: 128px;
-    max-width: 128px;
-    border: 5px solid $secondary;
+   // border-radius: 50%;
+    max-height: 64px;
+    max-width: 64px;
+  //  border: 5px solid $secondary;
   }
   span.sub-text {
     font-size: $small-text;

@@ -16,6 +16,7 @@ import {
   MikosavaNft,
 } from '../list-nfts/list-nfts.component';
 import { AlchemyService } from '../../services/alchemy.service';
+import { UtilsService } from '../../services/utils.service';
 export interface ListTradeItem {
   tradeId: BigInt;
   amountA: BigInt;
@@ -60,7 +61,8 @@ export class ListTradesComponent {
     private modalService: BsModalService,
     private toastr: ToastrService,
     private provider: ProviderService,
-    private alchemy: AlchemyService
+    private alchemy: AlchemyService,
+    private utils: UtilsService
   ) {}
 
   ngOnInit(): void {
@@ -123,13 +125,16 @@ export class ListTradesComponent {
           tx = await otcContract['cancellOTCNPosition'](trade.tradeId);
         }
         this.toastr.info('Approving is on the go');
+        this.utils.displayTransactionDialog(tx.hash);
         const receipt = await tx.wait();
+        this.modalService.hide();
         this.toastr.success(
           `The trade ${trade.tradeId} has been cancelled successfully!`
         );
         this.tradeCancelledSuccessfully.emit(trade);
       } catch (error: any) {
         this.toastr.error(error.reason);
+        this.modalService.hide();
       }
     });
   }

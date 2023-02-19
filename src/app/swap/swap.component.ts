@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 import moment from 'moment';
 import { CoinsService } from '../shared/services/coins.service';
 import { MikosavaNft } from '../shared/components/list-nfts/list-nfts.component';
+import { UtilsService } from '../shared/services/utils.service';
 export type TradingType = 'erc20' | 'erc721' | 'mixed';
 @Component({
   selector: 'app-swap',
@@ -57,7 +58,8 @@ export class SwapComponent {
     private toastr: ToastrService,
     private providerService: ProviderService,
     private router: Router,
-    private coinService: CoinsService
+    private coinService: CoinsService,
+    private utils: UtilsService
   ) {}
 
   public async approve() {
@@ -83,6 +85,7 @@ export class SwapComponent {
       otcContract.address,
       amountParsedA.toString()
     );
+
     this.toastr.info('Approving is on the go');
     const receipt = await tx.wait();
     this.toastr.success('The amount has been approved!');
@@ -136,13 +139,16 @@ export class SwapComponent {
         }
       );
       this.toastr.info('The trade is pending...');
+      this.utils.displayTransactionDialog(trade.hash);
       const receipt = await trade.wait();
+      this.modalService.hide();
       this.toastr.success('The trade has been opened correctly.');
       this.store.dispatch(NftActions.selectNftA({ selectANFT: null as any }));
       this.store.dispatch(NftActions.selectNftB({ selectBNFT: null as any }));
       this.router.navigate(['/list']);
     } catch (error: any) {
       this.toastr.error(error.reason);
+      this.modalService.hide();
     }
   }
 
@@ -193,8 +199,10 @@ export class SwapComponent {
             10 ** foundActiveNetwork!.nativeCurrency.decimals,
         }
       );
+      this.utils.displayTransactionDialog(trade.hash);
       this.toastr.info('The trade is pending...');
       const receipt = await trade.wait();
+      this.modalService.hide();
       this.toastr.success('The trade has been opened correctly.');
       this.store.dispatch(
         CoinsActions.selectCoinA({ selectACoin: null as any })
@@ -206,6 +214,7 @@ export class SwapComponent {
       this.router.navigate(['/list']);
     } catch (error: any) {
       this.toastr.error(error.reason);
+      this.modalService.hide();
     }
   }
 

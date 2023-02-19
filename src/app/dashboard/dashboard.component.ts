@@ -49,7 +49,6 @@ export class DashboardComponent {
     );
     this.trades = (await otcContract['fetchAllCoinTrades']()).map(
       (entry: MikosavaTrade) => {
-        console.log(entry);
         let clonedTrade = { ...entry };
         (clonedTrade as any)['sortTradeId'] = Number(entry.tradeId);
         return clonedTrade;

@@ -7,22 +7,6 @@ export enum ChainIds {
 }
 
 export const list = [
-  // {
-  //   chainId: ChainIds.SMR_EVM_TESTNET,
-  //   name: 'Shimmer Testnet',
-  //   interal_name_id: 'shimmer-testnet',
-  //   testnet: true,
-  //   platformName: 'shimmer',
-  //   asset: '/assets/icons/smr.png',
-  //   nativeCurrency: {
-  //     name: 'SMR',
-  //     decimals: 6,
-  //     symbol: 'SMR',
-  //     address: '0x0000000000000000000000000000000000001010',
-  //   },
-  //   easyAccessCoins: [],
-  //   rpcs: ['https://api.sc.testnet.shimmer.network/evm/jsonrpc'],
-  // },
   {
     chainId: ChainIds.TESTNET_POLYGON,
     name: 'Mumbai Testnet',
@@ -30,6 +14,7 @@ export const list = [
     testnet: true,
     asset: '/assets/icons/matic.png',
     platformName: 'polygon-pos',
+    explorer: 'https://mumbai.polygonscan.com/tx/',
     nativeCurrency: {
       name: 'MATIC',
       decimals: 18,
@@ -56,6 +41,7 @@ export const list = [
     interal_name_id: 'polygon-mainnet',
     testnet: false,
     asset: '/assets/icons/matic.png',
+    explorer: 'https://polygonscan.com/tx/',
     platformName: 'polygon-pos',
     nativeCurrency: {
       name: 'MATIC',
