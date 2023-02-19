@@ -11,12 +11,13 @@ import { getNetwork } from 'src/app/utils/chains';
 import { environment } from 'src/environments/environment';
 import { AlchemyERC721 } from '../models/Alchemy-ERC721';
 import { ProviderService } from './provider.service';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AlchemyService {
   private settings = {
-    apiKey: process.env['ALCHEMY_API'] ?? environment.ALCHEMY_API,
+    apiKey: !!process && !!process.env['ALCHEMY_API'] ? process.env['ALCHEMY_API'] : environment.ALCHEMY_API,
     network: '' as any,
   };
   private alchemyInstance!: Alchemy;
