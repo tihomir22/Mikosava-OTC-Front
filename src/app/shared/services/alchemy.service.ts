@@ -1,14 +1,7 @@
 import { Injectable } from '@angular/core';
-import {
-  Network,
-  Alchemy,
-  OwnedBaseNftsResponse,
-  NftContractNftsResponse,
-  NftTokenType,
-} from 'alchemy-sdk';
+import { Alchemy, NftContractNftsResponse, NftTokenType } from 'alchemy-sdk';
 import { BehaviorSubject, filter, firstValueFrom, from, of } from 'rxjs';
 import { getNetwork } from 'src/app/utils/chains';
-import { secrets } from 'src/environments/secrets';
 import { AlchemyERC721 } from '../models/Alchemy-ERC721';
 import { ProviderService } from './provider.service';
 
@@ -17,10 +10,7 @@ import { ProviderService } from './provider.service';
 })
 export class AlchemyService {
   private settings = {
-    apiKey:
-      !!process && !!process.env['ALCHEMY_API']
-        ? process.env['ALCHEMY_API']
-        : secrets.ALCHEMY_API,
+    apiKey: process.env['ALCHEMY_API'],
     network: '' as any,
   };
   private alchemyInstance!: Alchemy;
