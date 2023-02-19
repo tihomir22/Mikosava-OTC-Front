@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Alchemy, NftContractNftsResponse, NftTokenType } from 'alchemy-sdk';
 import { BehaviorSubject, filter, firstValueFrom, from, of } from 'rxjs';
 import { getNetwork } from 'src/app/utils/chains';
-import secrets from 'src/environments/secrets.json';
+import secrets from 'secrets.json';
 import { AlchemyERC721 } from '../models/Alchemy-ERC721';
 import { ProviderService } from './provider.service';
 
