@@ -24,6 +24,11 @@ const routes: Routes = [
     component: CloseTradeNftComponent,
     resolve: { idTradeNft: CloseTradeNftResolver },
   },
+  {
+    path: '**',
+    redirectTo: '/dashboard',
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({

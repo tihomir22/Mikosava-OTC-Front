@@ -74,6 +74,24 @@ export class AlchemyService {
     return response;
   }
 
+  public async getAllERC20TokensByWallet(address: string) {
+    await firstValueFrom(this.checkIfInit());
+    const response = await this.alchemyInstance.core.getTokenBalances(address);
+    response.tokenBalances.forEach(
+      (entry) =>
+        (entry.tokenBalance = BigInt(
+          parseInt(entry.tokenBalance!, 16)
+        ).toString())
+    );
+    return response;
+  }
+
+  public async getMetadataForERC20Token(address: string) {
+    await firstValueFrom(this.checkIfInit());
+    const response = await this.alchemyInstance.core.getTokenMetadata(address);
+    return response;
+  }
+
   public switchNetwork(newNetworkChainId: number) {
     const foundActiveNetwork = getNetwork(newNetworkChainId);
     this.settings.network = foundActiveNetwork?.interal_name_id;

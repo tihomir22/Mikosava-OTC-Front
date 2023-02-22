@@ -26,7 +26,6 @@ export class AppComponent {
   ) {
     this.translate.use('en');
     this.addProviderEvents();
-    this.alchemy.getAllNftsOwnedByCurrentUser();
   }
 
   private async addProviderEvents() {

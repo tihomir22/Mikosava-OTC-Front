@@ -19,27 +19,38 @@
       <div class="coin-name">{{ easyAccessCoin.symbol | uppercase }}</div>
     </div>
   </div>
-  <cdk-virtual-scroll-viewport
-    appendOnly
-    itemSize="50"
-    class="coin-viewport"
-    [ngStyle]="{ width: widthList + 'px', height: heightList + 'px' }"
-  >
-    <div
-      *cdkVirtualFor="let coin of filteredCoins"
-      class="coin-item"
-      (click)="selectCoin.emit(coin)"
+
+  <ng-container *ngIf="filteredCoins.length > 0; else emptyList">
+    <cdk-virtual-scroll-viewport
+      appendOnly
+      itemSize="50"
+      class="coin-viewport"
+      [ngStyle]="{ width: widthList + 'px', height: heightList + 'px' }"
     >
-      <div class="left-side">
-        <img class="img-logo mx-3" #refImg [src]="coin.image" />
-        <div class="coin-name ellipsify">{{ coin.name }}</div>
+      <div
+        *cdkVirtualFor="let coin of filteredCoins"
+        class="coin-item"
+        (click)="selectCoin.emit(coin)"
+      >
+        <div class="left-side">
+          <img class="img-logo mx-3" #refImg [src]="coin.image" />
+          <div class="coin-name ellipsify">{{ coin.name }}</div>
+        </div>
+        <div class="right-side">
+          <span class="px-1">{{ coin.amountOfToken$ | async | number }}</span>
+          <span class="coin-symbol text-muted">{{
+            toUpperCase(coin.symbol)
+          }}</span>
+        </div>
       </div>
-      <div class="right-side">
-        <span class="px-1">{{ coin.amountOfToken$ | async | number }}</span>
-        <span class="coin-symbol text-muted">{{
-          toUpperCase(coin.symbol)
-        }}</span>
-      </div>
+    </cdk-virtual-scroll-viewport>
+  </ng-container>
+  <ng-template #emptyList>
+    <div [ngStyle]="{ width: widthList + 'px', height: heightList + 'px' }">
+      <app-not-found
+        [subtext]="'COINS.EMPTY_SUBTITLE' | translate"
+        [text]="'COINS.EMPTY' | translate"
+      ></app-not-found>
     </div>
-  </cdk-virtual-scroll-viewport>
+  </ng-template>
 </div>

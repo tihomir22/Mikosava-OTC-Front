@@ -9,9 +9,13 @@ import {
 import { Store } from '@ngrx/store';
 import { BigNumber, ethers } from 'ethers';
 import {
+  combineLatest,
   firstValueFrom,
+  forkJoin,
+  from,
   map,
   Observable,
+  of,
   switchMap,
 } from 'rxjs';
 import { Account, State } from 'src/app/reducers';
@@ -20,6 +24,7 @@ import { CoingeckoCoin } from '../../models/CoinGeckoCoin';
 import { ProviderService } from '../../services/provider.service';
 import * as CoinsActions from '../../../actions/coins.actions';
 import { CoinsService } from '../../services/coins.service';
+import { AlchemyService } from '../../services/alchemy.service';
 
 @Component({
   selector: 'app-list-coins',
@@ -39,15 +44,88 @@ export class ListCoinsComponent {
   @Input() heightList: number = 200;
   @Output() selectCoin = new EventEmitter<CoingeckoCoin>();
 
-  constructor(private store: Store<State>, private coins: CoinsService) {
-    this.coins.getAllCoinsForCurrentNetwork().subscribe((data) => {
-      this.originalCoins = data;
-      this.filteredCoins = [...this.originalCoins];
-      this.searchValue = '';
-    });
+  constructor(
+    private store: Store<State>,
+    private coins: CoinsService,
+    private alchemy: AlchemyService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadCoins();
   }
 
-  ngOnInit(): void {}
+  private async loadCoins() {
+    const [account, coins, provider] = await firstValueFrom(
+      combineLatest([
+        this.store.select((data) => data.account),
+        this.coins.getAllCoinsForCurrentNetwork(),
+        from(ProviderService.getWebProvider(false)),
+      ])
+    );
+
+    let userBalances = (
+      await this.alchemy.getAllERC20TokensByWallet(account.address)
+    ).tokenBalances.sort(
+      (a, b) => (b.tokenBalance! as any) - (a.tokenBalance! as any)
+    );
+
+    let foundActiveNetwork = getNetwork(account.chainIdConnect);
+    const coinAddresses = coins.map(
+      (coin) => coin.platforms[foundActiveNetwork!.platformName]
+    );
+
+    const notAddedInListTokens = userBalances.filter(
+      (tokenBalance) =>
+        !coinAddresses.find(
+          (coinAddress) =>
+            coinAddress.toLowerCase() ==
+            tokenBalance.contractAddress.toLowerCase()
+        )
+    );
+
+    const tokensToAdd = await firstValueFrom(
+      forkJoin(
+        notAddedInListTokens.map((entry) =>
+          from(
+            this.alchemy.getMetadataForERC20Token(entry.contractAddress)
+          ).pipe(
+            map((metadata) => {
+              let coin: CoingeckoCoin = {
+                id: metadata.symbol!.toLowerCase(),
+                symbol: metadata.symbol!,
+                name: metadata.name!,
+                decimals: metadata.decimals! as any,
+                image: metadata.logo ?? '/assets/icons/question-mark.png',
+                platforms: {
+                  [foundActiveNetwork!.platformName]: entry.contractAddress,
+                },
+                amountOfToken$: of(
+                  (entry.tokenBalance as any) / 10 ** metadata.decimals!
+                ),
+              };
+              return coin;
+            })
+          )
+        )
+      )
+    );
+
+    this.originalCoins = [...tokensToAdd, ...coins];
+
+    //order => userBalances
+    const ordered = userBalances.reduce((prev, current, index) => {
+      prev[current.contractAddress] = index;
+      return prev;
+    }, {} as any);
+    this.originalCoins = this.originalCoins.sort(
+      (a, b) =>
+        ordered[a.platforms[foundActiveNetwork!.platformName]] -
+        ordered[b.platforms[foundActiveNetwork!.platformName]]
+    );
+
+    this.filteredCoins = [...this.originalCoins];
+    this.searchValue = '';
+  }
 
   public toUpperCaseFn(text: string) {
     return text.toUpperCase();
@@ -91,7 +169,6 @@ export class ListCoinsComponent {
                 const coin = await firstValueFrom(
                   this.coins.getERC20Info(event, provider, account)
                 );
-
                 this.store.dispatch(
                   CoinsActions.addNewCoinExternally({ newCoin: coin })
                 );
