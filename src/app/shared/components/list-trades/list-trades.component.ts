@@ -17,6 +17,9 @@ import {
 } from '../list-nfts/list-nfts.component';
 import { AlchemyService } from '../../services/alchemy.service';
 import { UtilsService } from '../../services/utils.service';
+import { Store } from '@ngrx/store';
+import { Account, State } from 'src/app/reducers';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 export interface ListTradeItem {
   tradeId: BigInt;
   amountA: BigInt;
@@ -29,6 +32,7 @@ export interface ListTradeItem {
   type: 'erc20' | 'erc721';
   creator: string;
   receiver: string;
+  sortNo?: number;
 }
 
 @Component({
@@ -56,14 +60,20 @@ export class ListTradesComponent {
   @Output() viewNftDetails = new EventEmitter<[string, string]>();
   @Output() tradeCancelledSuccessfully = new EventEmitter<ListTradeItem>();
 
+  public account?: Account;
   constructor(
     private router: Router,
     private modalService: BsModalService,
     private toastr: ToastrService,
     private provider: ProviderService,
     private alchemy: AlchemyService,
-    private utils: UtilsService
-  ) {}
+    private utils: UtilsService,
+    private store: Store<State>
+  ) {
+    this.provider.getAccountStream().subscribe((data) => {
+      this.account = data;
+    });
+  }
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.

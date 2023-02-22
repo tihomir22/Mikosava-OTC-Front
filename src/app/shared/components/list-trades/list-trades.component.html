@@ -5,233 +5,295 @@
 >
   <ngx-skeleton-loader count="10" *ngIf="!tradesLoaded"></ngx-skeleton-loader>
   <ng-container *ngIf="tradesLoaded">
-    <div
-      class="list-group-item list-group-item-action row d-flex tradeItem"
-      (dblclick)="clickTradeItem.emit(trade)"
-      *ngFor="let trade of trades | sort : 'sortTradeId' : 'DESC'"
-    >
-      <!-- <div class="col flex-grow-0">#{{ trade.tradeId }}</div> -->
-      <div class="col flex-grow-1">
-        <img
-          class="identicon"
-          tooltip="{{ trade.creator | translate }}"
-          [src]="
-            'data:image/png;base64,' +
-            transformToIdenticoin(trade.creator, options)
-          "
-        />
-        <ng-container
-          *ngIf="!isEmptyAddress(trade.receiver); else emptyAddress"
-        >
+    <div class="header">
+      <div
+        class="col flex-grow-1 justify-content-center text-muted"
+        tooltip="{{ 'TRADE.SB_LIST_TRADES' | translate }}"
+        container="body"
+        placement="bottom"
+      >
+        <span
+          >S/B
+          <i-bs
+            [name]="iconNames.QuestionCircle"
+            width="1rem"
+            height="1rem"
+          ></i-bs>
+        </span>
+      </div>
+      <div class="col flex-grow-2 justify-content-center text-muted">
+        <span>State</span>
+      </div>
+      <div class="col pairA flex-grow-4 justify-content-center"></div>
+      <div class="col flex-grow-0 d-none d-lg-flex"></div>
+      <div class="col pairB flex-grow-4 justify-content-center"></div>
+      <div
+        class="col flex-grow-1 justify-content-center d-none d-lg-flex text-muted"
+        tooltip="{{ 'TRADE.TOOLTIP_LIST_TRADES' | translate }}"
+        container="body"
+        placement="bottom"
+      >
+        <span
+          >Valid until
+          <i-bs
+            [name]="iconNames.QuestionCircle"
+            width="1rem"
+            height="1rem"
+          ></i-bs
+        ></span>
+      </div>
+      <div class="col actions flex-grow-1 d-flex justify-content-end"></div>
+    </div>
+    <div class="list">
+      <div
+        class="list-group-item list-group-item-action row d-flex tradeItem"
+        (dblclick)="clickTradeItem.emit(trade)"
+        *ngFor="let trade of trades | sort : 'sortNo' : 'DESC'"
+      >
+        <!-- <div class="col flex-grow-0">#{{ trade.tradeId }}</div> -->
+        <div class="col flex-grow-1">
           <img
-            tooltip="{{ trade.receiver | translate }}"
             class="identicon"
+            tooltip="{{ trade.creator | translate }}"
+            container="body"
+            placement="bottom"
             [src]="
               'data:image/png;base64,' +
-              transformToIdenticoin(trade.receiver, options)
+              transformToIdenticoin(trade.creator, options)
             "
           />
-        </ng-container>
-        <ng-template #emptyAddress>
-          <img class="identicon" [src]="'assets/icons/question-mark.png'" />
-        </ng-template>
-      </div>
-      <div class="col flex-grow-2 justify-content-end">
-        <app-status-displayer [trade]="trade"></app-status-displayer>
-      </div>
-
-      <div class="col pairA flex-grow-4 justify-content-center">
-        <ng-container *ngIf="trade.type == 'erc20'; else nftTemplateA">
-          <span>
-            {{
-              trade.amountA
-                | parseFromWeiToDecimalNumber : trade.aTokenAddress
-                | async
-                | number
-            }}
-          </span>
-          <app-coin-img-badge
-            [readOnly]="true"
-            [src]="(trade.aTokenAddress | fromAddressToCg | async)?.image ?? ''"
-            [coinLabel]="
-              (trade.aTokenAddress | fromAddressToCg | async)?.symbol ?? ''
-            "
-            [defaultLabel]="'Loading...'"
-          ></app-coin-img-badge>
-        </ng-container>
-        <ng-template #nftTemplateA>
-          <div class="nft-info mx-2">
-            <button
-              type="button"
-              name=""
-              id=""
-              class="btn btn-outline-primary details-btn"
-              (click)="
-                viewNftDetails.emit([trade.aTokenAddress, trade.amountA])
-              "
-            >
-              <i-bs
-                [name]="iconNames.Search"
-                [width]="'16px'"
-                [height]="'16px'"
-              ></i-bs
-              ><span class="d-none d-sm-block">View details</span>
-            </button>
-          </div>
-          <img
-            class="identicon-img"
-            [src]="
-              'data:image/png;base64,' +
-              transformToIdenticoin(
-                trade.amountA + trade.aTokenAddress,
-                options
-              )
-            "
-          />
-        </ng-template>
-      </div>
-      <div class="col flex-grow-0 d-none d-lg-flex">
-        <i-bs [name]="iconNames.ArrowLeftRight"></i-bs>
-      </div>
-      <div class="col pairB flex-grow-4 justify-content-center">
-        <ng-container *ngIf="trade.type == 'erc20'; else nftTemplateB">
-          <span>
-            {{
-              trade.amountB
-                | parseFromWeiToDecimalNumber : trade.bTokenAddress
-                | async
-                | number
-            }}
-          </span>
-          <app-coin-img-badge
-            [readOnly]="true"
-            [src]="(trade.aTokenAddress | fromAddressToCg | async)?.image ?? ''"
-            [coinLabel]="
-              (trade.aTokenAddress | fromAddressToCg | async)?.symbol ?? ''
-            "
-            [defaultLabel]="'Loading...'"
-          ></app-coin-img-badge>
-        </ng-container>
-        <ng-template #nftTemplateB>
-          <img
-            class="identicon-img"
-            [src]="
-              'data:image/png;base64,' +
-              transformToIdenticoin(
-                trade.amountB + trade.bTokenAddress,
-                options
-              )
-            "
-          />
-          <div class="nft-info mx-2">
-            <button
-              type="button"
-              name=""
-              id=""
-              class="btn btn-outline-primary details-btn"
-              (click)="
-                viewNftDetails.emit([trade.bTokenAddress, trade.amountB])
-              "
-            >
-              <i-bs
-                [name]="iconNames.Search"
-                [width]="'16px'"
-                [height]="'16px'"
-              ></i-bs
-              ><span class="d-none d-sm-block">View details</span>
-            </button>
-          </div>
-        </ng-template>
-      </div>
-      <div class="col flex-grow-1 justify-content-center d-none d-lg-flex">
-        <ng-container *ngIf="trade.validUntil == 0; else validUntilSet">
-          <i-bs width="2rem" height="2rem" [name]="iconNames.Infinity"></i-bs>
-        </ng-container>
-        <ng-template #validUntilSet>
-          <app-valid-until-progressbar
-            class="w-100"
-            [trade]="trade"
-          ></app-valid-until-progressbar>
-        </ng-template>
-      </div>
-
-      <div class="col actions flex-grow-1 d-flex justify-content-end">
-        <div
-          class="btn-group"
-          dropdown
-          placement="left"
-          container="body"
-          class="d-none d-sm-block"
-        >
-          <button
-            id="button-animated"
-            dropdownToggle
-            type="button"
-            class="hidden-button"
-            aria-controls="dropdown-animated"
+          <ng-container
+            *ngIf="!isEmptyAddress(trade.receiver); else emptyAddress"
           >
-            <i-bs [name]="iconNames.ThreeDotsVertical" class="mx-2"></i-bs>
-          </button>
-          <ul
-            id="dropdown-animated"
-            *dropdownMenu
-            class="dropdown-menu trade-actions-dropdown"
-            role="menu"
-            aria-labelledby="button-animated"
-          >
-            <li role="menuitem">
-              <a
-                class="dropdown-item text-secondary"
-                (click)="clickTradeItem.emit(trade)"
-                ><i-bs [name]="iconNames.Eye" class="mx-2"></i-bs>Open trade</a
-              >
-            </li>
-            <li role="menuitem">
-              <a
-                class="dropdown-item text-primary"
-                (click)="shareTradeItem.emit(trade)"
-                ><i-bs [name]="iconNames.QrCode" class="mx-2"></i-bs>Share</a
-              >
-            </li>
-            <li
-              role="menuitem"
-              [ngClass]="{ disabled: trade.cancelled || trade.sold }"
-            >
-              <a
-                class="dropdown-item cancel-btn {{
-                  trade.cancelled || trade.sold ? 'disabled' : 'text-danger'
-                }}"
-                (click)="cancelTradeItem.emit(trade)"
-                ><i-bs [name]="iconNames.XCircle" class="mx-2"></i-bs>Cancel</a
-              >
-            </li>
-          </ul>
+            <img
+              tooltip="{{ trade.receiver | translate }}"
+              container="body"
+              placement="bottom"
+              class="identicon"
+              [src]="
+                'data:image/png;base64,' +
+                transformToIdenticoin(trade.receiver, options)
+              "
+            />
+          </ng-container>
+          <ng-template #emptyAddress>
+            <img class="identicon" [src]="'assets/icons/question-mark.png'" />
+          </ng-template>
         </div>
-        <div class="d-flex d-sm-none">
-          <button
-            type="button"
-            class="btn btn-primary"
-            (click)="clickTradeItem.emit(trade)"
+        <div class="col flex-grow-2 justify-content-end">
+          <app-status-displayer [trade]="trade"></app-status-displayer>
+        </div>
+
+        <div class="col pairA flex-grow-4 justify-content-center">
+          <ng-container *ngIf="trade.type == 'erc20'; else nftTemplateA">
+            <span>
+              {{
+                trade.amountA
+                  | parseFromWeiToDecimalNumber : trade.aTokenAddress
+                  | async
+                  | number
+              }}
+            </span>
+            <app-coin-img-badge
+              [readOnly]="true"
+              [src]="
+                (trade.aTokenAddress | fromAddressToCg | async)?.image ?? ''
+              "
+              [coinLabel]="
+                (trade.aTokenAddress | fromAddressToCg | async)?.symbol ?? ''
+              "
+              [defaultLabel]="'Loading...'"
+            ></app-coin-img-badge>
+          </ng-container>
+          <ng-template #nftTemplateA>
+            <div class="nft-info mx-2">
+              <button
+                type="button"
+                name=""
+                id=""
+                class="btn btn-outline-primary details-btn"
+                (click)="
+                  viewNftDetails.emit([trade.aTokenAddress, trade.amountA])
+                "
+              >
+                <i-bs
+                  [name]="iconNames.Search"
+                  [width]="'16px'"
+                  [height]="'16px'"
+                ></i-bs
+                ><span class="d-none d-sm-block">View details</span>
+              </button>
+            </div>
+            <img
+              class="identicon-img"
+              [src]="
+                'data:image/png;base64,' +
+                transformToIdenticoin(
+                  trade.amountA + trade.aTokenAddress,
+                  options
+                )
+              "
+            />
+          </ng-template>
+        </div>
+        <div class="col flex-grow-0 d-none d-lg-flex">
+          <i-bs [name]="iconNames.ArrowLeftRight"></i-bs>
+        </div>
+        <div class="col pairB flex-grow-4 justify-content-center">
+          <ng-container *ngIf="trade.type == 'erc20'; else nftTemplateB">
+            <span>
+              {{
+                trade.amountB
+                  | parseFromWeiToDecimalNumber : trade.bTokenAddress
+                  | async
+                  | number
+              }}
+            </span>
+            <app-coin-img-badge
+              [readOnly]="true"
+              [src]="
+                (trade.aTokenAddress | fromAddressToCg | async)?.image ?? ''
+              "
+              [coinLabel]="
+                (trade.aTokenAddress | fromAddressToCg | async)?.symbol ?? ''
+              "
+              [defaultLabel]="'Loading...'"
+            ></app-coin-img-badge>
+          </ng-container>
+          <ng-template #nftTemplateB>
+            <img
+              class="identicon-img"
+              [src]="
+                'data:image/png;base64,' +
+                transformToIdenticoin(
+                  trade.amountB + trade.bTokenAddress,
+                  options
+                )
+              "
+            />
+            <div class="nft-info mx-2">
+              <button
+                type="button"
+                name=""
+                id=""
+                class="btn btn-outline-primary details-btn"
+                (click)="
+                  viewNftDetails.emit([trade.bTokenAddress, trade.amountB])
+                "
+              >
+                <i-bs
+                  [name]="iconNames.Search"
+                  [width]="'16px'"
+                  [height]="'16px'"
+                ></i-bs
+                ><span class="d-none d-sm-block">View details</span>
+              </button>
+            </div>
+          </ng-template>
+        </div>
+        <div class="col flex-grow-1 justify-content-center d-none d-lg-flex">
+          <ng-container *ngIf="trade.validUntil == 0; else validUntilSet">
+            <i-bs width="2rem" height="2rem" [name]="iconNames.Infinity"></i-bs>
+          </ng-container>
+          <ng-template #validUntilSet>
+            <app-valid-until-progressbar
+              class="w-100"
+              [trade]="trade"
+            ></app-valid-until-progressbar>
+          </ng-template>
+        </div>
+
+        <div class="col actions flex-grow-1 d-flex justify-content-end">
+          <div
+            class="btn-group"
+            dropdown
+            placement="left"
+            container="body"
+            class="d-none d-sm-block"
           >
-            <i-bs [name]="iconNames.Eye" class="mx-2"></i-bs>
-          </button>
-          <button
-            type="button"
-            class="btn btn-secondary"
-            (click)="shareTradeItem.emit(trade)"
-          >
-            <i-bs [name]="iconNames.QrCode" class="mx-2"></i-bs>
-          </button>
-          <button
-            type="button"
-            class="btn btn-danger cancel-btn {{
-              trade.cancelled || trade.sold ? 'disabled' : ''
-            }}"
-            [ngClass]="{ disabled: trade.cancelled || trade.sold }"
-            (click)="cancelTradeItem.emit(trade)"
-          >
-            <i-bs [name]="iconNames.XCircle" class="mx-2"></i-bs>
-          </button>
+            <button
+              id="button-animated"
+              dropdownToggle
+              type="button"
+              class="hidden-button"
+              aria-controls="dropdown-animated"
+            >
+              <i-bs [name]="iconNames.ThreeDotsVertical" class="mx-2"></i-bs>
+            </button>
+            <ul
+              id="dropdown-animated"
+              *dropdownMenu
+              class="dropdown-menu trade-actions-dropdown"
+              role="menu"
+              aria-labelledby="button-animated"
+            >
+              <li role="menuitem">
+                <a
+                  class="dropdown-item text-primary"
+                  (click)="clickTradeItem.emit(trade)"
+                  ><i-bs [name]="iconNames.Eye" class="mx-2"></i-bs>Open
+                  trade</a
+                >
+              </li>
+              <li role="menuitem">
+                <a
+                  class="dropdown-item text-primary"
+                  (click)="shareTradeItem.emit(trade)"
+                  ><i-bs [name]="iconNames.QrCode" class="mx-2"></i-bs>Share</a
+                >
+              </li>
+              <li
+                role="menuitem"
+                [ngClass]="{
+                  disabled:
+                    trade.cancelled ||
+                    trade.sold ||
+                    (trade.creator | lowercase) !=
+                      (account?.address | lowercase)
+                }"
+              >
+                <a
+                  class="dropdown-item cancel-btn {{
+                    trade.cancelled ||
+                    trade.sold ||
+                    (trade.creator | lowercase) !=
+                      (account?.address | lowercase)
+                      ? 'disabled'
+                      : 'text-danger'
+                  }}"
+                  (click)="cancelTradeItem.emit(trade)"
+                  ><i-bs [name]="iconNames.XCircle" class="mx-2"></i-bs
+                  >Cancel</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="d-flex d-sm-none">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="clickTradeItem.emit(trade)"
+            >
+              <i-bs [name]="iconNames.Eye" class="mx-2"></i-bs>
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="shareTradeItem.emit(trade)"
+            >
+              <i-bs [name]="iconNames.QrCode" class="mx-2"></i-bs>
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger cancel-btn {{
+                trade.cancelled || trade.sold ? 'disabled' : ''
+              }}"
+              [ngClass]="{ disabled: trade.cancelled || trade.sold }"
+              (click)="cancelTradeItem.emit(trade)"
+            >
+              <i-bs [name]="iconNames.XCircle" class="mx-2"></i-bs>
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -22,6 +22,7 @@ export class FromMikosavaTradeToListTradeItem implements PipeTransform {
         creator: entry.creator,
         receiver: entry.counterpart,
         type: 'erc20',
+        sortNo: entry.sortNo,
       } as ListTradeItem;
     });
     if (args.length == 0) {

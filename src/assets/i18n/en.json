@@ -21,6 +21,8 @@
     "TRADING_POSITION_GO_BACK": "Go back",
     "NOT_FOUND_TRADES_SUBTITLE": "It's damm empty",
     "NOT_FOUND_TRADES": "Looks like you did not trade yet. Start, it's easy! :)",
-    "TOOLTIP_AVAILABILITY": "You can define the availability of the trade until a specific time."
+    "TOOLTIP_AVAILABILITY": "You can define the availability of the trade until a specific time.",
+    "TOOLTIP_LIST_TRADES": "Timer based trade",
+    "SB_LIST_TRADES": "Seller/Buyer, indicates which addreses are the users that created the trades."
   }
 }

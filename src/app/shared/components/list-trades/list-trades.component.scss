@@ -1,10 +1,12 @@
 @import "../../../../assets/variables.scss";
 
 .coin-viewport {
-  overflow: auto;
-  height: 300px;
-  @include media-breakpoint-between(xs, sm) {
-    height: 450px;
+  .list {
+    overflow: auto;
+    height: 300px;
+    @include media-breakpoint-between(xs, sm) {
+      height: 450px;
+    }
   }
 }
 .list-group-item:nth-child(odd) {
@@ -52,6 +54,7 @@
 
 .menuitem {
   display: flex;
+  cursor: pointer;
 }
 
 .identicon {

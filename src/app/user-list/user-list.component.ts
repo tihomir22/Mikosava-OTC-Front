@@ -58,14 +58,14 @@ export class UserListComponent {
     this.trades = (await otcContract['fetchMyCoinTrades']()).map(
       (entry: MikosavaTrade) => {
         let clonedTrade = { ...entry };
-        (clonedTrade as any)['sortTradeId'] = Number(entry.tradeId);
+        clonedTrade.sortNo = Number(clonedTrade.tradeId);
         return clonedTrade;
       }
     );
     this.nftTrades = (await otcContract['fetchMyNftTrades']()).map(
       (entry: MikosavaNFTTRade) => {
         let clonedTrade = { ...entry };
-        (clonedTrade as any)['sortTradeId'] = Number(entry.tradeId);
+        clonedTrade.sortNo = Number(clonedTrade.tradeId);
         return clonedTrade;
       }
     );

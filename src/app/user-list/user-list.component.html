@@ -2,8 +2,38 @@
   <div class="card col-12 col-lg-12 col-xl-10">
     <div class="card-body d-flex justify-content-center align-items-center">
       <div class="list-group w-100">
-        <div class="header mb-2">
-          <span class="text-primary">{{ "TRADE.MY_TRADES" | translate }}</span>
+        <div class="header">
+          <div
+            class="type-list-changer d-flex justify-content-start"
+            [formGroup]="form"
+          >
+            <div
+              class="btn-group py-2 type-switcher"
+              btnRadioGroup
+              formControlName="activeType"
+            >
+              <label
+                btnRadio="erc20"
+                class="btn no-wrap-text chip-button shadow-none"
+                [ngClass]="{
+                  'btn-primary': form.value.activeType == 'erc20',
+                  'btn-ternary': form.value.activeType != 'erc20'
+                }"
+              >
+                Tokens</label
+              >
+              <label
+                btnRadio="erc721"
+                class="btn no-wrap-text chip-button shadow-none"
+                [ngClass]="{
+                  'btn-primary': form.value.activeType == 'erc721',
+                  'btn-ternary': form.value.activeType != 'erc721'
+                }"
+              >
+                NFTs</label
+              >
+            </div>
+          </div>
           <button
             type="button"
             class="btn btn-primary"
@@ -16,29 +46,7 @@
             {{ "TRADE.OPEN_NEW_TRADE" | translate }}
           </button>
         </div>
-        <div
-          class="type-list-changer w-100 d-flex justify-content-start"
-          [formGroup]="form"
-        >
-          <div
-            class="btn-group py-2 type-switcher"
-            btnRadioGroup
-            formControlName="activeType"
-          >
-            <label
-              btnRadio="erc20"
-              class="btn btn-secondary no-wrap-text chip-button"
-            >
-              Tokens</label
-            >
-            <label
-              btnRadio="erc721"
-              class="btn btn-secondary no-wrap-text chip-button"
-            >
-              NFTs</label
-            >
-          </div>
-        </div>
+
         <div class="list w-100">
           <app-list-trades
             *ngIf="form.value.activeType == 'erc20'"
