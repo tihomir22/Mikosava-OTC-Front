@@ -8,6 +8,7 @@
   "
   [disableExchangeButton]="getStatus(viewedTrade) != 'Open'"
   [displayApproveButton]="
+    (getAccount | async)?.address != viewedTrade.creator &&
     allowance < viewedTrade.amountPositionCounterpart &&
     !viewedTrade.cancelled &&
     !viewedTrade.sold &&
