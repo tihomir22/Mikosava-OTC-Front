@@ -24,6 +24,7 @@ import { AddressToCoin } from '../models/CookieCoinStructure';
 import { environment } from 'src/environments/environment';
 import { returnERC20InstanceFromAddress } from 'src/app/utils/tokens';
 import MikosavaABI from '../../../assets/MikosavaOTC.json';
+import { AlchemyService } from './alchemy.service';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +35,8 @@ export class CoinsService {
     private http: HttpClient,
     private fromWeiToUnit: ParseFromWeiToDecimalNumberPipe,
     private cookieService: CookieService,
-    private providerService: ProviderService
+    private providerService: ProviderService,
+    private alchemy: AlchemyService
   ) {}
 
   public getAllCoinsForCurrentNetwork() {
@@ -45,16 +47,6 @@ export class CoinsService {
       filter(([coins, account]) => {
         return !!account && Object.values(account).length > 0;
       }),
-      // map((data) => {
-      //   let [coins, account] = data;
-      //   coins = [
-      //     ...coins,
-      //     ...this.extractCoinsFromCookiesForCurrentNetwork(
-      //       account.chainIdConnect
-      //     ),
-      //   ];
-      //   return [coins, account] as [Array<CoingeckoCoin>, Account];
-      // }),
       map(([coins, account]) =>
         coins
           .filter((coin) => {
@@ -111,7 +103,7 @@ export class CoinsService {
       erc20['name'](),
       erc20['symbol'](),
       erc20['decimals'](),
-      erc20['balanceOf'](provider.getSigner().getAddress()),
+      erc20['balanceOf'](account.address),
     ]).pipe(
       map((value) => {
         let [name, symbol, decimals, balanceOf] = value as any;
@@ -122,13 +114,10 @@ export class CoinsService {
           decimals,
           image: '/assets/icons/question-mark.png',
           platforms: { [foundActiveNetwork!.platformName]: tokenAddress },
-          amountOfToken$: balanceOf,
+          amountOfToken$: of(
+            (balanceOf as any) / 10 ** decimals!
+          ),
         };
-        // this.addCustomCoinToCookiesBasedOnNetwork(
-        //   foundActiveNetwork!.chainId,
-        //   tokenAddress,
-        //   coin
-        // );
         return coin;
       })
     );

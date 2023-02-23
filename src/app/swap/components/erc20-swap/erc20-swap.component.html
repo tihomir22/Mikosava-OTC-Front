@@ -18,9 +18,11 @@
           [src]="(ACoin | async)?.image ?? ''"
           [coinLabel]="(ACoin | async)?.name ?? ''"
         ></app-coin-img-badge>
-        <span class="quantity text-primary" *ngIf="ACoin | async">{{
-          ((ACoin | async)?.amountOfToken$ | async) ?? 0 | number
-        }}</span>
+        <div class="d-flex justify-content-end mx-2">
+          <span class="quantity text-primary" *ngIf="ACoin | async">{{
+            ((ACoin | async)?.amountOfToken$ | async) ?? 0 | number
+          }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -44,9 +46,11 @@
           [src]="(BCoin | async)?.image ?? ''"
           [coinLabel]="(BCoin | async)?.name ?? ''"
         ></app-coin-img-badge>
-        <span class="quantity text-primary" *ngIf="BCoin | async">{{
-          ((BCoin | async)?.amountOfToken$ | async) ?? 0 | number
-        }}</span>
+        <div class="d-flex justify-content-end mx-2">
+          <span class="quantity text-primary" *ngIf="BCoin | async">{{
+            ((BCoin | async)?.amountOfToken$ | async) ?? 0 | number
+          }}</span>
+        </div>
       </div>
     </div>
   </div>

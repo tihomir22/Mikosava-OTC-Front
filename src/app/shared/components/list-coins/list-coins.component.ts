@@ -25,6 +25,11 @@ import { ProviderService } from '../../services/provider.service';
 import * as CoinsActions from '../../../actions/coins.actions';
 import { CoinsService } from '../../services/coins.service';
 import { AlchemyService } from '../../services/alchemy.service';
+import {
+  TokenBalance,
+  TokenBalancesResponse,
+  TokenBalancesResponseErc20,
+} from 'alchemy-sdk';
 
 @Component({
   selector: 'app-list-coins',
@@ -35,8 +40,7 @@ export class ListCoinsComponent {
   public originalCoins: CoingeckoCoin[] = [];
   public filteredCoins: CoingeckoCoin[] = [];
   public activeCoins: CoingeckoCoin[] = [];
-  public quickAccessCoins$: Observable<CoingeckoCoin[]> =
-    this.generateActiveCoins();
+  public quickAccessCoins$: Observable<CoingeckoCoin[]> = of([]);
   public networksAvalaible = list;
   public toUpperCase = this.toUpperCaseFn;
   public searchValue = '';
@@ -62,15 +66,42 @@ export class ListCoinsComponent {
         from(ProviderService.getWebProvider(false)),
       ])
     );
-
+    let foundActiveNetwork = getNetwork(account.chainIdConnect);
     let userBalances = (
       await this.alchemy.getAllERC20TokensByWallet(account.address)
     ).tokenBalances.sort(
       (a, b) => (b.tokenBalance! as any) - (a.tokenBalance! as any)
     );
+    const tokensToAdd = await this.getUserTokensToAdd$(
+      account,
+      userBalances,
+      coins
+    );
+    this.originalCoins = [...tokensToAdd, ...coins];
 
+    //order => userBalances
+    const ordered = userBalances.reduce((prev, current, index) => {
+      prev[current.contractAddress] = index;
+      return prev;
+    }, {} as any);
+
+    this.originalCoins = this.originalCoins.sort(
+      (a, b) =>
+        ordered[a.platforms[foundActiveNetwork!.platformName]] -
+        ordered[b.platforms[foundActiveNetwork!.platformName]]
+    );
+    this.quickAccessCoins$ = this.generateActiveCoins();
+    this.filteredCoins = [...this.originalCoins];
+    this.searchValue = '';
+  }
+
+  private async getUserTokensToAdd$(
+    account: Account,
+    userBalances: TokenBalance[],
+    coinsLoaded: CoingeckoCoin[]
+  ) {
     let foundActiveNetwork = getNetwork(account.chainIdConnect);
-    const coinAddresses = coins.map(
+    const coinAddresses = coinsLoaded.map(
       (coin) => coin.platforms[foundActiveNetwork!.platformName]
     );
 
@@ -109,42 +140,47 @@ export class ListCoinsComponent {
         )
       )
     );
-
-    this.originalCoins = [...tokensToAdd, ...coins];
-
-    //order => userBalances
-    const ordered = userBalances.reduce((prev, current, index) => {
-      prev[current.contractAddress] = index;
-      return prev;
-    }, {} as any);
-    this.originalCoins = this.originalCoins.sort(
-      (a, b) =>
-        ordered[a.platforms[foundActiveNetwork!.platformName]] -
-        ordered[b.platforms[foundActiveNetwork!.platformName]]
-    );
-
-    this.filteredCoins = [...this.originalCoins];
-    this.searchValue = '';
+    return tokensToAdd;
   }
 
   public toUpperCaseFn(text: string) {
     return text.toUpperCase();
   }
 
-  public generateActiveCoins() {
-    return this.store
-      .select((data) => data.account)
-      .pipe(
-        map((account) => {
+  public generateActiveCoins(): Observable<any> {
+    return combineLatest([
+      this.store.select((data) => data.account),
+      from(ProviderService.getWebProvider(false)),
+    ]).pipe(
+      map((data) => {
+        const [account, provider] = data;
+        let foundActiveNetwork = getNetwork(account.chainIdConnect);
+        let activeCoins = this.originalCoins.filter((originalCoin) =>
+          foundActiveNetwork?.easyAccessCoins.includes(
+            originalCoin.platforms[foundActiveNetwork!.platformName]
+          )
+        );
+        return [activeCoins, account, provider];
+      }),
+      switchMap((data) => {
+        const [entries, account, provider] = data as [
+          CoingeckoCoin[],
+          Account,
+          any
+        ];
+        if (entries.length > 0) {
+          return of(entries);
+        } else {
           let foundActiveNetwork = getNetwork(account.chainIdConnect);
-          let activeCoins = this.originalCoins.filter((originalCoin) =>
-            foundActiveNetwork?.easyAccessCoins.includes(
-              originalCoin.platforms[foundActiveNetwork!.platformName]
+          const addressesEasyCoins = foundActiveNetwork?.easyAccessCoins;
+          return forkJoin(
+            addressesEasyCoins!.map((entry) =>
+              this.coins.getERC20Info(entry, provider, account)
             )
           );
-          return activeCoins;
-        })
-      );
+        }
+      })
+    );
   }
 
   public async searchChanged(event: string) {

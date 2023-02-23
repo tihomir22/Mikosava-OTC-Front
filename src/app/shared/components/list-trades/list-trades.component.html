@@ -5,7 +5,7 @@
 >
   <ngx-skeleton-loader count="10" *ngIf="!tradesLoaded"></ngx-skeleton-loader>
   <ng-container *ngIf="tradesLoaded">
-    <div class="header">
+    <div class="header d-none d-sm-flex">
       <div
         class="col flex-grow-1 justify-content-center text-muted"
         tooltip="{{ 'TRADE.SB_LIST_TRADES' | translate }}"

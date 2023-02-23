@@ -5,7 +5,16 @@ import { Account, State } from 'src/app/reducers';
 import { CoingeckoCoin } from '../shared/models/CoinGeckoCoin';
 import * as CoinsActions from '../actions/coins.actions';
 import * as NftActions from '../actions/nfts.actions';
-import { firstValueFrom, Observable } from 'rxjs';
+import {
+  combineLatest,
+  firstValueFrom,
+  forkJoin,
+  interval,
+  map,
+  merge,
+  Observable,
+  switchMap,
+} from 'rxjs';
 import { ProviderService } from '../shared/services/provider.service';
 import { BigNumber, ethers } from 'ethers';
 import MikosavaABI from '../../assets/MikosavaOTC.json';
@@ -23,7 +32,13 @@ import moment from 'moment';
 import { CoinsService } from '../shared/services/coins.service';
 import { MikosavaNft } from '../shared/components/list-nfts/list-nfts.component';
 import { UtilsService } from '../shared/services/utils.service';
+import { TranslateService } from '@ngx-translate/core';
 export type TradingType = 'erc20' | 'erc721' | 'mixed';
+export enum ErrorErc20 {
+  NO_ERROR = 0,
+  POSITION_IS_ZERO = 1,
+  MORE_THAN_BALANCE = 2,
+}
 @Component({
   selector: 'app-swap',
   templateUrl: './swap.component.html',
@@ -51,6 +66,9 @@ export class SwapComponent {
   );
   public activeTradingType: TradingType = 'erc20';
   public validUntil: number = 0;
+  public errorStateERC20: ErrorErc20 = ErrorErc20.NO_ERROR;
+  public ErrorErc20MAP = ErrorErc20;
+
   constructor(
     private modalService: BsModalService,
     private store: Store<State>,
@@ -59,8 +77,56 @@ export class SwapComponent {
     private providerService: ProviderService,
     private router: Router,
     private coinService: CoinsService,
-    private utils: UtilsService
-  ) {}
+    private utils: UtilsService,
+    private translate: TranslateService
+  ) {
+    combineLatest([this.ACoin, this.BCoin, this.formGroupERC20.valueChanges])
+      .pipe(
+        switchMap(([acoin, bcoin, form]) => {
+          return forkJoin(acoin.amountOfToken$, bcoin.amountOfToken$).pipe(
+            map((amounts) => {
+              const [amountA, amountB] = amounts as any;
+              return [acoin, amountA, bcoin, amountB, form];
+            })
+          );
+        })
+      )
+      .subscribe((data) => {
+        const [aCoin, balanceA, bCoin, balanceB, formAmount] = data;
+        this.errorStateERC20 = this.getErrorValidationERC20(
+          formAmount.acoin,
+          balanceA,
+          formAmount.bcoin,
+          balanceB
+        );
+      });
+  }
+
+  public getErrorValidationERC20(
+    aCoinAmount: number,
+    aCoinBalance: number,
+    bCoinAmount: number,
+    bCoinBalance: number
+  ): ErrorErc20 {
+    //Position can't be 0
+    if (aCoinAmount === 0) {
+      return ErrorErc20.POSITION_IS_ZERO;
+    }
+    //Check if desired amount exceeds balance
+    if (aCoinAmount > aCoinBalance) {
+      return ErrorErc20.MORE_THAN_BALANCE;
+    }
+    return ErrorErc20.NO_ERROR;
+  }
+
+  public returnErrorMessage() {
+    if (this.errorStateERC20 == ErrorErc20.MORE_THAN_BALANCE) {
+      return this.translate.instant('COINS.ERROR.MORE_THAN_BALANCE');
+    } else if (this.errorStateERC20 == ErrorErc20.POSITION_IS_ZERO) {
+      return this.translate.instant('COINS.ERROR.POSITION_IS_ZERO');
+    }
+    return '';
+  }
 
   public async approve() {
     const [, signer, , foundActiveNetwork] =

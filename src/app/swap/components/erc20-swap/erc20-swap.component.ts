@@ -47,7 +47,8 @@ export class Erc20SwapComponent {
     private providerService: ProviderService,
     private router: Router,
     private coinService: CoinsService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.formERC20

@@ -5,7 +5,11 @@
   "COINS": {
     "NO_COIN_SELECTED": "No coin selected",
     "EMPTY": "The coins list is empty.",
-    "EMPTY_SUBTITLE": "Double-check your connection."
+    "EMPTY_SUBTITLE": "Double-check your connection.",
+    "ERROR": {
+      "MORE_THAN_BALANCE": "The amount exceeds the balance.",
+      "POSITION_IS_ZERO": "Amount can not be ZERO."
+    }
   },
   "NFT": {
     "VIEW_NFT": "Viewing "

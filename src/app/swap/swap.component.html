@@ -39,40 +39,58 @@
       <div class="mixed" *ngIf="activeTradingType == 'mixed'"></div>
       <app-timer-form [(validUntil)]="validUntil"></app-timer-form>
       <div class="row">
-        <button
-          *ngIf="allowance >= amountCoinAParsed && activeTradingType == 'erc20'"
-          type="button"
-          class="btn btn-primary btn-lg btn-block"
-          (click)="openTrade()"
-          [disabled]="
-            !formGroupERC20.valid ||
-            !(ACoin | async) ||
-            !(BCoin | async) ||
-            (!!formGroupERC20.get('availableUntil') &&
-              !formGroupERC20.get('selectAvailableUntil'))
-          "
+        <ng-container
+          *ngIf="activeTradingType == 'erc20'; else nftTradingButtons"
         >
-          Open token trade
-        </button>
+          <button
+            type="button"
+            *ngIf="errorStateERC20 != ErrorErc20MAP.NO_ERROR"
+            [disabled]="true"
+            class="btn btn-secondary btn-lg btn-block"
+          >
+            {{ returnErrorMessage() }}
+          </button>
 
-        <button
-          *ngIf="activeTradingType == 'erc721'"
-          type="button"
-          class="btn btn-primary btn-lg btn-block"
-          (click)="openNftTrade()"
-          [disabled]="!(NFTA | async) || !(NFTB | async)"
-        >
-          Open NFT trade
-        </button>
-
-        <button
-          type="button"
-          *ngIf="allowance < amountCoinAParsed && activeTradingType == 'erc20'"
-          class="btn btn-secondary btn-lg btn-block"
-          (click)="approve()"
-        >
-          Approve
-        </button>
+          <button
+            *ngIf="
+              allowance >= amountCoinAParsed &&
+              errorStateERC20 == ErrorErc20MAP.NO_ERROR
+            "
+            type="button"
+            class="btn btn-primary btn-lg btn-block"
+            (click)="openTrade()"
+            [disabled]="
+              !formGroupERC20.valid ||
+              !(ACoin | async) ||
+              !(BCoin | async) ||
+              (!!formGroupERC20.get('availableUntil') &&
+                !formGroupERC20.get('selectAvailableUntil'))
+            "
+          >
+            Open token trade
+          </button>
+          <button
+            type="button"
+            *ngIf="
+              allowance < amountCoinAParsed &&
+              errorStateERC20 == ErrorErc20MAP.NO_ERROR
+            "
+            class="btn btn-secondary btn-lg btn-block"
+            (click)="approve()"
+          >
+            Approve
+          </button>
+        </ng-container>
+        <ng-template #nftTradingButtons>
+          <button
+            type="button"
+            class="btn btn-primary btn-lg btn-block"
+            (click)="openNftTrade()"
+            [disabled]="!(NFTA | async) || !(NFTB | async)"
+          >
+            Open NFT trade
+          </button>
+        </ng-template>
       </div>
     </div>
   </div>

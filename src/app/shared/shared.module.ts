@@ -36,6 +36,7 @@ import { FromMikosavaNFTTradeToListTradeItem } from './pipes/from-mikosava-NFT-t
 import { CloseTradeCommonComponent } from './components/close-trade-common/close-trade-common.component';
 import { TimerFormComponent } from './components/timer-form/timer-form.component';
 import { TxOngoingModalComponent } from './components/tx-ongoing-modal/tx-ongoing-modal.component';
+import { NetworkModalComponent } from './components/network-modal/network-modal.component';
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -60,6 +61,7 @@ import { TxOngoingModalComponent } from './components/tx-ongoing-modal/tx-ongoin
     CloseTradeCommonComponent,
     TimerFormComponent,
     TxOngoingModalComponent,
+    NetworkModalComponent,
   ],
   imports: [
     CommonModule,

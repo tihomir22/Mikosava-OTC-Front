@@ -120,7 +120,6 @@ export class ListNftsComponent {
           })
         );
 
-        console.log(collectionResult);
         this.dynamicGroupedNft[event] = this.mapIdenticon(
           collectionResult as MikosavaNft[]
         );

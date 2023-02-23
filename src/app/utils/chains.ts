@@ -21,13 +21,10 @@ export const list = [
       symbol: 'MATIC',
       address: '0x0000000000000000000000000000000000001010',
     },
-    //TETHER,POLYGON,WMATIC,WETH,USDC
+    //USDC WMATIC
     easyAccessCoins: [
-      '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-      // '0x0000000000000000000000000000000000001010',
-      '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
-      '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619',
-      '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+      '0x992d00C09E1162Bda6D556A15d83e5050d300908',
+      '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
     ],
     rpcs: [
       'https://polygon-testnet.public.blastapi.io',
