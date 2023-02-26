@@ -2,7 +2,7 @@
   <div class="card col-12 col-lg-12 col-xl-8">
     <div class="card-body d-flex justify-content-center align-items-center">
       <div class="list-group w-100">
-        <div class="header d-flex">
+        <!-- <div class="header d-flex">
           <div
             class="type-list-changer d-flex justify-content-start"
             [formGroup]="form"
@@ -45,21 +45,21 @@
           >
             {{ "TRADE.OPEN_NEW_TRADE" | translate }}
           </button>
-        </div>
+        </div> -->
 
         <div class="list w-100">
           <app-list-trades
             *ngIf="form.value.activeType == 'erc20'"
+            [form]="form"
             [trades]="trades | fromMTtoLTI"
             [tradesLoaded]="tradesLoaded"
-            [typeTrades]="form.value.activeType"
             (tradeCancelledSuccessfully)="loadMyTrades()"
           ></app-list-trades>
 
           <app-list-trades
             *ngIf="form.value.activeType == 'erc721'"
+            [form]="form"
             [trades]="nftTrades | fromMNTtoLTI"
-            [typeTrades]="form.value.activeType"
             [tradesLoaded]="tradesLoaded"
             (tradeCancelledSuccessfully)="loadMyTrades()"
           ></app-list-trades>

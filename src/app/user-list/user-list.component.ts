@@ -11,6 +11,7 @@ import { IconNamesEnum } from 'ngx-bootstrap-icons';
 import { Router } from '@angular/router';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { getStatus } from '../utils/utils';
 
 @Component({
   selector: 'app-user-list',
@@ -70,9 +71,5 @@ export class UserListComponent {
       }
     );
     this.tradesLoaded = true;
-  }
-
-  public redirectToTrade() {
-    this.router.navigate(['/swap']);
   }
 }

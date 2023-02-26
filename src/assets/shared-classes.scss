@@ -60,6 +60,12 @@ ngx-skeleton-loader {
   }
 }
 
+ng-select{
+  input{
+    height: 100% !important;
+  }
+}
+
 app-swap {
   input {
     background-color: lighten($ternary, 10%) !important;

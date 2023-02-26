@@ -4,7 +4,11 @@ import { BigNumber, ethers } from 'ethers';
 import { IdenticonOptions } from 'identicon.js';
 import { IconNamesEnum } from 'ngx-bootstrap-icons';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { generateIdenticonB64, isEmptyAddress } from 'src/app/utils/utils';
+import {
+  generateIdenticonB64,
+  getStatus,
+  isEmptyAddress,
+} from 'src/app/utils/utils';
 import { environment } from 'src/environments/environment';
 import { MikosavaTrade } from '../../models/MikosavaTrade';
 import { ShareModalComponent } from '../share-modal/share-modal.component';
@@ -19,7 +23,12 @@ import { AlchemyService } from '../../services/alchemy.service';
 import { UtilsService } from '../../services/utils.service';
 import { Store } from '@ngrx/store';
 import { Account, State } from 'src/app/reducers';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { debounceTime, firstValueFrom, lastValueFrom } from 'rxjs';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import {
+  FilterDialogListTradesComponent,
+  FiltersDialogListTrades,
+} from './components/filter-dialog-list-trades/filter-dialog-list-trades.component';
 export interface ListTradeItem {
   tradeId: BigInt;
   amountA: BigInt;
@@ -41,9 +50,19 @@ export interface ListTradeItem {
   styleUrls: ['./list-trades.component.scss'],
 })
 export class ListTradesComponent {
-  @Input() trades: ListTradeItem[] = [];
+  @Input() set trades(data: ListTradeItem[]) {
+    if (data) {
+      this._originalTrades = data;
+      this.tradesFiltered = [...this._originalTrades];
+    }
+  }
+  public get trades() {
+    return this.tradesFiltered;
+  }
+  public tradesFiltered: ListTradeItem[] = [];
+  private _originalTrades: ListTradeItem[] = [];
   @Input() tradesLoaded: boolean = false;
-  @Input() typeTrades: 'erc20' | 'erc721' = 'erc20';
+  @Input() form!: FormGroup;
   public iconNames = IconNamesEnum;
   public transformToIdenticoin = generateIdenticonB64;
   public isEmptyAddress = isEmptyAddress;
@@ -56,9 +75,12 @@ export class ListTradesComponent {
   @Output() clickTradeItem = new EventEmitter<ListTradeItem>();
   @Output() cancelTradeItem = new EventEmitter<ListTradeItem>();
   @Output() shareTradeItem = new EventEmitter<ListTradeItem>();
+  @Output() newTrade = new EventEmitter<void>();
   //collection - tokenId
   @Output() viewNftDetails = new EventEmitter<[string, string]>();
   @Output() tradeCancelledSuccessfully = new EventEmitter<ListTradeItem>();
+  @Output() clickedFilter = new EventEmitter<void>();
+  private filterApplied!: FiltersDialogListTrades;
 
   public account?: Account;
   constructor(
@@ -68,7 +90,8 @@ export class ListTradesComponent {
     private provider: ProviderService,
     private alchemy: AlchemyService,
     private utils: UtilsService,
-    private store: Store<State>
+    private store: Store<State>,
+    private fb: FormBuilder
   ) {
     this.provider.getAccountStream().subscribe((data) => {
       this.account = data;
@@ -78,13 +101,54 @@ export class ListTradesComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
+    this.newTrade.subscribe(() => {
+      this.router.navigate(['/swap']);
+    });
+
+    this.clickedFilter.subscribe((data) => {
+      let sellerAddreses: Array<string> = [];
+      let buyerAddresses: Array<string> = [];
+      let possibleStatuses: Array<'Cancelled' | 'Sold' | 'Expired' | 'Open'> =
+        [];
+      let tokenAddresssForSell: Array<string> = [];
+      let tokensAddressesForBuy: Array<string> = [];
+      this.trades.forEach((erc20Trade) => {
+        sellerAddreses.push(erc20Trade.creator);
+        buyerAddresses.push(erc20Trade.receiver);
+        possibleStatuses.push(getStatus(erc20Trade));
+        tokenAddresssForSell.push(erc20Trade.aTokenAddress);
+        tokensAddressesForBuy.push(erc20Trade.bTokenAddress);
+      });
+
+      let bsModalRef = this.modalService.show(FilterDialogListTradesComponent, {
+        class: 'modal-dialog-centered',
+      });
+      if (bsModalRef.content) {
+        bsModalRef.content.sellerAddresees = [...new Set(sellerAddreses)];
+        bsModalRef.content.buyerAddresses = [...new Set(buyerAddresses)];
+        bsModalRef.content.statuses = [...new Set(possibleStatuses)];
+        bsModalRef.content.tokenAddressesSell = [
+          ...new Set(tokenAddresssForSell),
+        ];
+        bsModalRef.content.tokenAddressesBuy = [
+          ...new Set(tokensAddressesForBuy),
+        ];
+        bsModalRef.content.form.patchValue(this.filterApplied);
+        bsModalRef.content.onApplyFilter.subscribe((data) => {
+          this.modalService.hide();
+          this.applyFilters(data);
+          this.filterApplied = data;
+        });
+      }
+    });
+
     this.clickTradeItem.subscribe((trade) => {
-      if (this.typeTrades == 'erc20') {
+      if (this.form.get('activeType')?.value == 'erc20') {
         this.router.navigate(['/trade/' + trade.tradeId]);
-      } else if (this.typeTrades == 'erc721') {
+      } else if (this.form.get('activeType')?.value == 'erc721') {
         this.router.navigate(['/nft-trade/' + trade.tradeId]);
       } else {
-        console.error('No known type: ', this.typeTrades);
+        console.error('No known type: ', this.form.get('activeType')?.value);
       }
     });
 
@@ -129,7 +193,7 @@ export class ListTradesComponent {
 
       try {
         let tx = null as any;
-        if (this.typeTrades == 'erc20') {
+        if (this.form.get('activeType')?.value == 'erc20') {
           tx = await otcContract['cancellOTCCPosition'](trade.tradeId);
         } else {
           tx = await otcContract['cancellOTCNPosition'](trade.tradeId);
@@ -146,6 +210,34 @@ export class ListTradesComponent {
         this.toastr.error(error.reason);
         this.modalService.hide();
       }
+    });
+  }
+
+  private applyFilters(filters: FiltersDialogListTrades) {
+    this.tradesFiltered = this._originalTrades.filter((trade) => {
+      let includeInList = true;
+      if (filters.sellerAddress && includeInList) {
+        includeInList =
+          trade.creator.toLowerCase() == filters.sellerAddress.toLowerCase();
+      }
+      if (filters.buyingTokenAddress && includeInList) {
+        includeInList =
+          trade.bTokenAddress.toLowerCase() ==
+          filters.buyingTokenAddress.toLowerCase();
+      }
+      if (filters.buyerAddress && includeInList) {
+        includeInList =
+          trade.receiver.toLowerCase() == filters.buyerAddress.toLowerCase();
+      }
+      if (filters.sellingTokenAddress && includeInList) {
+        includeInList =
+          trade.aTokenAddress.toLowerCase() ==
+          filters.sellingTokenAddress.toLowerCase();
+      }
+      if (filters.status && includeInList) {
+        includeInList = getStatus(trade) == filters.status;
+      }
+      return includeInList;
     });
   }
 }

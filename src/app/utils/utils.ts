@@ -1,4 +1,7 @@
-import { MikosavaTrade } from '../shared/models/MikosavaTrade';
+import {
+  MikosavaNFTTRade,
+  MikosavaTrade,
+} from '../shared/models/MikosavaTrade';
 import Identicon, { IdenticonOptions } from 'identicon.js';
 import { ListTradeItem } from '../shared/components/list-trades/list-trades.component';
 
@@ -22,11 +25,13 @@ export const copyClipboard = (val: string) => {
   document.body.removeChild(selBox);
 };
 
-export const isExpired = (trade: MikosavaTrade | ListTradeItem) => {
+export const isExpired = (trade: MikosavaTrade | ListTradeItem | MikosavaNFTTRade) => {
   return +new Date() * 1000 > +trade.validUntil && +trade.validUntil != 0;
 };
 
-export const getStatus = (trade: MikosavaTrade | ListTradeItem) => {
+export const getStatus = (
+  trade: MikosavaTrade | ListTradeItem | MikosavaNFTTRade
+) => {
   const expired = isExpired(trade);
   if (trade.cancelled) {
     return 'Cancelled';

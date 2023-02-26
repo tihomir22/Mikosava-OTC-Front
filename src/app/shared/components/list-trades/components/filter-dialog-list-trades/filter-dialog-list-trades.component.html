@@ -1,0 +1,185 @@
+<div class="wrapper" [formGroup]="form">
+  <div class="modal-content-wrapper">
+    <div class="modal-body-wrapper">
+      <div class="select-input">
+        <ng-select
+          #select
+          [items]="sellerAddresees"
+          [searchable]="true"
+          [clearable]="true"
+          placeholder="Seller address"
+          formControlName="sellerAddress"
+        >
+          <ng-template
+            ng-option-tmp
+            let-item="item"
+            let-index="index"
+            let-search="searchTerm"
+          >
+            <div>
+              <img
+                class="identicon"
+                tooltip="{{ item | translate }}"
+                container="body"
+                placement="bottom"
+                [src]="
+                  'data:image/png;base64,' +
+                  transformToIdenticoin(item, options)
+                "
+              />
+              {{ truncate(item, 10) }}
+            </div>
+          </ng-template>
+        </ng-select>
+
+        <div class="custom-control custom-checkbox">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            formControlName="selectMineSellerAddress"
+            id="customCheck1"
+          />
+          <label class="custom-control-label" for="customCheck1"
+            >Select mine</label
+          >
+        </div>
+      </div>
+
+      <div class="select-input">
+        <ng-select
+          [items]="buyerAddresses"
+          [searchable]="true"
+          [clearable]="true"
+          placeholder="Buyer address"
+          formControlName="buyerAddress"
+        >
+          <ng-template
+            ng-option-tmp
+            let-item="item"
+            let-index="index"
+            let-search="searchTerm"
+          >
+            <div>
+              <img
+                class="identicon"
+                tooltip="{{ item | translate }}"
+                container="body"
+                placement="bottom"
+                [src]="
+                  'data:image/png;base64,' +
+                  transformToIdenticoin(item, options)
+                "
+              />
+              {{ isEmptyAddress(item) ? "No buyer yet" : truncate(item, 10) }}
+            </div>
+          </ng-template>
+        </ng-select>
+
+        <div class="custom-control custom-checkbox">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            formControlName="selectWithoutBuyer"
+            id="customCheck3"
+          />
+          <label class="custom-control-label" for="customCheck3"
+            >Select without buyer</label
+          >
+        </div>
+      </div>
+
+      <div class="select-input">
+        <ng-select
+          [items]="statuses"
+          [searchable]="true"
+          [clearable]="true"
+          formControlName="status"
+          placeholder="Status"
+        >
+          <ng-template
+            ng-option-tmp
+            let-item="item"
+            let-index="index"
+            let-search="searchTerm"
+          >
+            <div>
+              {{ item }}
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
+
+      <div class="select-input">
+        <ng-select
+          [items]="tokenAddressesSell"
+          [searchable]="true"
+          [clearable]="true"
+          formControlName="sellingTokenAddress"
+          placeholder="Selling token"
+        >
+          <ng-template
+            ng-option-tmp
+            let-item="item"
+            let-index="index"
+            let-search="searchTerm"
+          >
+            <div>
+              <img
+                class="identicon"
+                tooltip="{{ item | translate }}"
+                container="body"
+                placement="bottom"
+                [src]="
+                  'data:image/png;base64,' +
+                  transformToIdenticoin(item, options)
+                "
+              />
+              {{ truncate(item, 10) }}
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
+
+      <div class="select-input">
+        <ng-select
+          [items]="tokenAddressesBuy"
+          [searchable]="true"
+          [clearable]="true"
+          formControlName="buyingTokenAddress"
+          placeholder="Buying token"
+        >
+          <ng-template
+            ng-option-tmp
+            let-item="item"
+            let-index="index"
+            let-search="searchTerm"
+          >
+            <div>
+              <img
+                class="identicon"
+                tooltip="{{ item | translate }}"
+                container="body"
+                placement="bottom"
+                [src]="
+                  'data:image/png;base64,' +
+                  transformToIdenticoin(item, options)
+                "
+              />
+              {{ truncate(item, 10) }}
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+    <div class="w-100 p-2">
+      <button (click)="applyFilter()"
+        type="button"
+        name=""
+        id=""
+        class="btn btn-primary btn-lg btn-block w-100"
+      >
+        Apply filter
+      </button>
+    </div>
+  </div>
+</div>

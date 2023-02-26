@@ -37,6 +37,8 @@ import { CloseTradeCommonComponent } from './components/close-trade-common/close
 import { TimerFormComponent } from './components/timer-form/timer-form.component';
 import { TxOngoingModalComponent } from './components/tx-ongoing-modal/tx-ongoing-modal.component';
 import { NetworkModalComponent } from './components/network-modal/network-modal.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { FilterDialogListTradesComponent } from './components/list-trades/components/filter-dialog-list-trades/filter-dialog-list-trades.component';
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -62,6 +64,7 @@ import { NetworkModalComponent } from './components/network-modal/network-modal.
     TimerFormComponent,
     TxOngoingModalComponent,
     NetworkModalComponent,
+    FilterDialogListTradesComponent,
   ],
   imports: [
     CommonModule,
@@ -81,6 +84,7 @@ import { NetworkModalComponent } from './components/network-modal/network-modal.
     TranslateModule,
     NgxSkeletonLoaderModule,
     NgxBootstrapIconsModule.pick(allIcons),
+    NgSelectModule,
   ],
   exports: [
     NavbarComponent,
@@ -108,7 +112,7 @@ import { NetworkModalComponent } from './components/network-modal/network-modal.
     ButtonsModule,
     FromMikosavaNFTTradeToListTradeItem,
     CloseTradeCommonComponent,
-    TimerFormComponent
+    TimerFormComponent,
   ],
   providers: [ParseFromWeiToDecimalNumberPipe],
 })

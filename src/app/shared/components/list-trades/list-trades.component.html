@@ -1,11 +1,56 @@
-<div
-  class="coin-viewport"
-  [ngClass]="{ 'd-none': trades.length == 0 }"
-  [ngStyle]="{ width: 100 + '%' }"
->
+<div class="coin-viewport" [ngStyle]="{ width: 100 + '%' }">
   <ngx-skeleton-loader count="10" *ngIf="!tradesLoaded"></ngx-skeleton-loader>
   <ng-container *ngIf="tradesLoaded">
-    <div class="header d-none d-sm-flex">
+    <div class="header d-flex">
+      <div
+        class="type-list-changer d-flex justify-content-start"
+        [formGroup]="form"
+      >
+        <div
+          class="btn-group py-2 type-switcher"
+          btnRadioGroup
+          formControlName="activeType"
+        >
+          <label
+            btnRadio="erc20"
+            class="btn no-wrap-text chip-button shadow-none"
+            [ngClass]="{
+              'btn-primary': form.value.activeType == 'erc20',
+              'btn-ternary': form.value.activeType != 'erc20'
+            }"
+          >
+            Tokens</label
+          >
+          <label
+            btnRadio="erc721"
+            class="btn no-wrap-text chip-button shadow-none"
+            [ngClass]="{
+              'btn-primary': form.value.activeType == 'erc721',
+              'btn-ternary': form.value.activeType != 'erc721'
+            }"
+          >
+            NFTs</label
+          >
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" (click)="clickedFilter.emit()">
+          <i-bs [name]="iconNames.Funnel" width="1.25rem" height="1.25rem"></i-bs>
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [ngClass]="{
+            'animate__animated animate__pulse animate__infinite':
+              trades.length == 0
+          }"
+          (click)="newTrade.emit()"
+        >
+          {{ "TRADE.OPEN_NEW_TRADE" | translate }}
+        </button>
+      </div>
+    </div>
+    <div class="column-header d-none d-sm-flex">
       <div
         class="col flex-grow-1 justify-content-center text-muted"
         tooltip="{{ 'TRADE.SB_LIST_TRADES' | translate }}"
@@ -44,7 +89,7 @@
       </div>
       <div class="col actions flex-grow-1 d-flex justify-content-end"></div>
     </div>
-    <div class="list">
+    <div class="list" [ngClass]="{ 'd-none': trades.length == 0 }">
       <div
         class="list-group-item list-group-item-action row d-flex tradeItem"
         (dblclick)="clickTradeItem.emit(trade)"
@@ -299,7 +344,7 @@
     </div>
   </ng-container>
 </div>
-<div class="empty-list w-100" *ngIf="trades.length == 0">
+<div class="empty-list w-100" *ngIf="tradesLoaded && trades.length == 0">
   <app-not-found
     [subtext]="'TRADE.NOT_FOUND_TRADES_SUBTITLE' | translate"
     [text]="'TRADE.NOT_FOUND_TRADES' | translate"
