@@ -60,8 +60,8 @@ ngx-skeleton-loader {
   }
 }
 
-ng-select{
-  input{
+ng-select {
+  input {
     height: 100% !important;
   }
 }
@@ -188,6 +188,10 @@ app-close-trade-nft {
     width: 550px !important;
     @include media-breakpoint-between(xs, sm) {
       width: 400px !important;
+      .erc721-swap {
+        max-height: 250px;
+        overflow: auto;
+      }
     }
   }
   app-share-modal {
