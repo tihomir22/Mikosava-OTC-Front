@@ -93,8 +93,10 @@ export class CloseTradeComponent {
       this.viewedTrade.amountPositionCounterpart.toString()
     );
     this.toastr.info('Approving is on the go');
+    this.utils.displayTransactionDialog(tx.hash);
     const receipt = await tx.wait();
     this.toastr.success('The amount has been approved!');
+    this.bsModal.hide();
     this.allowance = await this.calculateAllowance(
       this.viewedTrade.coinCounterpart
     );

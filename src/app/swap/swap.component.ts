@@ -153,8 +153,10 @@ export class SwapComponent {
     );
 
     this.toastr.info('Approving is on the go');
+    this.utils.displayTransactionDialog(tx.hash);
     const receipt = await tx.wait();
     this.toastr.success('The amount has been approved!');
+    this.modalService.hide();
     this.allowance = await this.coinService.getAllowanceERC20(selectedACoin);
   }
 
