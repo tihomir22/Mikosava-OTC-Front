@@ -7,6 +7,7 @@ import * as CoinsActions from '../actions/coins.actions';
 import * as NftActions from '../actions/nfts.actions';
 import {
   combineLatest,
+  filter,
   firstValueFrom,
   forkJoin,
   interval,
@@ -82,6 +83,9 @@ export class SwapComponent {
   ) {
     combineLatest([this.ACoin, this.BCoin, this.formGroupERC20.valueChanges])
       .pipe(
+        filter(([acoin, bcoin, form]) => {
+          return !!acoin && !!bcoin && !!form;
+        }),
         switchMap(([acoin, bcoin, form]) => {
           return forkJoin(acoin.amountOfToken$, bcoin.amountOfToken$).pipe(
             map((amounts) => {
