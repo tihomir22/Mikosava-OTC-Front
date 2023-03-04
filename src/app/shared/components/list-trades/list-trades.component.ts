@@ -183,10 +183,10 @@ export class ListTradesComponent {
     });
 
     this.cancelTradeItem.subscribe(async (trade) => {
-      const [, signer, , ,] = await this.provider.getTools();
-
+      const [provider, signer, account, foundActiveNetwork] =
+        await this.provider.getTools();
       const otcContract = new ethers.Contract(
-        environment.MATIC_DEPLOYED_ADDRESS_OTC,
+        foundActiveNetwork.contracts.OTC_PROXY,
         MikosavaABI.abi,
         signer
       );

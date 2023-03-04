@@ -114,9 +114,7 @@ export class CoinsService {
           decimals,
           image: '/assets/icons/question-mark.png',
           platforms: { [foundActiveNetwork!.platformName]: tokenAddress },
-          amountOfToken$: of(
-            (balanceOf as any) / 10 ** decimals!
-          ),
+          amountOfToken$: of((balanceOf as any) / 10 ** decimals!),
         };
         return coin;
       })
@@ -176,7 +174,7 @@ export class CoinsService {
     );
 
     const otcContract = new ethers.Contract(
-      environment.MATIC_DEPLOYED_ADDRESS_OTC,
+      foundActiveNetwork.contracts.OTC_PROXY,
       MikosavaABI.abi,
       signer
     );

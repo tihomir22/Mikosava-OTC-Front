@@ -56,9 +56,10 @@ export class CloseTradeComponent {
 
   public async exchange() {
     try {
-      const signer = await this.provider.getSigner();
+      const [provider, signer, account, foundActiveNetwork] =
+        await this.provider.getTools();
       const otcContract = new ethers.Contract(
-        environment.MATIC_DEPLOYED_ADDRESS_OTC,
+        foundActiveNetwork.contracts.OTC_PROXY,
         MikosavaABI.abi,
         signer
       );
@@ -76,10 +77,10 @@ export class CloseTradeComponent {
   }
 
   public async approve() {
-    const signer = await this.provider.getSigner();
-
+    const [provider, signer, account, foundActiveNetwork] =
+      await this.provider.getTools();
     const otcContract = new ethers.Contract(
-      environment.MATIC_DEPLOYED_ADDRESS_OTC,
+      foundActiveNetwork.contracts.OTC_PROXY,
       MikosavaABI.abi,
       signer
     );
@@ -103,12 +104,11 @@ export class CloseTradeComponent {
   }
 
   private async calculateAllowance(erc20Address: string): Promise<BigInt> {
-    const signer = await this.provider.getSigner();
-
+    const [provider, signer, account, foundActiveNetwork] =
+      await this.provider.getTools();
     const coinAContract = returnERC20InstanceFromAddress(erc20Address, signer);
-
     const otcContract = new ethers.Contract(
-      environment.MATIC_DEPLOYED_ADDRESS_OTC,
+      foundActiveNetwork.contracts.OTC_PROXY,
       MikosavaABI.abi,
       signer
     );
@@ -123,9 +123,10 @@ export class CloseTradeComponent {
 
   public async cancell() {
     try {
-      const signer = await this.provider.getSigner();
+      const [provider, signer, account, foundActiveNetwork] =
+        await this.provider.getTools();
       const otcContract = new ethers.Contract(
-        environment.MATIC_DEPLOYED_ADDRESS_OTC,
+        foundActiveNetwork.contracts.OTC_PROXY,
         MikosavaABI.abi,
         signer
       );

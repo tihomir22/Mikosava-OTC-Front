@@ -27,13 +27,14 @@ export class CloseTradeNftResolver implements Resolve<MikosavaNFTTRade> {
     state: RouterStateSnapshot
   ): Observable<MikosavaNFTTRade> {
     let tradeId = route.paramMap.get('idTradeNft');
-    return of(this.provider.getSigner()).pipe(
-      switchMap((signer) => {
-        return signer;
+    return of(this.provider.getTools()).pipe(
+      switchMap((tools) => {
+        return tools;
       }),
-      switchMap((signer) => {
+      switchMap((tools) => {
+        const [provider, signer, account, foundActiveNetwork] = tools;
         const otcContract = new ethers.Contract(
-          environment.MATIC_DEPLOYED_ADDRESS_OTC,
+          foundActiveNetwork.contracts.OTC_PROXY,
           MikosavaABI.abi,
           signer
         );

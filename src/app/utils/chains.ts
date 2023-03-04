@@ -9,6 +9,9 @@ export enum ChainIds {
 export const list = [
   {
     chainId: ChainIds.TESTNET_POLYGON,
+    contracts: {
+      OTC_PROXY: '0x81b47E8520f9E7431D6135fa6Bb60F2a4E221Fdc',
+    },
     name: 'Mumbai Testnet',
     interal_name_id: 'polygon-mumbai',
     testnet: true,
@@ -34,6 +37,9 @@ export const list = [
   },
   {
     chainId: ChainIds.MAINNET_POLYGON,
+    contracts: {
+      OTC_PROXY: '0xbeb8eEd57BaE1a1C6CDf060393d831b77A317408',
+    },
     name: 'Polygon Mainnet',
     interal_name_id: 'polygon-mainnet',
     testnet: false,

@@ -23,13 +23,14 @@ export class TradeResolver implements Resolve<MikosavaTrade> {
     state: RouterStateSnapshot
   ): Observable<MikosavaTrade> {
     let tradeId = route.paramMap.get('idTrade');
-    return of(this.provider.getSigner()).pipe(
-      switchMap((signer) => {
-        return signer;
+    return of(this.provider.getTools()).pipe(
+      switchMap((tools) => {
+        return tools;
       }),
-      switchMap((signer) => {
+      switchMap((tools) => {
+        const [provider, signer, account, foundActiveNetwork] = tools;
         const otcContract = new ethers.Contract(
-          environment.MATIC_DEPLOYED_ADDRESS_OTC,
+          foundActiveNetwork.contracts.OTC_PROXY,
           MikosavaABI.abi,
           signer
         );

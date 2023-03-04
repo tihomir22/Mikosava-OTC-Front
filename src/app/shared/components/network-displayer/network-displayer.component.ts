@@ -37,7 +37,9 @@ export class NetworkDisplayerComponent {
         );
         if (!this.activeNetwork) {
           let bsModalRef = this.modalService.show(NetworkModalComponent, {
-            class: 'modal-dialog-centered',
+            class: 'modal-dialog-centered network-modal',
+            keyboard: false,
+            backdrop: 'static',
           });
         } else {
           this.modalService.hide();
@@ -47,5 +49,8 @@ export class NetworkDisplayerComponent {
 
   public async selectNetwork(network: { chainId: number }) {
     await ProviderService.changeNetwork(network.chainId);
+    if (!this.activeNetwork) {
+      window.location.reload();
+    }
   }
 }

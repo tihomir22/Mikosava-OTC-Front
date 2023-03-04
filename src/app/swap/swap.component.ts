@@ -142,7 +142,7 @@ export class SwapComponent {
       signer
     );
     const otcContract = new ethers.Contract(
-      environment.MATIC_DEPLOYED_ADDRESS_OTC,
+      foundActiveNetwork.contracts.OTC_PROXY,
       MikosavaABI.abi,
       signer
     );
@@ -183,7 +183,7 @@ export class SwapComponent {
     );
 
     const otcContract = new ethers.Contract(
-      environment.MATIC_DEPLOYED_ADDRESS_OTC,
+      foundActiveNetwork.contracts.OTC_PROXY,
       MikosavaABI.abi,
       signer
     );
@@ -241,7 +241,7 @@ export class SwapComponent {
     );
 
     const otcContract = new ethers.Contract(
-      environment.MATIC_DEPLOYED_ADDRESS_OTC,
+      foundActiveNetwork.contracts.OTC_PROXY,
       MikosavaABI.abi,
       signer
     );

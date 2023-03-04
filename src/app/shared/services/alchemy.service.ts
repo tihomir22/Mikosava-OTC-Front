@@ -17,18 +17,22 @@ export class AlchemyService {
   private alchemyInstance!: Alchemy;
   private hasInitEvent = new BehaviorSubject<boolean>(false);
   constructor(private provider: ProviderService) {
-    this.init();
+    this.provider.getAccountStream().subscribe(() => this.init());
   }
 
   private async init() {
     const [provider, , account, foundActiveNetwork] =
       await this.provider.getTools();
-    this.settings.network = foundActiveNetwork.interal_name_id;
-    this.alchemyInstance = new Alchemy(this.settings);
-    const latestBlock = await this.alchemyInstance.core.getBlockNumber();
-    this.hasInitEvent.next(true);
-    this.hasInitEvent.complete();
-    console.log('The latest block number is', latestBlock);
+    if (foundActiveNetwork) {
+      this.settings.network = foundActiveNetwork.interal_name_id;
+      this.alchemyInstance = new Alchemy(this.settings);
+      const latestBlock = await this.alchemyInstance.core.getBlockNumber();
+      this.hasInitEvent.next(true);
+      this.hasInitEvent.complete();
+      console.log('The latest block number is', latestBlock);
+    } else {
+      this.hasInitEvent.next(false);
+    }
   }
 
   private checkIfInit() {
