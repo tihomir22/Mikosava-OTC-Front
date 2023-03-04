@@ -26,25 +26,23 @@ export class NetworkDisplayerComponent {
 
   constructor(
     private store: Store<State>,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private providerService: ProviderService
   ) {
-    this.store
-      .select((action: State) => action.account)
-      .pipe(filter((entry) => Object.values(entry).length > 0))
-      .subscribe((data) => {
-        this.activeNetwork = this.networksAvalaible.find(
-          (network) => network.chainId == data.chainIdConnect
-        );
-        if (!this.activeNetwork) {
-          let bsModalRef = this.modalService.show(NetworkModalComponent, {
-            class: 'modal-dialog-centered network-modal',
-            keyboard: false,
-            backdrop: 'static',
-          });
-        } else {
-          this.modalService.hide();
-        }
-      });
+    this.providerService.getAccountStream().subscribe((account) => {
+      this.activeNetwork = this.networksAvalaible.find(
+        (network) => network.chainId == account.chainIdConnect
+      );
+      if (!this.activeNetwork) {
+        this.modalService.show(NetworkModalComponent, {
+          class: 'modal-dialog-centered network-modal',
+          keyboard: false,
+          backdrop: 'static',
+        });
+      } else {
+        this.modalService.hide();
+      }
+    });
   }
 
   public async selectNetwork(network: { chainId: number }) {
