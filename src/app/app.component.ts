@@ -42,6 +42,7 @@ export class AppComponent {
     };
     this.setCoinsDependingOnNetwork(chainId);
     provider.on('network', async (newNetwork, oldNetwork) => {
+      console.log('changed network', [newNetwork, oldNetwork]);
       this.store.dispatch(
         AccountActions.setNewNetwork({ networkId: newNetwork.chainId })
       );
@@ -52,7 +53,7 @@ export class AppComponent {
       this.store.dispatch(
         AccountActions.setAccount({ newAccount: accountCloned })
       );
-      this.alchemy.switchNetwork(newNetwork.chainId)
+      this.alchemy.switchNetwork(newNetwork.chainId);
       this.setCoinsDependingOnNetwork(newNetwork.chainId);
     });
 
@@ -62,6 +63,7 @@ export class AppComponent {
       (window as any).ethereum.addListener(
         'accountsChanged',
         async (accounts: any) => {
+          console.log('accountsChanged', accounts);
           provider.off('network');
           await this.addProviderEvents();
         }
