@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { Store } from '@ngrx/store';
 import { ethers } from 'ethers';
-import { filter, firstValueFrom } from 'rxjs';
+import { distinctUntilChanged, filter, firstValueFrom } from 'rxjs';
 import { State } from 'src/app/reducers';
 import { getNetwork, list } from 'src/app/utils/chains';
 
@@ -68,7 +68,8 @@ export class ProviderService {
     return this.store
       .select((store) => store.account)
       .pipe(
-        filter((account) => !!account && Object.values(account).length > 0)
+        filter((account) => !!account && Object.values(account).length > 0),
+        distinctUntilChanged()
       );
   }
 }
