@@ -31,6 +31,7 @@ export class NetworkDisplayerComponent {
     private providerService: ProviderService
   ) {
     this.providerService.getAccountStream().subscribe((account) => {
+      console.log(account)
       this.activeNetwork = this.networksAvalaible.find(
         (network) => network.chainId == account.chainIdConnect
       );
@@ -41,6 +42,7 @@ export class NetworkDisplayerComponent {
           keyboard: false,
           backdrop: 'static',
         });
+        console.log("Show")
         dialogRef.onHidden.subscribe((data) => {
           this.dialogShowing = false;
         });
