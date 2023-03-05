@@ -42,7 +42,6 @@ export class AppComponent {
     };
     this.setCoinsDependingOnNetwork(chainId);
     provider.on('network', async (newNetwork, oldNetwork) => {
-      console.log('changed network', [newNetwork, oldNetwork]);
       this.store.dispatch(
         AccountActions.setNewNetwork({ networkId: newNetwork.chainId })
       );
@@ -56,7 +55,6 @@ export class AppComponent {
       this.alchemy.switchNetwork(newNetwork.chainId);
       this.setCoinsDependingOnNetwork(newNetwork.chainId);
     });
-    console.log('setting new account', account);
     this.store.dispatch(AccountActions.setAccount({ newAccount: account }));
 
     if (!this.globalListenersSet) {
@@ -86,22 +84,6 @@ export class AppComponent {
       this.store.dispatch(
         CoinsActions.setAllCoins({
           newAllCoins: [
-            // {
-            //   id: 'TokenA01',
-            //   symbol: 'TKA001',
-            //   name: 'TokenA01',
-            //   platforms: {
-            //     'polygon-pos': '0x8460719c22DDD92D7F2632bA3C8baF2C8a5dE8cC',
-            //   },
-            // },
-            // {
-            //   id: 'TokenB01',
-            //   symbol: 'TKB001',
-            //   name: 'TokenB01',
-            //   platforms: {
-            //     'polygon-pos': '0xa217838eaFcCe6184659BDc593FcEb25f9DAf4C4',
-            //   },
-            // },
             {
               id: 'TokenA02',
               symbol: 'TKA002',
