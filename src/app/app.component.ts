@@ -56,7 +56,7 @@ export class AppComponent {
       this.alchemy.switchNetwork(newNetwork.chainId);
       this.setCoinsDependingOnNetwork(newNetwork.chainId);
     });
-
+    console.log('setting new account', account);
     this.store.dispatch(AccountActions.setAccount({ newAccount: account }));
 
     if (!this.globalListenersSet) {
