@@ -17,6 +17,7 @@ export class NavbarComponent {
   private account$: Observable<Account>;
   public balance$: Observable<string>;
   public nativeCurrencyName$: Observable<any>;
+  public activeAccount$ = null as any;
 
   constructor(
     private store: Store<any>,
@@ -25,7 +26,10 @@ export class NavbarComponent {
     private providerService: ProviderService
   ) {
     this.account$ = this.store.select((action: State) => action.account);
-    this.account$.subscribe(noop)
+    this.account$.subscribe(noop);
+    this.activeAccount$ = this.account$.pipe(
+      map((account) => getNetwork(account.chainIdConnect))
+    );
     this.nativeCurrencyName$ = this.account$.pipe(
       map((acount) => getNetwork(acount.chainIdConnect)?.nativeCurrency.symbol)
     );

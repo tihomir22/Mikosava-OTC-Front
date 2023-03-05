@@ -23,6 +23,7 @@ export class NetworkDisplayerComponent {
   });
   public activeNetwork = null as any;
   public iconNames = IconNamesEnum;
+  private dialogShowing = false;
 
   constructor(
     private store: Store<State>,
@@ -33,13 +34,17 @@ export class NetworkDisplayerComponent {
       this.activeNetwork = this.networksAvalaible.find(
         (network) => network.chainId == account.chainIdConnect
       );
-      if (!this.activeNetwork) {
-        this.modalService.show(NetworkModalComponent, {
+      if (!this.activeNetwork && !this.dialogShowing) {
+        this.dialogShowing = true;
+        let dialogRef = this.modalService.show(NetworkModalComponent, {
           class: 'modal-dialog-centered network-modal',
           keyboard: false,
           backdrop: 'static',
         });
-      } else {
+        dialogRef.onHidden.subscribe((data) => {
+          this.dialogShowing = false;
+        });
+      } else if(this.dialogShowing){
         this.modalService.hide();
       }
     });

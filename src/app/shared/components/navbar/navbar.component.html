@@ -63,9 +63,9 @@
       </ul>
       <div class="actions d-flex justify-content-center align-items-center">
         <div class="mx-2 h-100">
-          <app-network-displayer></app-network-displayer>
+          <app-network-displayer ></app-network-displayer>
         </div>
-        <div class="h-100 mx-2 d-none d-lg-block">
+        <div class="h-100 mx-2 d-none d-lg-block" *ngIf="!!(activeAccount$ |async)">
           <span class="text-primary large-text"
             >{{ balance$ | async }} {{ nativeCurrencyName$ | async }}</span
           >
