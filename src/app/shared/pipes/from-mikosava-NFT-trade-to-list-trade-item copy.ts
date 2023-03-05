@@ -10,7 +10,6 @@ export class FromMikosavaNFTTradeToListTradeItem implements PipeTransform {
 
   transform(trades: Array<MikosavaNFTTRade>, ...args: any[]): any {
     let res = trades.map((entry) => {
-      console.log((+entry.createdAt) * 1000)
       return {
         tradeId: entry.tradeId,
         amountA: entry.nftIdA,
@@ -27,7 +26,6 @@ export class FromMikosavaNFTTradeToListTradeItem implements PipeTransform {
         createdAt: new Date((+entry.createdAt) * 1000),
       } as ListTradeItem;
     });
-    console.log(res)
     if (args.length == 0) {
       return res;
     } else {

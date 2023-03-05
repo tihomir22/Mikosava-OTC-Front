@@ -61,7 +61,6 @@ export class AppComponent {
       (window as any).ethereum.addListener(
         'accountsChanged',
         async (accounts: any) => {
-          console.log('accountsChanged', accounts);
           provider.off('network');
           await this.addProviderEvents();
         }
