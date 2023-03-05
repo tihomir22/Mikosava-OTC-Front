@@ -10,6 +10,7 @@ export class FromMikosavaTradeToListTradeItem implements PipeTransform {
 
   transform(trades: Array<MikosavaTrade>, ...args: any[]): any {
     let res = trades.map((entry) => {
+      console.log((+entry.createdAt) * 1000)
       return {
         tradeId: entry.tradeId,
         amountA: entry.amountPositionCreator,
@@ -23,8 +24,10 @@ export class FromMikosavaTradeToListTradeItem implements PipeTransform {
         receiver: entry.counterpart,
         type: 'erc20',
         sortNo: entry.sortNo,
+        createdAt: new Date((+entry.createdAt) * 1000),
       } as ListTradeItem;
     });
+    console.log(res)
     if (args.length == 0) {
       return res;
     } else {

@@ -19,6 +19,8 @@
     "OPEN_TRADE": "Open trade",
     "OPEN_NEW_TRADE": "Open new trade",
     "AVAILABLE_TIME": "Activate timer",
+    "PRIVATE_TRADE": "Private trade",
+    "PRIVATE_TRADE_TOOLTIP": "This trade would be yours. And only can be found if the direct link is sent to it.",
     "MY_TRADES": "My trades",
     "ALL_TRADES": "All trades",
     "TRADING_POSITION": "Trading position",
@@ -27,6 +29,7 @@
     "NOT_FOUND_TRADES": "Looks like you did not trade yet. Start, it's easy! :)",
     "TOOLTIP_AVAILABILITY": "You can define the availability of the trade until a specific time.",
     "TOOLTIP_LIST_TRADES": "Timer based trade",
+    "TOOLTIP_CREATED": "Displays when the trade was created",
     "SB_LIST_TRADES": "Seller/Buyer, indicates which addreses are the users that created the trades."
   }
 }

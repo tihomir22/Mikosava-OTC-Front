@@ -39,6 +39,7 @@ import { TxOngoingModalComponent } from './components/tx-ongoing-modal/tx-ongoin
 import { NetworkModalComponent } from './components/network-modal/network-modal.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FilterDialogListTradesComponent } from './components/list-trades/components/filter-dialog-list-trades/filter-dialog-list-trades.component';
+import { ToggleButtonComponent } from './components/toggle-button/toggle-button.component';
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -65,6 +66,7 @@ import { FilterDialogListTradesComponent } from './components/list-trades/compon
     TxOngoingModalComponent,
     NetworkModalComponent,
     FilterDialogListTradesComponent,
+    ToggleButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -113,6 +115,7 @@ import { FilterDialogListTradesComponent } from './components/list-trades/compon
     FromMikosavaNFTTradeToListTradeItem,
     CloseTradeCommonComponent,
     TimerFormComponent,
+    ToggleButtonComponent,
   ],
   providers: [ParseFromWeiToDecimalNumberPipe],
 })

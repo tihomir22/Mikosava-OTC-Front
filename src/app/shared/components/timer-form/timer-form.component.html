@@ -1,26 +1,24 @@
 <div class="row availableUntil" [formGroup]="localForm">
   <div class="col checkbox-wrapper">
-    <label class="custom-control custom-checkbox pb-2">
-      <input
-        type="checkbox"
-        value="checkedValue"
-        class="custom-control-input"
-        formControlName="availableUntil"
-      />
+    <div class="d-flex align-items-center pb-2">
+      <span class="custom-control-description">{{
+        "TRADE.AVAILABLE_TIME" | translate
+      }}</span>
+      <app-toggle-button
+        [toggled]="localForm.value.availableUntil"
+        (toggledChange)="toggleFormChange($event)"
+      ></app-toggle-button>
       <span
-        class="custom-control-indicator mx-2"
+        class="custom-control-indicator"
         tooltip="{{ 'TRADE.TOOLTIP_AVAILABILITY' | translate }}"
         container="body"
         placement="bottom"
         ><i-bs [name]="iconNames.QuestionCircle"></i-bs
       ></span>
-      <span class="custom-control-description">{{
-        "TRADE.AVAILABLE_TIME" | translate
-      }}</span>
-    </label>
+    </div>
   </div>
 
-  <div class="col badge-wrapper" *ngIf="!!localForm.value.availableUntil">
+  <div class="col badge-wrapper pb-2" *ngIf="!!localForm.value.availableUntil">
     <span
       class="badge badge-pill badge-primary bg-primary"
       [ngClass]="{

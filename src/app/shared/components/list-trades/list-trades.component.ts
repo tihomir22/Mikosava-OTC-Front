@@ -42,6 +42,7 @@ export interface ListTradeItem {
   creator: string;
   receiver: string;
   sortNo?: number;
+  createdAt?: Date;
 }
 
 @Component({
@@ -239,5 +240,9 @@ export class ListTradesComponent {
       }
       return includeInList;
     });
+  }
+
+  public isEmptyDate(tradeCreatedDate: Date): boolean {
+    return tradeCreatedDate.getFullYear() == 1970;
   }
 }

@@ -14,6 +14,7 @@ export interface MikosavaTrade {
   publicTrade: boolean;
   validUntil: BigInt;
   sortNo?: number;
+  createdAt: BigInt;
 }
 
 export interface MikosavaNFTTRade {
@@ -29,4 +30,5 @@ export interface MikosavaNFTTRade {
   cancelled: boolean;
   publicTrade: boolean;
   sortNo?: number;
+  createdAt: BigInt;
 }

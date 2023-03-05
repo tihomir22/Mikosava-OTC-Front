@@ -70,6 +70,7 @@ export class UserListComponent {
         return clonedTrade;
       }
     );
+    console.log(this.trades, this.nftTrades);
     this.tradesLoaded = true;
   }
 }

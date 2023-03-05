@@ -37,7 +37,26 @@
       </div>
 
       <div class="mixed" *ngIf="activeTradingType == 'mixed'"></div>
-      <app-timer-form [(validUntil)]="validUntil"></app-timer-form>
+      <div class="settings-wrapper row">
+        <div class="col-6">
+          <app-timer-form [(validUntil)]="validUntil"></app-timer-form>
+        </div>
+        <div class="col-6">
+          <div class="d-flex justify-content-end align-items-center pb-2">
+            <span class="custom-control-description">{{
+              "TRADE.PRIVATE_TRADE" | translate
+            }}</span>
+            <app-toggle-button [(toggled)]="privateTrade"></app-toggle-button>
+            <span
+              class="custom-control-indicator"
+              tooltip="{{ 'TRADE.PRIVATE_TRADE_TOOLTIP' | translate }}"
+              container="body"
+              placement="bottom"
+              ><i-bs [name]="iconNames.QuestionCircle"></i-bs
+            ></span>
+          </div>
+        </div>
+      </div>
       <div class="row">
         <ng-container
           *ngIf="activeTradingType == 'erc20'; else nftTradingButtons"

@@ -35,7 +35,11 @@
       </div>
       <div class="actions">
         <button class="btn" (click)="clickedFilter.emit()">
-          <i-bs [name]="iconNames.Funnel" width="1.25rem" height="1.25rem"></i-bs>
+          <i-bs
+            [name]="iconNames.Funnel"
+            width="1.25rem"
+            height="1.25rem"
+          ></i-bs>
         </button>
         <button
           type="button"
@@ -72,6 +76,19 @@
       <div class="col pairA flex-grow-4 justify-content-center"></div>
       <div class="col flex-grow-0 d-none d-lg-flex"></div>
       <div class="col pairB flex-grow-4 justify-content-center"></div>
+      <div
+        class="col flex-grow-2 text-muted"
+        tooltip="{{ 'TRADE.TOOLTIP_CREATED' | translate }}"
+      >
+        <span
+          >Created
+          <i-bs
+            [name]="iconNames.QuestionCircle"
+            width="1rem"
+            height="1rem"
+          ></i-bs
+        ></span>
+      </div>
       <div
         class="col flex-grow-1 justify-content-center d-none d-lg-flex text-muted"
         tooltip="{{ 'TRADE.TOOLTIP_LIST_TRADES' | translate }}"
@@ -197,10 +214,10 @@
             <app-coin-img-badge
               [readOnly]="true"
               [src]="
-                (trade.aTokenAddress | fromAddressToCg | async)?.image ?? ''
+                (trade.bTokenAddress | fromAddressToCg | async)?.image ?? ''
               "
               [coinLabel]="
-                (trade.aTokenAddress | fromAddressToCg | async)?.symbol ?? ''
+                (trade.bTokenAddress | fromAddressToCg | async)?.symbol ?? ''
               "
               [defaultLabel]="'Loading...'"
             ></app-coin-img-badge>
@@ -235,6 +252,13 @@
               </button>
             </div>
           </ng-template>
+        </div>
+        <div class="col flex-grow-2">
+          {{
+            isEmptyDate(trade.createdAt)
+              ? "Not known"
+              : (trade.createdAt | date : "dd/MM/yyyy")
+          }}
         </div>
         <div class="col flex-grow-1 justify-content-center d-none d-lg-flex">
           <ng-container *ngIf="trade.validUntil == 0; else validUntilSet">

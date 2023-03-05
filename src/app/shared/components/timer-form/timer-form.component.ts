@@ -27,6 +27,10 @@ export class TimerFormComponent {
     });
   }
 
+  public toggleFormChange(newValue: boolean) {
+    this.localForm.get('availableUntil')?.patchValue(newValue);
+  }
+
   public onClickChipTimeFrameAvailableUntil(timeSelectedInMinutes: number) {
     if (timeSelectedInMinutes == -1) {
       //custom

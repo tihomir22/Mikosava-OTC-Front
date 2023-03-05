@@ -67,6 +67,7 @@ export class SwapComponent {
   );
   public activeTradingType: TradingType = 'erc20';
   public validUntil: number = 0;
+  public privateTrade = false;
   public errorStateERC20: ErrorErc20 = ErrorErc20.NO_ERROR;
   public ErrorErc20MAP = ErrorErc20;
 
@@ -205,7 +206,7 @@ export class SwapComponent {
         nftA.tokenId,
         nftB.tokenId,
         this.validUntil * 1000,
-        true,
+        !this.privateTrade,
         {
           value: fees,
         }
@@ -264,7 +265,7 @@ export class SwapComponent {
         amountParsedA.toString(),
         amountParsedB.toString(),
         this.validUntil * 1000,
-        true,
+        !this.privateTrade,
         {
           value:
             getFeeForInternalPlatformId(foundActiveNetwork!.interal_name_id) *
