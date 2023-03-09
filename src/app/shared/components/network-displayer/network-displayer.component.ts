@@ -15,9 +15,10 @@ import { NetworkModalComponent } from '../network-modal/network-modal.component'
 })
 export class NetworkDisplayerComponent {
   public networksAvalaible = list.filter((network) => {
-    if (environment.mainnet && network.testnet) {
-      return false;
-    }
+    //TMP disabled
+    // if (environment.mainnet && network.testnet) {
+    //   return false;
+    // }
     return true;
   });
   public activeNetwork = null as any;
