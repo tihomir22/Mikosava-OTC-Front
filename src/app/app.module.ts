@@ -27,6 +27,7 @@ import { Erc20SwapComponent } from './swap/components/erc20-swap/erc20-swap.comp
 import { Erc721SwapComponent } from './swap/components/erc721-swap/erc721-swap.component';
 import { CloseTradeNftComponent } from './close-trade-nft/close-trade-nft.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -70,6 +71,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxSkeletonLoaderModule.forRoot({ animation: 'pulse' }),
     BsDropdownModule.forRoot(),
     EffectsModule.forRoot([]),
+    HttpClientModule,
+    AgGridModule,
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],

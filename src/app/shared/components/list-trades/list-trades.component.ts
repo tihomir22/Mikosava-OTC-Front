@@ -29,6 +29,23 @@ import {
   FilterDialogListTradesComponent,
   FiltersDialogListTrades,
 } from './components/filter-dialog-list-trades/filter-dialog-list-trades.component';
+import { ColDef } from 'ag-grid-community';
+import { IdenticoinComponent } from '../identicoin/identicoin.component';
+import { StatusDisplayerRendererComponent } from '../status-displayer-renderer/status-displayer-renderer.component';
+import {
+  PairDisplayerComponent,
+  PairDisplayerRendererParams,
+} from '../pair-displayer/pair-displayer.component';
+import {
+  IconDisplayerRendererComponent,
+  IconDisplayerRendererParams,
+} from '../icon-displayer-renderer/icon-displayer-renderer.component';
+import { DatePipe } from '@angular/common';
+import { ProgressBarRendererComponent } from '../progress-bar-renderer/progress-bar-renderer.component';
+import {
+  TableActionsComponent,
+  TableActionsParams,
+} from '../table-actions/table-actions.component';
 export interface ListTradeItem {
   tradeId: BigInt;
   amountA: BigInt;
@@ -72,6 +89,14 @@ export class ListTradesComponent {
     background: [255, 255, 255, 255],
     margin: 0.2,
   };
+  public rowClassRules = {
+    'ag-row-even-mikosava': (params: any) => {
+      return params.node.rowIndex % 2 === 0;
+    },
+    'ag-row-odd-mikosava': (params: any) => {
+      return params.node.rowIndex % 2 !== 0;
+    },
+  };
 
   @Output() clickTradeItem = new EventEmitter<ListTradeItem>();
   @Output() cancelTradeItem = new EventEmitter<ListTradeItem>();
@@ -84,6 +109,103 @@ export class ListTradesComponent {
   private filterApplied!: FiltersDialogListTrades;
 
   public account?: Account;
+  public ENVIRONMENT = environment;
+
+  public colDefs: ColDef[] = [
+    {
+      field: 'creator',
+      cellRenderer: IdenticoinComponent,
+      resizable: true,
+      sortable: true,
+      flex: 1,
+    },
+    {
+      field: 'receiver',
+      cellRenderer: IdenticoinComponent,
+      resizable: true,
+      sortable: true,
+      flex: 1,
+    },
+    {
+      cellRenderer: StatusDisplayerRendererComponent,
+      resizable: true,
+      sortable: true,
+      headerName: 'Status',
+      flex: 1,
+    },
+    {
+      cellRenderer: PairDisplayerComponent,
+      flex: 2,
+      headerName: 'Asset A',
+      cellRendererParams: {
+        onViewNftDetailsClick: (tokenAddress: string, amount: BigInt) => {
+          this.viewNftDetails.emit([tokenAddress, amount as any]);
+        },
+        lookOutKeyAddress: 'aTokenAddress',
+        lookOutKeyAmount: 'amountA',
+      } as PairDisplayerRendererParams,
+    },
+    {
+      cellRenderer: IconDisplayerRendererComponent,
+      flex: 1,
+      cellRendererParams: {
+        icon: IconNamesEnum.ArrowLeftRight,
+      } as IconDisplayerRendererParams,
+    },
+    {
+      cellRenderer: PairDisplayerComponent,
+      flex: 2,
+      headerName: 'Asset B',
+      cellRendererParams: {
+        onViewNftDetailsClick: (tokenAddress: string, amount: BigInt) => {
+          this.viewNftDetails.emit([tokenAddress, amount as any]);
+        },
+        lookOutKeyAddress: 'bTokenAddress',
+        lookOutKeyAmount: 'amountB',
+      } as PairDisplayerRendererParams,
+    },
+    {
+      field: 'createdAt',
+      resizable: true,
+      flex: 1,
+      sortable: true,
+      valueFormatter: (params) => {
+        if (this.isEmptyDate(params.data.createdAt)) {
+          return 'Not known';
+        } else {
+          return (
+            this.date
+              .transform(params.data.createdAt, 'dd/MM/yyyy')
+              ?.toString() ?? ''
+          );
+        }
+      },
+    },
+    {
+      headerName: 'Valid until',
+      resizable: true,
+      sortable: true,
+      flex: 1,
+      cellRenderer: ProgressBarRendererComponent,
+    },
+    {
+      flex: 1,
+      maxWidth: 80,
+      cellRenderer: TableActionsComponent,
+      cellRendererParams: {
+        clickTradeItem: (trade) => {
+          this.clickTradeItem.emit(trade);
+        },
+        cancelTradeItem: (trade) => {
+          this.cancelTradeItem.emit(trade);
+        },
+        shareTradeItem: (trade) => {
+          this.shareTradeItem.emit(trade);
+        },
+      } as TableActionsParams,
+    },
+  ];
+
   constructor(
     private router: Router,
     private modalService: BsModalService,
@@ -92,7 +214,8 @@ export class ListTradesComponent {
     private alchemy: AlchemyService,
     private utils: UtilsService,
     private store: Store<State>,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private date: DatePipe
   ) {
     this.provider.getAccountStream().subscribe((data) => {
       this.account = data;

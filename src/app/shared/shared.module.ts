@@ -40,6 +40,13 @@ import { NetworkModalComponent } from './components/network-modal/network-modal.
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FilterDialogListTradesComponent } from './components/list-trades/components/filter-dialog-list-trades/filter-dialog-list-trades.component';
 import { ToggleButtonComponent } from './components/toggle-button/toggle-button.component';
+import { AgGridModule } from 'ag-grid-angular';
+import { IdenticoinComponent } from './components/identicoin/identicoin.component';
+import { StatusDisplayerRendererComponent } from './components/status-displayer-renderer/status-displayer-renderer.component';
+import { PairDisplayerComponent } from './components/pair-displayer/pair-displayer.component';
+import { IconDisplayerRendererComponent } from './components/icon-displayer-renderer/icon-displayer-renderer.component';
+import { ProgressBarRendererComponent } from './components/progress-bar-renderer/progress-bar-renderer.component';
+import { TableActionsComponent } from './components/table-actions/table-actions.component';
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -67,6 +74,12 @@ import { ToggleButtonComponent } from './components/toggle-button/toggle-button.
     NetworkModalComponent,
     FilterDialogListTradesComponent,
     ToggleButtonComponent,
+    IdenticoinComponent,
+    StatusDisplayerRendererComponent,
+    PairDisplayerComponent,
+    IconDisplayerRendererComponent,
+    ProgressBarRendererComponent,
+    TableActionsComponent,
   ],
   imports: [
     CommonModule,
@@ -87,6 +100,7 @@ import { ToggleButtonComponent } from './components/toggle-button/toggle-button.
     NgxSkeletonLoaderModule,
     NgxBootstrapIconsModule.pick(allIcons),
     NgSelectModule,
+    AgGridModule,
   ],
   exports: [
     NavbarComponent,
@@ -117,6 +131,6 @@ import { ToggleButtonComponent } from './components/toggle-button/toggle-button.
     TimerFormComponent,
     ToggleButtonComponent,
   ],
-  providers: [ParseFromWeiToDecimalNumberPipe],
+  providers: [ParseFromWeiToDecimalNumberPipe, DatePipe],
 })
 export class SharedModule {}

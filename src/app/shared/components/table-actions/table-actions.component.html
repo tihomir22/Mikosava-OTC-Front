@@ -1,0 +1,88 @@
+<div class="col actions flex-grow-1 d-flex justify-content-end">
+  <div
+    class="btn-group"
+    dropdown
+    placement="left"
+    container="body"
+    class="d-none d-sm-block"
+  >
+    <button
+      id="button-animated"
+      dropdownToggle
+      type="button"
+      class="hidden-button"
+      aria-controls="dropdown-animated"
+    >
+      <i-bs [name]="iconNames.ThreeDotsVertical" class="mx-2"></i-bs>
+    </button>
+    <ul
+      id="dropdown-animated"
+      *dropdownMenu
+      class="dropdown-menu trade-actions-dropdown"
+      role="menu"
+      aria-labelledby="button-animated"
+    >
+      <li role="menuitem">
+        <a
+          class="dropdown-item text-primary"
+          (click)="params.clickTradeItem(trade)"
+          ><i-bs [name]="iconNames.Eye" class="mx-2"></i-bs>Open trade</a
+        >
+      </li>
+      <li role="menuitem">
+        <a
+          class="dropdown-item text-primary"
+          (click)="params.shareTradeItem(trade)"
+          ><i-bs [name]="iconNames.QrCode" class="mx-2"></i-bs>Share</a
+        >
+      </li>
+      <li
+        role="menuitem"
+        [ngClass]="{
+          disabled:
+            trade.cancelled ||
+            trade.sold ||
+            (trade.creator | lowercase) != (account?.address | lowercase)
+        }"
+      >
+        <a
+          class="dropdown-item cancel-btn {{
+            trade.cancelled ||
+            trade.sold ||
+            (trade.creator | lowercase) != (account?.address | lowercase)
+              ? 'disabled'
+              : 'text-danger'
+          }}"
+          (click)="params.cancelTradeItem(trade)"
+          ><i-bs [name]="iconNames.XCircle" class="mx-2"></i-bs>Cancel</a
+        >
+      </li>
+    </ul>
+  </div>
+  <div class="d-flex d-sm-none">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="params.clickTradeItem(trade)"
+    >
+      <i-bs [name]="iconNames.Eye" class="mx-2"></i-bs>
+    </button>
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="params.shareTradeItem(trade)"
+    >
+      <i-bs [name]="iconNames.QrCode" class="mx-2"></i-bs>
+    </button>
+    <button
+      type="button"
+      class="btn btn-danger cancel-btn {{
+        trade.cancelled || trade.sold ? 'disabled' : ''
+      }}"
+      [ngClass]="{ disabled: trade.cancelled || trade.sold }"
+      (click)="params.cancelTradeItem(trade)"
+    >
+      <i-bs [name]="iconNames.XCircle" class="mx-2"></i-bs>
+    </button>
+  </div>
+</div>

@@ -70,6 +70,7 @@ export class SwapComponent {
   public privateTrade = false;
   public errorStateERC20: ErrorErc20 = ErrorErc20.NO_ERROR;
   public ErrorErc20MAP = ErrorErc20;
+  public ENVIRONMENT = environment;
 
   constructor(
     private modalService: BsModalService,

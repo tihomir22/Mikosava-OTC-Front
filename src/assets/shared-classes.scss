@@ -91,12 +91,11 @@ app-swap {
 .card {
   border-radius: 10px;
 }
-
+.coin-label {
+  color: $primary !important;
+}
 .list-group-item {
   color: $primary !important;
-  .coin-label {
-    color: $primary !important;
-  }
 }
 
 app-close-trade {
@@ -201,6 +200,6 @@ app-close-trade-nft {
   }
 }
 
-app-toggle-button{
+app-toggle-button {
   transform: scale(0.7);
 }

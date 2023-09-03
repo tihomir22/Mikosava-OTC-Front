@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { ChainIds } from './utils/chains';
 import PolygonCoins from '../assets/coins/polygon-coins.json';
+import PolygonCoinsToDisplay from '../assets/coins/polygon-coins-to-display.json';
 import { AlchemyService } from './shared/services/alchemy.service';
 @Component({
   selector: 'app-root',
@@ -77,7 +78,11 @@ export class AppComponent {
   private setCoinsDependingOnNetwork(chainId: number) {
     if (chainId == ChainIds.MAINNET_POLYGON) {
       this.store.dispatch(
-        CoinsActions.setAllCoins({ newAllCoins: PolygonCoins })
+        CoinsActions.setAllCoins({
+          newAllCoins: PolygonCoins.filter((coin) => {
+            return PolygonCoinsToDisplay.includes(coin.symbol.toUpperCase());
+          }),
+        })
       );
     } else if (chainId == ChainIds.TESTNET_POLYGON) {
       this.store.dispatch(

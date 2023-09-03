@@ -1,0 +1,177 @@
+[
+  {
+    "id": "cryptokhat",
+    "contract_address": "0x098e1bc661398ed6858626ba5750e56ce03f9072",
+    "name": "cryptokhat",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "ck"
+  },
+  {
+    "id": "y00ts",
+    "contract_address": "0x670fd103b1a08628e9557cD66B87DeD841115190",
+    "name": "y00ts",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "y00t"
+  },
+  {
+    "id": "trump-digital-trading-cards",
+    "contract_address": "0x24a11e702cd90f034ea44faf1e180c0c654ac5d9",
+    "name": "Trump Digital Trading Cards",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "TRUMP"
+  },
+  {
+    "id": "aww-friends-x-reddit-collectible-avatars",
+    "contract_address": "0x6acB8fb82880d39c2B8446F8778A14d34Ee6cFb7",
+    "name": "Aww Friends x Reddit Collectible Avatars",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "AWW-FRIENDS-X-REDDIT-COLLECTIBLE-AVATARS"
+  },
+  {
+    "id": "meme-team-x-reddit-collectible-avatars",
+    "contract_address": "0xb9C042c3275BC49799688EEA1A29b1405D02946B",
+    "name": "Meme Team x Reddit Collectible Avatars",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "MEME-TEAM-X-REDDIT-COLLECTIBLE-AVATARS"
+  },
+  {
+    "id": "the-singularity-x-reddit-collectible-avatars",
+    "contract_address": "0x466a330887bDF62D53f968EA824793150f07762e",
+    "name": "The Singularity x Reddit Collectible Avatars",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "THE-SINGULARITY-X-REDDIT-COLLECTIBLE-AVATARS"
+  },
+  {
+    "id": "drip-squad-x-reddit-collectible-avatars",
+    "contract_address": "0xbfd670667053e517a97AFE56C91e4f83f1160Bd3",
+    "name": "Drip Squad x Reddit Collectible Avatars",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "DRIP-SQUAD-X-REDDIT-COLLECTIBLE-AVATARS"
+  },
+  {
+    "id": "lens-protocol-profiles",
+    "contract_address": "0xdb46d1dc155634fbc732f92e853b10b288ad5a1d",
+    "name": "Lens Protocol Profiles",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "LPP"
+  },
+  {
+    "id": "trump-digital-trading-cards-series-2",
+    "contract_address": "0xe28d2d8746d855251ba677a91626009cb33aa4f9",
+    "name": "Trump Digital Trading Cards Series 2",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "TRUMP2"
+  },
+  {
+    "id": "wolfer-finance-wolfpack",
+    "contract_address": "0xce8a6e03e6996f259191a18c4e2aa398319b04e9",
+    "name": "The Wolfpack Finance",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "TWF"
+  },
+  {
+    "id": "own-cryptonites",
+    "contract_address": "0x4252b44fe1f771f5385a7e80097744b80bbfe68c",
+    "name": "Cryptonites",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "CRYPOWN"
+  },
+  {
+    "id": "cross-the-ages-arkhante-premium-pack",
+    "contract_address": "0xb6041eae62c4591458af480679c6a497eda6cfcd",
+    "name": "Cross the Ages - Arkhante Booster Premium Pack",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "CTAPRM"
+  },
+  {
+    "id": "decentral-games-ice",
+    "contract_address": "0xd79cf5a41d8caec4688e01b4754ea2da6f51e856",
+    "name": "Decentral Games ICE Poker",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "DCL-ICELNNS"
+  },
+  {
+    "id": "aavegotchi-official-polygon",
+    "contract_address": "0x86935f11c86623dec8a25696e1c19a8659cbf95d",
+    "name": "Aavegotchi",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "GOTCHI"
+  },
+  {
+    "id": "tracer-official-nft",
+    "contract_address": "0xf28355d73cb46216bdf4895e16a11f43e272ef73",
+    "name": "TRACERSHOE",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "TRCS"
+  },
+  {
+    "id": "mr-crypto-by-racksmafia",
+    "contract_address": "0xef453154766505feb9dbf0a58e6990fd6eb66969",
+    "name": "Mr. Crypto by Racksmafia",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "MRC"
+  },
+  {
+    "id": "embersword-land",
+    "contract_address": "0xe7e16f2da731265778f87cb8d7850e31b84b7b86",
+    "name": "Embersword Land",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "LAND"
+  },
+  {
+    "id": "crypto-unicorns-land-market",
+    "contract_address": "0xa2a13ce1824f3916fc84c65e559391fc6674e6e8",
+    "name": "Unicorn Farm",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "UNIF"
+  },
+  {
+    "id": "etihad-ey-zero1",
+    "contract_address": "0x8d3a4b92cf54e8c2c41353aeb67aa7041f5df196",
+    "name": "Etihad Airways: EY-ZERO1",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "EYZ"
+  },
+  {
+    "id": "very-long-animals",
+    "contract_address": "0xC52d9642260830055c986a97794B7b27393Edf5e",
+    "name": "VeryLongAnimals",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "VeryLongAnimals"
+  },
+  {
+    "id": "chicken-derby",
+    "contract_address": "0x8634666ba15ada4bbc83b9dbf285f73d9e46e4c2",
+    "name": "Chicken Derby",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "CHICKS"
+  },
+  {
+    "id": "crypto-unicorns",
+    "contract_address": "0xdc0479cc5bba033b3e7de9f178607150b3abce1f",
+    "name": "Crypto Unicorns",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "UNICORNS"
+  },
+  {
+    "id": "polygon-ape-yc",
+    "contract_address": "0x419e82d502f598ca63d821d3bbd8dfefaf9bbc8d",
+    "name": "Polygon Ape: The Evolution",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "PAYC"
+  },
+  {
+    "id": "fancybirds",
+    "contract_address": "0xad59ecb77033391e847cc96829b08beb83151088",
+    "name": "FancyBirds",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "FB"
+  },
+  {
+    "id": "the-visitors",
+    "contract_address": "0x0a0bf65248805efa926c39bf51b6dd94e3d1a7af",
+    "name": "Visitor",
+    "asset_platform_id": "polygon-pos",
+    "symbol": "VSTR"
+  }
+]

@@ -1,7 +1,7 @@
 import { CoingeckoCoin } from './CoinGeckoCoin';
 
 export interface CookieCoinStructure {
-  [networkId: string]: AddressToCoin;
+  [networkIdAndSymbol: string]: AddressToCoin;
 }
 
 export interface AddressToCoin {

@@ -1,0 +1,11 @@
+<img
+  class="identicon"
+  tooltip="{{ isDefaultValue() ? 'No value is set' : (text | translate) }}"
+  container="body"
+  placement="bottom"
+  [src]="
+    isDefaultValue()
+      ? text
+      : 'data:image/png;base64,' + transformToIdenticoin(text, options)
+  "
+/>

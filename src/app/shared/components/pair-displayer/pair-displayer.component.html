@@ -1,0 +1,49 @@
+<div class="d-flex">
+  <ng-container *ngIf="trade.type == 'erc20'; else nftTemplateA">
+    <span>
+      {{
+        trade[params.lookOutKeyAmount]
+          | parseFromWeiToDecimalNumber : trade[params.lookOutKeyAddress]
+          | async
+          | number
+      }}
+    </span>
+    <app-coin-img-badge
+      [readOnly]="true"
+      [src]="
+        (trade[params.lookOutKeyAddress] | fromAddressToCg | async)?.image ?? ''
+      "
+      [coinLabel]="
+        (trade[params.lookOutKeyAddress] | fromAddressToCg | async)?.symbol ??
+        ''
+      "
+      [defaultLabel]="'Loading...'"
+    ></app-coin-img-badge>
+  </ng-container>
+  <ng-template #nftTemplateA>
+    <div class="nft-info mx-2">
+      <button
+        type="button"
+        name=""
+        id=""
+        class="btn btn-outline-primary details-btn"
+        (click)="
+          params.onViewNftDetailsClick(
+            trade[params.lookOutKeyAddress],
+            trade[params.lookOutKeyAmount]
+          )
+        "
+      >
+        <i-bs
+          [name]="iconNames.Search"
+          [width]="'16px'"
+          [height]="'16px'"
+        ></i-bs
+        ><span class="d-none d-sm-block">View details</span>
+      </button>
+    </div>
+    <app-identicoin
+      [text]="trade[params.lookOutKeyAmount] + trade[params.lookOutKeyAddress]"
+    ></app-identicoin>
+  </ng-template>
+</div>

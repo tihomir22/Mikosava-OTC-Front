@@ -10,3 +10,39 @@
 
 //0x8460719c22DDD92D7F2632bA3C8baF2C8a5dE8cC
 //0xa217838eaFcCe6184659BDc593FcEb25f9DAf4C4
+@import "ag-grid-community/styles/ag-grid.css";
+@import "ag-grid-community/styles/ag-theme-alpine.css";
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.identicon {
+  border-radius: 5px;
+  margin: 0px 5px;
+}
+
+.identicon-img {
+  border: 1px solid $primary;
+  border-radius: 5px;
+}
+
+.ag-cell {
+  display: flex;
+  align-items: center;
+}
+
+/* Estilo para filas pares */
+.ag-row-even-mikosava {
+  background-color: lighten($secondary, 40%);
+}
+
+/* Estilo para filas impares */
+.ag-row-odd-mikosava {
+  background-color: lighten($primary, 60%);
+}

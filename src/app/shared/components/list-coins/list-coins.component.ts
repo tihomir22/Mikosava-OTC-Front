@@ -58,7 +58,7 @@ export class ListCoinsComponent {
     this.loadCoins();
   }
 
-  private async loadCoins() {
+  private async loadCoins(resetSearchValue = true) {
     const [account, coins, provider] = await firstValueFrom(
       combineLatest([
         this.store.select((data) => data.account),
@@ -66,81 +66,12 @@ export class ListCoinsComponent {
         from(ProviderService.getWebProvider(false)),
       ])
     );
-    let foundActiveNetwork = getNetwork(account.chainIdConnect);
-    let userBalances = (
-      await this.alchemy.getAllERC20TokensByWallet(account.address)
-    ).tokenBalances.sort(
-      (a, b) => (b.tokenBalance! as any) - (a.tokenBalance! as any)
-    );
-    const tokensToAdd = await this.getUserTokensToAdd$(
-      account,
-      userBalances,
-      coins
-    );
-    this.originalCoins = [...tokensToAdd, ...coins];
 
-    //order => userBalances
-    const ordered = userBalances.reduce((prev, current, index) => {
-      prev[current.contractAddress] = index;
-      return prev;
-    }, {} as any);
+    this.originalCoins = [...coins];
 
-    this.originalCoins = this.originalCoins.sort(
-      (a, b) =>
-        ordered[a.platforms[foundActiveNetwork!.platformName]] -
-        ordered[b.platforms[foundActiveNetwork!.platformName]]
-    );
     this.quickAccessCoins$ = this.generateActiveCoins();
     this.filteredCoins = [...this.originalCoins];
-    this.searchValue = '';
-  }
-
-  private async getUserTokensToAdd$(
-    account: Account,
-    userBalances: TokenBalance[],
-    coinsLoaded: CoingeckoCoin[]
-  ) {
-    let foundActiveNetwork = getNetwork(account.chainIdConnect);
-    const coinAddresses = coinsLoaded.map(
-      (coin) => coin.platforms[foundActiveNetwork!.platformName]
-    );
-
-    const notAddedInListTokens = userBalances.filter(
-      (tokenBalance) =>
-        !coinAddresses.find(
-          (coinAddress) =>
-            coinAddress.toLowerCase() ==
-            tokenBalance.contractAddress.toLowerCase()
-        )
-    );
-
-    const tokensToAdd = await firstValueFrom(
-      forkJoin(
-        notAddedInListTokens.map((entry) =>
-          from(
-            this.alchemy.getMetadataForERC20Token(entry.contractAddress)
-          ).pipe(
-            map((metadata) => {
-              let coin: CoingeckoCoin = {
-                id: metadata.symbol!.toLowerCase(),
-                symbol: metadata.symbol!,
-                name: metadata.name!,
-                decimals: metadata.decimals! as any,
-                image: metadata.logo ?? '/assets/icons/question-mark.png',
-                platforms: {
-                  [foundActiveNetwork!.platformName]: entry.contractAddress,
-                },
-                amountOfToken$: of(
-                  (entry.tokenBalance as any) / 10 ** metadata.decimals!
-                ),
-              };
-              return coin;
-            })
-          )
-        )
-      )
-    );
-    return tokensToAdd;
+    if (resetSearchValue) this.searchValue = '';
   }
 
   public toUpperCaseFn(text: string) {
@@ -208,6 +139,7 @@ export class ListCoinsComponent {
                 this.store.dispatch(
                   CoinsActions.addNewCoinExternally({ newCoin: coin })
                 );
+                await this.loadCoins(false);
                 this.searchChanged(event);
               }
             })

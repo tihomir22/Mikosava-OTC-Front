@@ -20,11 +20,8 @@ import erc20Object from '../../../assets/ERC20.json';
 import { ParseFromWeiToDecimalNumberPipe } from '../pipes/parse-from-wei-to-decimal-number.pipe';
 import { CoingeckoCoin } from '../models/CoinGeckoCoin';
 import { CookieService } from 'ngx-cookie-service';
-import { AddressToCoin } from '../models/CookieCoinStructure';
-import { environment } from 'src/environments/environment';
 import { returnERC20InstanceFromAddress } from 'src/app/utils/tokens';
 import MikosavaABI from '../../../assets/MikosavaOTC.json';
-import { AlchemyService } from './alchemy.service';
 
 @Injectable({
   providedIn: 'root',
@@ -35,8 +32,7 @@ export class CoinsService {
     private http: HttpClient,
     private fromWeiToUnit: ParseFromWeiToDecimalNumberPipe,
     private cookieService: CookieService,
-    private providerService: ProviderService,
-    private alchemy: AlchemyService
+    private providerService: ProviderService
   ) {}
 
   public getAllCoinsForCurrentNetwork() {
@@ -47,37 +43,30 @@ export class CoinsService {
       filter(([coins, account]) => {
         return !!account && Object.values(account).length > 0;
       }),
-      map(([coins, account]) =>
-        coins
-          .filter((coin) => {
-            let foundActiveNetwork = getNetwork(account.chainIdConnect);
-            let coinAddress = coin.platforms[foundActiveNetwork!.platformName];
-            return foundActiveNetwork
-              ? Object.keys(coin.platforms).includes(
-                  foundActiveNetwork.platformName
-                ) && coinAddress != foundActiveNetwork.nativeCurrency.address
-              : false;
-          })
-          .map((coin) => {
-            let coinCloned = { ...coin };
-            let foundActiveNetwork = getNetwork(account.chainIdConnect);
-            coinCloned.image = coin.image ?? '/assets/icons/question-mark.png';
-            coinCloned.amountOfToken$ = this.getAmountOfToken(
-              coin.platforms[foundActiveNetwork!.platformName]
-            );
-            return coinCloned;
-          })
-      )
+      map(([coins, account]) => {
+        const coinsFromCookies = this.extractCoinsFromCookiesForCurrentNetwork(
+          account.chainIdConnect
+        );
+        coins = [...new Set([...coins, ...coinsFromCookies])];
+        return coins.map((coin) => {
+          let coinCloned = { ...coin };
+          let foundActiveNetwork = getNetwork(account.chainIdConnect);
+          coinCloned.image = coin.image ?? '/assets/icons/question-mark.png';
+          coinCloned.amountOfToken$ = this.getAmountOfToken(
+            coin.platforms[foundActiveNetwork!.platformName]
+          );
+          return coinCloned;
+        });
+      })
     );
   }
 
   public getCoinInfoFromAddress(tokenAddress: string) {
     let provider: any;
     let account: Account;
-    let foundActiveNetwork: any;
     return from(this.providerService.getTools()).pipe(
       switchMap((tools) => {
-        [provider, , account, foundActiveNetwork] = tools;
+        [provider, , account] = tools;
         return this.getAllCoinsForCurrentNetwork();
       }),
       switchMap((coinsFromCoinGecko) => {
@@ -116,6 +105,7 @@ export class CoinsService {
           platforms: { [foundActiveNetwork!.platformName]: tokenAddress },
           amountOfToken$: of((balanceOf as any) / 10 ** decimals!),
         };
+        this.addCustomCoinToCookiesBasedOnNetwork(account.chainIdConnect, coin);
         return coin;
       })
     );
@@ -149,20 +139,15 @@ export class CoinsService {
     );
   }
 
-  // public addCustomCoinToCookiesBasedOnNetwork(
-  //   chainId: number,
-  //   tokenAddress: string,
-  //   customCoin: CoingeckoCoin
-  // ) {
-  //   let actualCookieState = this.cookieService.get(chainId.toString());
-  //   let latestState: AddressToCoin = {};
-  //   if (actualCookieState.length > 0) {
-  //     latestState = JSON.parse(actualCookieState);
-  //   }
-  //   latestState[tokenAddress] = customCoin;
-
-  //   this.cookieService.set(chainId.toString(), JSON.stringify(latestState));
-  // }
+  public addCustomCoinToCookiesBasedOnNetwork(
+    chainId: number,
+    customCoin: CoingeckoCoin
+  ) {
+    this.cookieService.set(
+      'MIKOSAVA_' + chainId.toString() + '_' + customCoin.symbol,
+      JSON.stringify(customCoin)
+    );
+  }
 
   public async getAllowanceERC20(coin: CoingeckoCoin): Promise<BigInt> {
     const [, signer, , foundActiveNetwork] =
@@ -186,11 +171,17 @@ export class CoinsService {
     return allowance;
   }
 
-  // private extractCoinsFromCookiesForCurrentNetwork(
-  //   chainId: number
-  // ): Array<CoingeckoCoin> {
-  //   let actualCookieState = this.cookieService.get(chainId.toString());
-  //   if (actualCookieState.length == 0) return [];
-  //   return Object.values(JSON.parse(actualCookieState));
-  // }
+  private extractCoinsFromCookiesForCurrentNetwork(
+    chainId: number
+  ): Array<CoingeckoCoin> {
+    const allCookies = this.cookieService.getAll();
+    const keysAllCookies = Object.keys(allCookies);
+    const coinsForThisNetwork = keysAllCookies.filter((entry) =>
+      entry.includes(`MIKOSAVA_${chainId}`)
+    );
+    const coins = coinsForThisNetwork.map((entry) =>
+      JSON.parse(allCookies[entry])
+    );
+    return coins;
+  }
 }

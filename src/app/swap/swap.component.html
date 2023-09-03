@@ -5,7 +5,12 @@
     <div class="card-body">
       <div class="d-flex justify-content-between w-100">
         <span class="text-primary">{{ "TRADE.OPEN_TRADE" | translate }}</span>
-        <div class="btn-group" role="group" aria-label="Basic example">
+        <div
+          class="btn-group"
+          role="group"
+          aria-label="Basic example"
+          *ngIf="ENVIRONMENT.SHOW_NFTS"
+        >
           <button
             type="button"
             class="btn"

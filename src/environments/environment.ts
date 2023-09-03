@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   mainnet: false,
   MATIC_FEE: 0.0055,
+  SHOW_NFTS: false,
   ALCHEMY_API: '_Nl2yOagivWBbjDwBg29FYZub2iOcVTz',
 };
 
