@@ -8,7 +8,8 @@
     "EMPTY_SUBTITLE": "Double-check your connection.",
     "ERROR": {
       "MORE_THAN_BALANCE": "The amount exceeds the balance.",
-      "POSITION_IS_ZERO": "Amount can not be ZERO."
+      "POSITION_IS_ZERO": "Amount can not be ZERO.",
+      "NATIVE_COIN_SELECTED": "To perform the transaction you have to wrap the native asset. Click the button below to wrap them and proceed with the transaction."
     }
   },
   "NFT": {

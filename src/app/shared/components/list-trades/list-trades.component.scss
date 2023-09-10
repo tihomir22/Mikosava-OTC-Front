@@ -1,14 +1,5 @@
 @import "../../../../assets/variables.scss";
 
-.coin-viewport {
-  .list {
-    overflow: auto;
-    height: 300px;
-    @include media-breakpoint-between(xs, sm) {
-      height: 450px;
-    }
-  }
-}
 .list-group-item:nth-child(odd) {
   background-color: lighten($primary, 60%);
 }
@@ -60,4 +51,8 @@
 .details-btn {
   border: none;
   display: flex;
+}
+
+.empty-list {
+  position: absolute;
 }

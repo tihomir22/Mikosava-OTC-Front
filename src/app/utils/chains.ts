@@ -11,6 +11,7 @@ export const list = [
     chainId: ChainIds.TESTNET_POLYGON,
     contracts: {
       OTC_PROXY: '0x81b47E8520f9E7431D6135fa6Bb60F2a4E221Fdc',
+      WRAP_ADDRESS: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
     },
     name: 'Mumbai Testnet',
     interal_name_id: 'polygon-mumbai',
@@ -39,6 +40,7 @@ export const list = [
     chainId: ChainIds.MAINNET_POLYGON,
     contracts: {
       OTC_PROXY: '0xbeb8eEd57BaE1a1C6CDf060393d831b77A317408',
+      WRAP_ADDRESS: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
     },
     name: 'Polygon Mainnet',
     interal_name_id: 'polygon-mainnet',

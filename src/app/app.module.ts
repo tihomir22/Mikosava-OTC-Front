@@ -28,6 +28,7 @@ import { Erc721SwapComponent } from './swap/components/erc721-swap/erc721-swap.c
 import { CloseTradeNftComponent } from './close-trade-nft/close-trade-nft.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AgGridModule } from 'ag-grid-angular';
+import { FromAddressToCgPipe } from './shared/pipes/from-address-to-cg.pipe';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -74,7 +75,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     AgGridModule,
   ],
-  providers: [CookieService],
+  providers: [CookieService, FromAddressToCgPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

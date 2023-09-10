@@ -8,7 +8,10 @@ import {
   debounceTime,
   distinctUntilChanged,
   firstValueFrom,
+  from,
   Observable,
+  switchMap,
+  tap,
 } from 'rxjs';
 import { State } from 'src/app/reducers';
 import { ListCoinsComponent } from 'src/app/shared/components/list-coins/list-coins.component';
@@ -18,14 +21,13 @@ import * as CoinsActions from '../../../actions/coins.actions';
 import { IconNamesEnum } from 'ngx-bootstrap-icons';
 import { returnERC20InstanceFromAddress } from 'src/app/utils/tokens';
 import { CoinsService } from 'src/app/shared/services/coins.service';
+import { getNetwork } from 'src/app/utils/chains';
 @Component({
   selector: 'app-erc20-swap',
   templateUrl: './erc20-swap.component.html',
   styleUrls: ['./erc20-swap.component.scss'],
 })
 export class Erc20SwapComponent {
-  @Input() public allowance: BigInt = BigInt(0);
-  @Output() allowanceChange = new EventEmitter<BigInt>();
   @Input() formERC20!: FormGroup;
   public ACoin: Observable<CoingeckoCoin> = this.store.select(
     (store) => store.selectCoinA
@@ -34,68 +36,85 @@ export class Erc20SwapComponent {
     (store) => store.selectCoinB
   );
 
-  @Input() public amountCoinAParsed: BigInt = BigInt(0);
-  @Output() amountCoinAParsedChange = new EventEmitter<BigInt>();
-
   public iconNames = IconNamesEnum;
 
   constructor(
     private modalService: BsModalService,
     private store: Store<State>,
-    private fb: FormBuilder,
-    private toastr: ToastrService,
     private providerService: ProviderService,
-    private router: Router,
     private coinService: CoinsService
-  ) {
-  }
+  ) {}
 
-  ngOnInit(): void {
-    this.formERC20
-      .get('acoin')
-      ?.valueChanges.pipe(debounceTime(500), distinctUntilChanged())
-      .subscribe(async (valueChangedCoinA) => {
-        let coinSelected = await firstValueFrom(this.ACoin);
-        if (coinSelected && Object.values(coinSelected).length > 0) {
-          this.allowance = await this.coinService.getAllowanceERC20(
-            coinSelected
-          );
-          this.amountCoinAParsed = await this.returnParsedAmountCoinA();
-          this.amountCoinAParsedChange.emit(this.amountCoinAParsed);
-        }
-      });
-  }
+  ngOnInit(): void {}
 
-  public selectCoin(whichOne: 'A' | 'B') {
+  public async selectCoin(whichOne: 'A' | 'B') {
+    const [, signer, , foundActiveNetwork] =
+      await this.providerService.getTools();
+    let coinASelected = await firstValueFrom(this.ACoin);
+    let coinBSelected = await firstValueFrom(this.BCoin);
     let bsModalRef = this.modalService.show(ListCoinsComponent, {
       class: 'modal-dialog-centered',
     });
     if (bsModalRef.content) {
       bsModalRef.content.widthList = 550;
       bsModalRef.content.heightList = 650;
+      if (whichOne == 'B') {
+        const avoidingList = [foundActiveNetwork.nativeCurrency.symbol];
+        if (!!coinASelected) avoidingList.push(coinASelected.symbol);
+        bsModalRef.content.tokensToAvoidSymbol = avoidingList;
+      } else {
+        bsModalRef.content.tokensToAvoidSymbol = !!coinBSelected
+          ? [coinBSelected.symbol]
+          : [];
+      }
       bsModalRef.content.selectCoin.subscribe(async (coin) => {
         this.store.dispatch(
           whichOne == 'A'
             ? CoinsActions.selectCoinA({ selectACoin: coin })
             : CoinsActions.selectCoinB({ selectBCoin: coin })
         );
-        if (whichOne == 'A') {
-          this.allowance = await this.coinService.getAllowanceERC20(coin);
-        }
         bsModalRef.hide();
       });
     }
   }
 
-  private async returnParsedAmountCoinA() {
-    const [, signer, , foundActiveNetwork] =
-      await this.providerService.getTools();
-    let selectedACoin = await firstValueFrom(this.ACoin);
-    const coinAContract = returnERC20InstanceFromAddress(
-      selectedACoin.platforms[foundActiveNetwork!.platformName],
-      signer
+  public async calculateAmount(type: 'A' | 'B', amount: 50 | 100) {
+    let amountToSet = 0;
+    if (type == 'A') {
+      const coinA = await firstValueFrom(this.ACoin);
+
+      if (!!coinA) {
+        const amountCoinA = (await firstValueFrom(
+          coinA.amountOfToken$
+        )) as number;
+        if (amountCoinA > 0) amountToSet = amountCoinA * (amount / 100);
+      }
+      this.formERC20.controls['acoin'].patchValue(amountToSet);
+    } else {
+      const coinB = await firstValueFrom(this.BCoin);
+      if (!!coinB) {
+        const amountCoinB = (await firstValueFrom(
+          coinB.amountOfToken$
+        )) as number;
+
+        if (amountCoinB > 0) amountToSet = amountCoinB * (amount / 100);
+      }
+      this.formERC20.controls['bcoin'].patchValue(amountToSet);
+    }
+  }
+  public async replaceSelected() {
+    let coinASelected = await firstValueFrom(this.ACoin);
+    let coinBSelected = await firstValueFrom(this.BCoin);
+    let amountA = this.formERC20.controls['acoin'].getRawValue();
+    let amountB = this.formERC20.controls['bcoin'].getRawValue();
+    if (!coinASelected || !coinBSelected) return;
+    this.store.dispatch(
+      CoinsActions.selectCoinA({ selectACoin: coinBSelected })
     );
-    const decimals = await coinAContract['decimals']();
-    return BigInt(this.formERC20.value.acoin * 10 ** decimals);
+    this.formERC20.controls['acoin'].patchValue(amountB);
+    this.store.dispatch(
+      CoinsActions.selectCoinB({ selectBCoin: coinASelected })
+    );
+    this.formERC20.controls['bcoin'].patchValue(amountA);
   }
 }

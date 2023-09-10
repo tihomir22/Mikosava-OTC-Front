@@ -5,7 +5,7 @@ export interface CoingeckoCoin {
   symbol: string;
   name: string;
   decimals?: BigInt;
-  platforms: any;
+  address: string;
   image?: string;
   amountOfToken$?: any;
 }

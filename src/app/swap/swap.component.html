@@ -30,11 +30,7 @@
         </div>
       </div>
       <div class="erc20" *ngIf="activeTradingType == 'erc20'">
-        <app-erc20-swap
-          [(allowance)]="allowance"
-          [(amountCoinAParsed)]="amountCoinAParsed"
-          [formERC20]="formGroupERC20"
-        ></app-erc20-swap>
+        <app-erc20-swap [formERC20]="formGroupERC20"></app-erc20-swap>
       </div>
 
       <div class="nft" *ngIf="activeTradingType == 'erc721'">
@@ -62,6 +58,7 @@
           </div>
         </div>
       </div>
+
       <div class="row">
         <ng-container
           *ngIf="activeTradingType == 'erc20'; else nftTradingButtons"
@@ -77,8 +74,7 @@
 
           <button
             *ngIf="
-              allowance >= amountCoinAParsed &&
-              errorStateERC20 == ErrorErc20MAP.NO_ERROR
+              !!allowanceAllowed && errorStateERC20 == ErrorErc20MAP.NO_ERROR
             "
             type="button"
             class="btn btn-primary btn-lg btn-block"
@@ -96,13 +92,20 @@
           <button
             type="button"
             *ngIf="
-              allowance < amountCoinAParsed &&
-              errorStateERC20 == ErrorErc20MAP.NO_ERROR
+              !allowanceAllowed && errorStateERC20 == ErrorErc20MAP.NO_ERROR
             "
             class="btn btn-secondary btn-lg btn-block"
             (click)="approve()"
           >
             Approve
+          </button>
+          <button
+            type="button"
+            *ngIf="errorStateERC20 == ErrorErc20MAP.NATIVE_COIN_SELECTED"
+            class="btn btn-secondary btn-lg btn-block"
+            (click)="wrapToken()"
+          >
+            Wrap token
           </button>
         </ng-container>
         <ng-template #nftTradingButtons>

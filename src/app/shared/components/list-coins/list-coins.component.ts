@@ -25,11 +25,6 @@ import { ProviderService } from '../../services/provider.service';
 import * as CoinsActions from '../../../actions/coins.actions';
 import { CoinsService } from '../../services/coins.service';
 import { AlchemyService } from '../../services/alchemy.service';
-import {
-  TokenBalance,
-  TokenBalancesResponse,
-  TokenBalancesResponseErc20,
-} from 'alchemy-sdk';
 
 @Component({
   selector: 'app-list-coins',
@@ -42,32 +37,31 @@ export class ListCoinsComponent {
   public activeCoins: CoingeckoCoin[] = [];
   public quickAccessCoins$: Observable<CoingeckoCoin[]> = of([]);
   public networksAvalaible = list;
+  public tokensToAvoidSymbol: string[] = [];
   public toUpperCase = this.toUpperCaseFn;
   public searchValue = '';
   @Input() widthList: number = 400;
   @Input() heightList: number = 200;
   @Output() selectCoin = new EventEmitter<CoingeckoCoin>();
 
-  constructor(
-    private store: Store<State>,
-    private coins: CoinsService,
-    private alchemy: AlchemyService
-  ) {}
+  constructor(private store: Store<State>, private coins: CoinsService) {}
 
   ngOnInit(): void {
     this.loadCoins();
   }
 
   private async loadCoins(resetSearchValue = true) {
-    const [account, coins, provider] = await firstValueFrom(
-      combineLatest([
-        this.store.select((data) => data.account),
-        this.coins.getAllCoinsForCurrentNetwork(),
-        from(ProviderService.getWebProvider(false)),
-      ])
+    const coins = await firstValueFrom(
+      this.coins.getAllCoinsForCurrentNetwork()
     );
-
-    this.originalCoins = [...coins];
+    this.originalCoins = [
+      ...coins.filter(
+        (coin) =>
+          !this.tokensToAvoidSymbol
+            .map((entry) => entry.toUpperCase())
+            .includes(coin.symbol.toUpperCase())
+      ),
+    ];
 
     this.quickAccessCoins$ = this.generateActiveCoins();
     this.filteredCoins = [...this.originalCoins];
@@ -87,9 +81,7 @@ export class ListCoinsComponent {
         const [account, provider] = data;
         let foundActiveNetwork = getNetwork(account.chainIdConnect);
         let activeCoins = this.originalCoins.filter((originalCoin) =>
-          foundActiveNetwork?.easyAccessCoins.includes(
-            originalCoin.platforms[foundActiveNetwork!.platformName]
-          )
+          foundActiveNetwork?.easyAccessCoins.includes(originalCoin.address)
         );
         return [activeCoins, account, provider];
       }),
@@ -122,12 +114,9 @@ export class ListCoinsComponent {
           .select((data) => data.account)
           .pipe(
             switchMap(async (account: Account) => {
-              let foundActiveNetwork = getNetwork(account.chainIdConnect);
               let foundCoins = this.originalCoins.filter(
                 (coin) =>
-                  coin.platforms[
-                    foundActiveNetwork!.platformName
-                  ].toLowerCase() == event.toString().toLowerCase()
+                  coin.address.toLowerCase() == event.toString().toLowerCase()
               );
               if (foundCoins.length > 0) {
                 this.filteredCoins = foundCoins;

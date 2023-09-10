@@ -18,13 +18,43 @@
           [src]="(ACoin | async)?.image ?? ''"
           [coinLabel]="(ACoin | async)?.name ?? ''"
         ></app-coin-img-badge>
-        <div class="d-flex justify-content-end mx-2">
-          <span class="quantity text-primary" *ngIf="ACoin | async">{{
+        <div class="d-flex justify-content-end mx-2" *ngIf="ACoin | async">
+          <button
+            type="button"
+            class="btn btn-outline-primary badge-mikosava"
+            (click)="
+              $event.preventDefault();
+              $event.stopPropagation();
+              calculateAmount('A', 100)
+            "
+          >
+            MAX
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-primary badge-mikosava"
+            (click)="
+              $event.preventDefault();
+              $event.stopPropagation();
+              calculateAmount('A', 50)
+            "
+          >
+            HALF
+          </button>
+
+          <span class="quantity text-primary">{{
             ((ACoin | async)?.amountOfToken$ | async) ?? 0 | number
           }}</span>
         </div>
       </div>
     </div>
+  </div>
+  <div class="row replacer m-0">
+    <i-bs (click)="replaceSelected()"
+      [name]="iconNames.ArrowLeftRight"
+      [width]="'20px'"
+      [height]="'20px'"
+    ></i-bs>
   </div>
   <div class="row my-2">
     <div
@@ -46,8 +76,30 @@
           [src]="(BCoin | async)?.image ?? ''"
           [coinLabel]="(BCoin | async)?.name ?? ''"
         ></app-coin-img-badge>
-        <div class="d-flex justify-content-end mx-2">
-          <span class="quantity text-primary" *ngIf="BCoin | async">{{
+        <div class="d-flex justify-content-end mx-2" *ngIf="BCoin | async">
+          <button
+            type="button"
+            class="btn btn-outline-primary badge-mikosava"
+            (click)="
+              $event.preventDefault();
+              $event.stopPropagation();
+              calculateAmount('B', 100)
+            "
+          >
+            MAX
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-primary badge-mikosava"
+            (click)="
+              $event.preventDefault();
+              $event.stopPropagation();
+              calculateAmount('B', 50)
+            "
+          >
+            HALF
+          </button>
+          <span class="quantity text-primary">{{
             ((BCoin | async)?.amountOfToken$ | async) ?? 0 | number
           }}</span>
         </div>

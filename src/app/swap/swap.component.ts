@@ -19,6 +19,7 @@ import {
 import { ProviderService } from '../shared/services/provider.service';
 import { BigNumber, ethers } from 'ethers';
 import MikosavaABI from '../../assets/MikosavaOTC.json';
+import WrapERC20ABI from '../../assets/WrapERC20.abi.json';
 import { getFeeForInternalPlatformId, getNetwork } from 'src/app/utils/chains';
 import {
   returnERC20InstanceFromAddress,
@@ -34,11 +35,14 @@ import { CoinsService } from '../shared/services/coins.service';
 import { MikosavaNft } from '../shared/components/list-nfts/list-nfts.component';
 import { UtilsService } from '../shared/services/utils.service';
 import { TranslateService } from '@ngx-translate/core';
+import { FromAddressToCgPipe } from '../shared/pipes/from-address-to-cg.pipe';
+import { cloneDeep } from 'lodash';
 export type TradingType = 'erc20' | 'erc721' | 'mixed';
 export enum ErrorErc20 {
   NO_ERROR = 0,
   POSITION_IS_ZERO = 1,
   MORE_THAN_BALANCE = 2,
+  NATIVE_COIN_SELECTED = 3,
 }
 @Component({
   selector: 'app-swap',
@@ -46,7 +50,6 @@ export enum ErrorErc20 {
   styleUrls: ['./swap.component.scss'],
 })
 export class SwapComponent {
-  public amountCoinAParsed: BigInt = BigInt(0);
   public iconNames = IconNamesEnum;
   public allowance: BigInt = BigInt(0);
   public formGroupERC20: FormGroup = this.fb.group({
@@ -72,6 +75,12 @@ export class SwapComponent {
   public ErrorErc20MAP = ErrorErc20;
   public ENVIRONMENT = environment;
 
+  public isCoinANativeCoin$ = this.ACoin.pipe(
+    switchMap((entry) => this.coinService.isCoinANativeCoin())
+  );
+
+  public allowanceAllowed = true;
+
   constructor(
     private modalService: BsModalService,
     private store: Store<State>,
@@ -81,7 +90,8 @@ export class SwapComponent {
     private router: Router,
     private coinService: CoinsService,
     private utils: UtilsService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private fromAddressToCgPipe: FromAddressToCgPipe
   ) {
     combineLatest([this.ACoin, this.BCoin, this.formGroupERC20.valueChanges])
       .pipe(
@@ -97,31 +107,45 @@ export class SwapComponent {
           );
         })
       )
-      .subscribe((data) => {
+      .subscribe(async (data) => {
         const [aCoin, balanceA, bCoin, balanceB, formAmount] = data;
-        this.errorStateERC20 = this.getErrorValidationERC20(
+        this.errorStateERC20 = await this.getErrorValidationERC20(
           formAmount.acoin,
           balanceA,
           formAmount.bcoin,
           balanceB
         );
+        const coinDecimalsA = await firstValueFrom(
+          this.coinService.getCoinDecimalsFromAddress(aCoin.address)
+        );
+        this.allowance = await this.coinService.getAllowanceERC20(aCoin);
+
+        this.allowanceAllowed =
+          (formAmount.acoin * 10 ** (coinDecimalsA as any)).toString() <
+          this.allowance.toString();
       });
   }
 
-  public getErrorValidationERC20(
+  public async getErrorValidationERC20(
     aCoinAmount: number,
     aCoinBalance: number,
     bCoinAmount: number,
     bCoinBalance: number
-  ): ErrorErc20 {
-    //Position can't be 0
-    if (aCoinAmount === 0) {
+  ): Promise<ErrorErc20> {
+    if (!aCoinAmount) {
       return ErrorErc20.POSITION_IS_ZERO;
     }
     //Check if desired amount exceeds balance
-    if (aCoinAmount > aCoinBalance) {
+    if (aCoinAmount >= aCoinBalance) {
       return ErrorErc20.MORE_THAN_BALANCE;
     }
+
+    const isNativeCoinSelected = await this.coinService.isCoinANativeCoin();
+    if (!!isNativeCoinSelected) {
+      return ErrorErc20.NATIVE_COIN_SELECTED;
+    }
+    //Position can't be 0
+
     return ErrorErc20.NO_ERROR;
   }
 
@@ -130,6 +154,8 @@ export class SwapComponent {
       return this.translate.instant('COINS.ERROR.MORE_THAN_BALANCE');
     } else if (this.errorStateERC20 == ErrorErc20.POSITION_IS_ZERO) {
       return this.translate.instant('COINS.ERROR.POSITION_IS_ZERO');
+    } else if (this.errorStateERC20 == ErrorErc20.NATIVE_COIN_SELECTED) {
+      return this.translate.instant('COINS.ERROR.NATIVE_COIN_SELECTED');
     }
     return '';
   }
@@ -140,7 +166,7 @@ export class SwapComponent {
     let selectedACoin = await firstValueFrom(this.ACoin);
 
     const coinAContract = returnERC20InstanceFromAddress(
-      selectedACoin.platforms[foundActiveNetwork!.platformName],
+      selectedACoin.address,
       signer
     );
     const otcContract = new ethers.Contract(
@@ -233,12 +259,12 @@ export class SwapComponent {
     let selectedBCoin = await firstValueFrom(this.BCoin);
 
     const coinAContract = returnERC20InstanceFromAddress(
-      selectedACoin.platforms[foundActiveNetwork!.platformName],
+      selectedACoin.address,
       signer
     );
 
     const coinBContract = returnERC20InstanceFromAddress(
-      selectedBCoin.platforms[foundActiveNetwork!.platformName],
+      selectedBCoin.address,
       signer
     );
 
@@ -294,5 +320,43 @@ export class SwapComponent {
 
   public changeType(newType: TradingType) {
     this.activeTradingType = newType;
+  }
+
+  public async wrapToken() {
+    const [provider, signer, account, foundActiveNetwork] =
+      await this.providerService.getTools();
+    const decimals = foundActiveNetwork.nativeCurrency.decimals;
+    const wrapContract = new ethers.Contract(
+      foundActiveNetwork.contracts.WRAP_ADDRESS,
+      WrapERC20ABI,
+      signer
+    );
+    try {
+      const deposit = await wrapContract['deposit']({
+        value: BigInt(
+          this.formGroupERC20.controls['acoin'].getRawValue() * 10 ** decimals
+        ).toString(),
+      });
+      this.toastr.info('Deposit is on the go');
+      const receipt = await deposit.wait();
+      this.toastr.success(
+        'Wrapping of ' +
+          foundActiveNetwork.nativeCurrency.name +
+          ' was successful'
+      );
+      const coingeckoCoin = await firstValueFrom(
+        this.fromAddressToCgPipe.transform(
+          foundActiveNetwork.contracts.WRAP_ADDRESS
+        )
+      );
+      const value = this.formGroupERC20.controls['acoin'].getRawValue();
+      this.store.dispatch(
+        CoinsActions.selectCoinA({ selectACoin: coingeckoCoin })
+      );
+      this.formGroupERC20.controls['acoin'].reset();
+      this.formGroupERC20.controls['acoin'].patchValue(cloneDeep(value));
+    } catch (error) {
+      this.toastr.error('Upss. Something went wrong');
+    }
   }
 }

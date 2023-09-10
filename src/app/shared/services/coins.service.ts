@@ -3,13 +3,16 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ethers } from 'ethers';
 import {
+  Observable,
   catchError,
   combineLatest,
   filter,
+  firstValueFrom,
   forkJoin,
   from,
   map,
   of,
+  retry,
   switchMap,
   tap,
 } from 'rxjs';
@@ -50,18 +53,17 @@ export class CoinsService {
         coins = [...new Set([...coins, ...coinsFromCookies])];
         return coins.map((coin) => {
           let coinCloned = { ...coin };
-          let foundActiveNetwork = getNetwork(account.chainIdConnect);
           coinCloned.image = coin.image ?? '/assets/icons/question-mark.png';
-          coinCloned.amountOfToken$ = this.getAmountOfToken(
-            coin.platforms[foundActiveNetwork!.platformName]
-          );
+          coinCloned.amountOfToken$ = this.getAmountOfToken(coin.address);
           return coinCloned;
         });
       })
     );
   }
 
-  public getCoinInfoFromAddress(tokenAddress: string) {
+  public getCoinInfoFromAddress(
+    tokenAddress: string
+  ): Observable<CoingeckoCoin> {
     let provider: any;
     let account: Account;
     return from(this.providerService.getTools()).pipe(
@@ -71,10 +73,7 @@ export class CoinsService {
       }),
       switchMap((coinsFromCoinGecko) => {
         let foundCoin = coinsFromCoinGecko.find((coinCG) => {
-          let foundActiveNetwork = getNetwork(account.chainIdConnect);
-          return (
-            coinCG.platforms[foundActiveNetwork!.platformName] == tokenAddress
-          );
+          return coinCG.address == tokenAddress;
         });
         if (foundCoin) {
           return of(foundCoin);
@@ -85,8 +84,23 @@ export class CoinsService {
     );
   }
 
+  public getCoinDecimalsFromAddress(tokenAddress: string) {
+    let provider: any;
+    let account: Account;
+    return from(this.providerService.getTools()).pipe(
+      switchMap((tools) => {
+        [provider, , account] = tools;
+        const erc20 = new ethers.Contract(
+          tokenAddress,
+          erc20Object.abi,
+          provider
+        );
+        return erc20['decimals']();
+      })
+    );
+  }
+
   public getERC20Info(tokenAddress: string, provider: any, account: Account) {
-    let foundActiveNetwork = getNetwork(account.chainIdConnect);
     const erc20 = new ethers.Contract(tokenAddress, erc20Object.abi, provider);
     return forkJoin([
       erc20['name'](),
@@ -102,7 +116,7 @@ export class CoinsService {
           name: name,
           decimals,
           image: '/assets/icons/question-mark.png',
-          platforms: { [foundActiveNetwork!.platformName]: tokenAddress },
+          address: tokenAddress,
           amountOfToken$: of((balanceOf as any) / 10 ** decimals!),
         };
         this.addCustomCoinToCookiesBasedOnNetwork(account.chainIdConnect, coin);
@@ -129,10 +143,13 @@ export class CoinsService {
       switchMap((data) => {
         const [address, provider, contract] = data as any;
         return from((contract as any)['balanceOf'](address)).pipe(
-          map((value: any) => this.fromWeiToUnit.transform(value, tokenAddress))
+          map((value: any) => {
+            return this.fromWeiToUnit.transform(value, tokenAddress);
+          })
         );
       }),
       switchMap((value) => value),
+      retry(1),
       catchError((err) => {
         return of(0);
       })
@@ -153,10 +170,7 @@ export class CoinsService {
     const [, signer, , foundActiveNetwork] =
       await this.providerService.getTools();
 
-    const coinAContract = returnERC20InstanceFromAddress(
-      coin.platforms[foundActiveNetwork!.platformName],
-      signer
-    );
+    const coinAContract = returnERC20InstanceFromAddress(coin.address, signer);
 
     const otcContract = new ethers.Contract(
       foundActiveNetwork.contracts.OTC_PROXY,
@@ -183,5 +197,19 @@ export class CoinsService {
       JSON.parse(allCookies[entry])
     );
     return coins;
+  }
+  public async isCoinANativeCoin(): Promise<boolean> {
+    const [, , , foundActiveNetwork] = await this.providerService.getTools();
+    const aCoin = await firstValueFrom(
+      this.store.select((store) => store.selectCoinA)
+    );
+    if (
+      !!aCoin &&
+      aCoin.symbol.toLowerCase() ==
+        foundActiveNetwork.nativeCurrency.symbol.toLowerCase()
+    ) {
+      return true;
+    }
+    return false;
   }
 }

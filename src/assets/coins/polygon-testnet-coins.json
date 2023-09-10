@@ -1,0 +1,14 @@
+[
+  {
+    "id": "TokenA02",
+    "symbol": "TKA002",
+    "name": "TokenA02",
+    "address": "0x064604F2815c6615435Acc62217b50A6d80262FB"
+  },
+  {
+    "id": "TokenB02",
+    "symbol": "TKB002",
+    "name": "TokenB02",
+    "address": "0x3887b308be2Fe0691a13eCF5504AA0cD02D08168"
+  }
+]

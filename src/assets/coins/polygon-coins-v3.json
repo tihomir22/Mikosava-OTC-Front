@@ -1,0 +1,156 @@
+[
+  {
+    "id": "matic-network",
+    "symbol": "matic",
+    "name": "Polygon",
+    "image": "https://assets.coingecko.com/coins/images/4713/large/matic-token-icon.png?1624446912",
+    "address": "0x0000000000000000000000000000000000001010"
+  },
+  {
+    "id": "wmatic",
+    "symbol": "wmatic",
+    "name": "Wrapped Matic",
+    "image": "https://assets.coingecko.com/coins/images/14073/large/matic.png?1628852392",
+    "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270"
+  },
+  {
+    "id": "usd-coin",
+    "symbol": "usdc",
+    "name": "USD Coin",
+    "image": "https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png?1547042389",
+    "address": "0x2791bca1f2de4661ed88a30c99a7a9449aa84174"
+  },
+  {
+    "id": "wrapped-bitcoin",
+    "symbol": "wbtc",
+    "name": "Wrapped Bitcoin",
+    "image": "https://assets.coingecko.com/coins/images/7598/large/wrapped_bitcoin_wbtc.png?1548822744",
+    "address": "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6"
+  },
+  {
+    "id": "aave",
+    "symbol": "aave",
+    "name": "Aave",
+    "image": "https://assets.coingecko.com/coins/images/12645/large/AAVE.png?1601374110",
+    "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b"
+  },
+  {
+    "id": "uniswap",
+    "symbol": "uni",
+    "name": "Uniswap",
+    "image": "https://assets.coingecko.com/coins/images/12504/large/uniswap-uni.png?1600306604",
+    "address": "0xb33eaad8d922b1083446dc23f610c2567fb5180f"
+  },
+  {
+    "id": "quick",
+    "symbol": "quick",
+    "name": "Quickswap [OLD]",
+    "image": "https://assets.coingecko.com/coins/images/13970/large/1_pOU6pBMEmiL-ZJVb0CYRjQ.png?1613386659",
+    "address": "0x831753dd7087cac61ab5644b308642cc1c33dc13"
+  },
+  {
+    "id": "chainlink",
+    "symbol": "link",
+    "name": "Chainlink",
+    "image": "https://assets.coingecko.com/coins/images/877/large/chainlink-new-logo.png?1547034700",
+    "address": "0x53e0bca35ec356bd5dddfebbd1fc0fd03fabad39"
+  },
+  {
+    "id": "havven",
+    "symbol": "snx",
+    "name": "Synthetix Network",
+    "image": "https://assets.coingecko.com/coins/images/3406/large/SNX.png?1598631139",
+    "address": "0x50b728d8d964fd00c2d0aad81718b71311fef68a"
+  },
+  {
+    "id": "curve-dao-token",
+    "symbol": "crv",
+    "name": "Curve DAO",
+    "image": "https://assets.coingecko.com/coins/images/12124/large/Curve.png?1597369484",
+    "address": "0x172370d5cd63279efa6d502dab29171933a610af"
+  },
+  {
+    "id": "sushi",
+    "symbol": "sushi",
+    "name": "Sushi",
+    "image": "https://assets.coingecko.com/coins/images/12271/large/512x512_Logo_no_chop.png?1606986688",
+    "address": "0x0b3f868e0be5597d5db7feb59e1cadbb0fdda50a"
+  },
+  {
+    "id": "yearn-finance",
+    "symbol": "yfi",
+    "name": "yearn.finance",
+    "image": "https://assets.coingecko.com/coins/images/11849/large/yfi-192x192.png?1598325330",
+    "address": "0xda537104d6a5edd53c6fbba9a898708e465260b6"
+  },
+  {
+    "id": "balancer",
+    "symbol": "bal",
+    "name": "Balancer",
+    "image": "https://assets.coingecko.com/coins/images/11683/large/Balancer.png?1592792958",
+    "address": "0x9a71012b13ca4d3d0cdc72a177df3ef03b0e76a3"
+  },
+  {
+    "id": "the-sandbox",
+    "symbol": "sand",
+    "name": "The Sandbox",
+    "image": "https://assets.coingecko.com/coins/images/12129/large/sandbox_logo.jpg?1597397942",
+    "address": "0xbbba073c31bf03b8acf7c28ef0738decf3695683"
+  },
+  {
+    "id": "frax",
+    "symbol": "frax",
+    "name": "Frax",
+    "image": "https://assets.coingecko.com/coins/images/13422/large/ethCanonicalFRAX.png?1669277108",
+    "address": "0x45c32fa6df82ead1e2ef74d17b76547eddfaff89"
+  },
+  {
+    "id": "tether",
+    "symbol": "usdt",
+    "name": "Tether",
+    "image": "https://assets.coingecko.com/coins/images/325/large/Tether.png?1668148663",
+    "address": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f"
+  },
+  {
+    "id": "frontier-token",
+    "symbol": "front",
+    "name": "Frontier",
+    "image": "https://assets.coingecko.com/coins/images/12479/large/frontier_logo.png?1600145472",
+    "address": "0xa3ed22eee92a3872709823a6970069e12a4540eb"
+  },
+  {
+    "id": "rai",
+    "symbol": "rai",
+    "name": "Rai Reflex Index",
+    "image": "https://assets.coingecko.com/coins/images/14004/large/RAI-logo-coin.png?1613592334",
+    "address": "0x00e5646f60ac6fb446f621d146b6e1886f002905"
+  },
+  {
+    "id": "must",
+    "symbol": "must",
+    "name": "Must",
+    "image": "https://assets.coingecko.com/coins/images/13688/large/must_logo.png?1610949645",
+    "address": "0x9c78ee466d6cb57a4d01fd887d2b5dfb2d46288f"
+  },
+  {
+    "id": "hex",
+    "symbol": "hex",
+    "name": "HEX",
+    "image": "https://assets.coingecko.com/coins/images/10103/large/HEX-logo.png?1575942673",
+    "address": "0x23d29d30e35c5e8d321e1dc9a8a61bfd846d4c5c"
+  },
+  {
+    "id": "the-graph",
+    "symbol": "grt",
+    "name": "The Graph",
+    "image": "https://assets.coingecko.com/coins/images/13397/large/Graph_Token.png?1608145566",
+    "address": "0x5fe2b58c013d7601147dcdd68c143a77499f5531"
+  },
+  {
+    "id": "weth",
+    "symbol": "weth",
+    "name": "WETH",
+    "image": "https://assets.coingecko.com/coins/images/2518/large/weth.png?1628852295",
+    "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619"
+  }
+]

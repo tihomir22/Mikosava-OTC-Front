@@ -8,8 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { ChainIds } from './utils/chains';
-import PolygonCoins from '../assets/coins/polygon-coins.json';
-import PolygonCoinsToDisplay from '../assets/coins/polygon-coins-to-display.json';
+import PolygonCoins from '../assets/coins/polygon-coins-v3.json';
+import PolygonTestnetCoins from '../assets/coins/polygon-testnet-coins.json';
 import { AlchemyService } from './shared/services/alchemy.service';
 @Component({
   selector: 'app-root',
@@ -79,32 +79,13 @@ export class AppComponent {
     if (chainId == ChainIds.MAINNET_POLYGON) {
       this.store.dispatch(
         CoinsActions.setAllCoins({
-          newAllCoins: PolygonCoins.filter((coin) => {
-            return PolygonCoinsToDisplay.includes(coin.symbol.toUpperCase());
-          }),
+          newAllCoins: PolygonCoins,
         })
       );
     } else if (chainId == ChainIds.TESTNET_POLYGON) {
       this.store.dispatch(
         CoinsActions.setAllCoins({
-          newAllCoins: [
-            {
-              id: 'TokenA02',
-              symbol: 'TKA002',
-              name: 'TokenA02',
-              platforms: {
-                'polygon-pos': '0x064604F2815c6615435Acc62217b50A6d80262FB',
-              },
-            },
-            {
-              id: 'TokenB02',
-              symbol: 'TKB002',
-              name: 'TokenB02',
-              platforms: {
-                'polygon-pos': '0x3887b308be2Fe0691a13eCF5504AA0cD02D08168',
-              },
-            },
-          ],
+          newAllCoins: PolygonTestnetCoins,
         })
       );
     }
