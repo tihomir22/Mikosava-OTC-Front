@@ -32,65 +32,65 @@ export const list = [
     ],
     rpcs: ['https://json-rpc.evm.testnet.shimmer.network'],
   },
-  {
-    chainId: ChainIds.TESTNET_POLYGON,
-    contracts: {
-      OTC_PROXY: '0x81b47E8520f9E7431D6135fa6Bb60F2a4E221Fdc',
-      WRAP_ADDRESS: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
-    },
-    name: 'Mumbai Testnet',
-    interal_name_id: 'polygon-mumbai',
-    testnet: true,
-    asset: '/assets/icons/matic.png',
-    explorer: 'https://mumbai.polygonscan.com/tx/',
-    nativeCurrency: {
-      name: 'MATIC',
-      decimals: 18,
-      symbol: 'MATIC',
-      address: '0x0000000000000000000000000000000000001010',
-    },
-    //USDC WMATIC
-    easyAccessCoins: [
-      '0x992d00C09E1162Bda6D556A15d83e5050d300908',
-      '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
-    ],
-    rpcs: [
-      'https://polygon-testnet.public.blastapi.io',
-      'https://matic-testnet-archive-rpc.bwarelabs.com',
-      'https://matic-mumbai.chainstacklabs.com',
-    ],
-  },
-  {
-    chainId: ChainIds.MAINNET_POLYGON,
-    contracts: {
-      OTC_PROXY: '0xbeb8eEd57BaE1a1C6CDf060393d831b77A317408',
-      WRAP_ADDRESS: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
-    },
-    name: 'Polygon Mainnet',
-    interal_name_id: 'polygon-mainnet',
-    testnet: false,
-    asset: '/assets/icons/matic.png',
-    explorer: 'https://polygonscan.com/tx/',
-    nativeCurrency: {
-      name: 'MATIC',
-      decimals: 18,
-      symbol: 'MATIC',
-      address: '0x0000000000000000000000000000000000001010',
-    },
-    //TETHER,POLYGON,WMATIC,WETH,USDC
-    easyAccessCoins: [
-      '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-      // '0x0000000000000000000000000000000000001010',
-      '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
-      '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619',
-      '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-    ],
-    rpcs: [
-      'https://polygon.llamarpc.com',
-      'https://rpc-mainnet.matic.quiknode.pro',
-      'hhttps://matic-mainnet-archive-rpc.bwarelabs.com',
-    ],
-  },
+  // {
+  //   chainId: ChainIds.TESTNET_POLYGON,
+  //   contracts: {
+  //     OTC_PROXY: '0x81b47E8520f9E7431D6135fa6Bb60F2a4E221Fdc',
+  //     WRAP_ADDRESS: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+  //   },
+  //   name: 'Mumbai Testnet',
+  //   interal_name_id: 'polygon-mumbai',
+  //   testnet: true,
+  //   asset: '/assets/icons/matic.png',
+  //   explorer: 'https://mumbai.polygonscan.com/tx/',
+  //   nativeCurrency: {
+  //     name: 'MATIC',
+  //     decimals: 18,
+  //     symbol: 'MATIC',
+  //     address: '0x0000000000000000000000000000000000001010',
+  //   },
+  //   //USDC WMATIC
+  //   easyAccessCoins: [
+  //     '0x992d00C09E1162Bda6D556A15d83e5050d300908',
+  //     '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
+  //   ],
+  //   rpcs: [
+  //     'https://polygon-testnet.public.blastapi.io',
+  //     'https://matic-testnet-archive-rpc.bwarelabs.com',
+  //     'https://matic-mumbai.chainstacklabs.com',
+  //   ],
+  // },
+  // {
+  //   chainId: ChainIds.MAINNET_POLYGON,
+  //   contracts: {
+  //     OTC_PROXY: '0xbeb8eEd57BaE1a1C6CDf060393d831b77A317408',
+  //     WRAP_ADDRESS: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+  //   },
+  //   name: 'Polygon Mainnet',
+  //   interal_name_id: 'polygon-mainnet',
+  //   testnet: false,
+  //   asset: '/assets/icons/matic.png',
+  //   explorer: 'https://polygonscan.com/tx/',
+  //   nativeCurrency: {
+  //     name: 'MATIC',
+  //     decimals: 18,
+  //     symbol: 'MATIC',
+  //     address: '0x0000000000000000000000000000000000001010',
+  //   },
+  //   //TETHER,POLYGON,WMATIC,WETH,USDC
+  //   easyAccessCoins: [
+  //     '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
+  //     // '0x0000000000000000000000000000000000001010',
+  //     '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+  //     '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619',
+  //     '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+  //   ],
+  //   rpcs: [
+  //     'https://polygon.llamarpc.com',
+  //     'https://rpc-mainnet.matic.quiknode.pro',
+  //     'hhttps://matic-mainnet-archive-rpc.bwarelabs.com',
+  //   ],
+  // },
 ];
 
 export const getNetwork = (networkId: number) => {
