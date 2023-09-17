@@ -2,7 +2,13 @@ import { Injectable } from '@angular/core';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { Store } from '@ngrx/store';
 import { ethers } from 'ethers';
-import { distinctUntilChanged, filter, firstValueFrom } from 'rxjs';
+import {
+  BehaviorSubject,
+  Subject,
+  distinctUntilChanged,
+  filter,
+  firstValueFrom,
+} from 'rxjs';
 import { State } from 'src/app/reducers';
 import { getNetwork, list } from 'src/app/utils/chains';
 
@@ -10,6 +16,7 @@ import { getNetwork, list } from 'src/app/utils/chains';
   providedIn: 'root',
 })
 export class ProviderService {
+  public triggerBalanceUpdate: BehaviorSubject<any> = new BehaviorSubject(null);
   constructor(private store: Store<State>) {}
 
   public static async getWebProvider(requestAccounts = true) {

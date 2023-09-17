@@ -29,6 +29,7 @@ import { CloseTradeNftComponent } from './close-trade-nft/close-trade-nft.compon
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { FromAddressToCgPipe } from './shared/pipes/from-address-to-cg.pipe';
+import { DecimalPipe } from '@angular/common';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -75,7 +76,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     AgGridModule,
   ],
-  providers: [CookieService, FromAddressToCgPipe],
+  providers: [CookieService, FromAddressToCgPipe, DecimalPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,13 +1,5 @@
 <div class="d-flex">
   <ng-container *ngIf="trade.type == 'erc20'; else nftTemplateA">
-    <span>
-      {{
-        trade[params.lookOutKeyAmount]
-          | parseFromWeiToDecimalNumber : trade[params.lookOutKeyAddress]
-          | async
-          | number
-      }}
-    </span>
     <app-coin-img-badge
       [readOnly]="true"
       [src]="
@@ -19,6 +11,14 @@
       "
       [defaultLabel]="'Loading...'"
     ></app-coin-img-badge>
+    <span>
+      {{
+        trade[params.lookOutKeyAmount]
+          | parseFromWeiToDecimalNumber : trade[params.lookOutKeyAddress]
+          | async
+          | number : "1.1-18"
+      }}
+    </span>
   </ng-container>
   <ng-template #nftTemplateA>
     <div class="nft-info mx-2">

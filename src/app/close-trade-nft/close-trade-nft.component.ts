@@ -7,7 +7,6 @@ import { Account, State } from '../reducers';
 import { MikosavaNFTTRade } from '../shared/models/MikosavaTrade';
 import { ProviderService } from '../shared/services/provider.service';
 import MikosavaABI from '../../assets/MikosavaOTC.json';
-import { environment } from 'src/environments/environment';
 import { ethers } from 'ethers';
 import { returnERC721InstanceFromAddress } from '../utils/tokens';
 import { getStatus } from '../utils/utils';
@@ -15,11 +14,11 @@ import {
   ListNftsComponent,
   MikosavaNft,
 } from '../shared/components/list-nfts/list-nfts.component';
-import { AlchemyService } from '../shared/services/alchemy.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { IconNamesEnum } from 'ngx-bootstrap-icons';
 import * as NftActions from '../actions/nfts.actions';
 import { UtilsService } from '../shared/services/utils.service';
+import { getFeeForInternalPlatformId } from '../utils/chains';
 
 @Component({
   selector: 'app-close-trade-nft',
@@ -42,30 +41,29 @@ export class CloseTradeNftComponent {
     private toastr: ToastrService,
     private router: Router,
     private provider: ProviderService,
-    private alchemy: AlchemyService,
     private modalService: BsModalService,
     private utils: UtilsService
   ) {
     this.resolveData$ = this.route.data;
 
-    this.nftA = this.resolveData$.pipe(
-      switchMap(
-        (entry: any) =>
-          this.alchemy.getTokenMetadata(
-            entry.idTradeNft.nftAddressA,
-            entry.idTradeNft.nftIdA
-          ) as any
-      )
-    ) as Observable<MikosavaNft>;
-    this.nftB = this.resolveData$.pipe(
-      switchMap(
-        (entry: any) =>
-          this.alchemy.getTokenMetadata(
-            entry.idTradeNft.nftAddressB,
-            entry.idTradeNft.nftIdB
-          ) as any
-      )
-    ) as Observable<MikosavaNft>;
+    // this.nftA = this.resolveData$.pipe(
+    //   switchMap(
+    //     (entry: any) =>
+    //       this.alchemy.getTokenMetadata(
+    //         entry.idTradeNft.nftAddressA,
+    //         entry.idTradeNft.nftIdA
+    //       ) as any
+    //   )
+    // ) as Observable<MikosavaNft>;
+    // this.nftB = this.resolveData$.pipe(
+    //   switchMap(
+    //     (entry: any) =>
+    //       this.alchemy.getTokenMetadata(
+    //         entry.idTradeNft.nftAddressB,
+    //         entry.idTradeNft.nftIdB
+    //       ) as any
+    //   )
+    // ) as Observable<MikosavaNft>;
   }
 
   ngOnInit(): void {

@@ -3,9 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { delay, filter, map, noop, Observable, of, switchMap } from 'rxjs';
 import { Account, State } from 'src/app/reducers';
-import { getNetwork } from 'src/app/utils/chains';
+import { ChainIds, getNetwork } from 'src/app/utils/chains';
 import { ParseFromWeiToDecimalNumberPipe } from '../../pipes/parse-from-wei-to-decimal-number.pipe';
 import { ProviderService } from '../../services/provider.service';
+import { tap } from 'lodash';
 
 @Component({
   selector: 'app-navbar',
@@ -31,7 +32,7 @@ export class NavbarComponent {
       map((account) => getNetwork(account.chainIdConnect))
     );
     this.nativeCurrencyName$ = this.account$.pipe(
-      map((acount) => getNetwork(acount.chainIdConnect)?.nativeCurrency.symbol)
+      map((acount) => getNetwork(acount.chainIdConnect)?.nativeCurrency.name)
     );
     this.balance$ = this.account$.pipe(
       switchMap((account) => {

@@ -22,6 +22,7 @@ import { IconNamesEnum } from 'ngx-bootstrap-icons';
 import { returnERC20InstanceFromAddress } from 'src/app/utils/tokens';
 import { CoinsService } from 'src/app/shared/services/coins.service';
 import { getNetwork } from 'src/app/utils/chains';
+import { DecimalPipe } from '@angular/common';
 @Component({
   selector: 'app-erc20-swap',
   templateUrl: './erc20-swap.component.html',
@@ -42,7 +43,8 @@ export class Erc20SwapComponent {
     private modalService: BsModalService,
     private store: Store<State>,
     private providerService: ProviderService,
-    private coinService: CoinsService
+    private coinService: CoinsService,
+    private numberPipe: DecimalPipe
   ) {}
 
   ngOnInit(): void {}
@@ -89,7 +91,9 @@ export class Erc20SwapComponent {
         )) as number;
         if (amountCoinA > 0) amountToSet = amountCoinA * (amount / 100);
       }
-      this.formERC20.controls['acoin'].patchValue(amountToSet);
+      this.formERC20.controls['acoin'].patchValue(
+        this.numberPipe.transform(amountToSet, '1.1-18')
+      );
     } else {
       const coinB = await firstValueFrom(this.BCoin);
       if (!!coinB) {
@@ -99,7 +103,9 @@ export class Erc20SwapComponent {
 
         if (amountCoinB > 0) amountToSet = amountCoinB * (amount / 100);
       }
-      this.formERC20.controls['bcoin'].patchValue(amountToSet);
+      this.formERC20.controls['bcoin'].patchValue(
+        this.numberPipe.transform(amountToSet, '1.1-18')
+      );
     }
   }
   public async replaceSelected() {

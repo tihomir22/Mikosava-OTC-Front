@@ -17,7 +17,6 @@ html,
 body {
   height: 100%;
   width: 100%;
-  padding: 5px;
   box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
 }
@@ -45,4 +44,16 @@ body {
 /* Estilo para filas impares */
 .ag-row-odd-mikosava {
   background-color: lighten($primary, 60%);
+}
+
+app-progress-bar-renderer {
+  width: 100%;
+}
+
+body {
+  overflow: hidden;
+}
+
+.dropdown-menu{
+  width: fit-content !important;
 }

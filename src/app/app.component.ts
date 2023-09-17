@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { ChainIds } from './utils/chains';
 import PolygonCoins from '../assets/coins/polygon-coins-v3.json';
 import PolygonTestnetCoins from '../assets/coins/polygon-testnet-coins.json';
-import { AlchemyService } from './shared/services/alchemy.service';
+import ShimmerEvmTestnetCoins from '../assets/coins/shimmer-coins.json';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -23,7 +23,7 @@ export class AppComponent {
     private store: Store<any>,
     private translate: TranslateService,
     private router: Router,
-    private alchemy: AlchemyService
+    private provider: ProviderService
   ) {
     this.translate.use('en');
     this.addProviderEvents();
@@ -42,6 +42,14 @@ export class AppComponent {
       balance: balance as any,
     };
     this.setCoinsDependingOnNetwork(chainId);
+    this.provider.triggerBalanceUpdate.subscribe(async () => {
+      let balanceUpdated = await provider.getBalance(address);
+      let accountCloned = { ...account };
+      accountCloned.balance = balanceUpdated as any;
+      this.store.dispatch(
+        AccountActions.setAccount({ newAccount: accountCloned })
+      );
+    });
     provider.on('network', async (newNetwork, oldNetwork) => {
       this.store.dispatch(
         AccountActions.setNewNetwork({ networkId: newNetwork.chainId })
@@ -53,7 +61,6 @@ export class AppComponent {
       this.store.dispatch(
         AccountActions.setAccount({ newAccount: accountCloned })
       );
-      this.alchemy.switchNetwork(newNetwork.chainId);
       this.setCoinsDependingOnNetwork(newNetwork.chainId);
     });
     this.store.dispatch(AccountActions.setAccount({ newAccount: account }));
@@ -86,6 +93,12 @@ export class AppComponent {
       this.store.dispatch(
         CoinsActions.setAllCoins({
           newAllCoins: PolygonTestnetCoins,
+        })
+      );
+    } else if (chainId == ChainIds.SMR_EVM_TESTNET) {
+      this.store.dispatch(
+        CoinsActions.setAllCoins({
+          newAllCoins: ShimmerEvmTestnetCoins,
         })
       );
     }

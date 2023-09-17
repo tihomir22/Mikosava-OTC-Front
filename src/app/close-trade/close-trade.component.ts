@@ -14,6 +14,8 @@ import { IconNamesEnum } from 'ngx-bootstrap-icons';
 import { getStatus } from '../utils/utils';
 import { UtilsService } from '../shared/services/utils.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
+import { Location } from '@angular/common';
+import { getFeeForInternalPlatformId } from '../utils/chains';
 
 @Component({
   selector: 'app-close-trade',
@@ -43,7 +45,8 @@ export class CloseTradeComponent {
     private router: Router,
     private provider: ProviderService,
     private utils: UtilsService,
-    private bsModal: BsModalService
+    private bsModal: BsModalService,
+    private location: Location
   ) {
     this.resolveData$ = this.route.data;
   }
@@ -64,12 +67,23 @@ export class CloseTradeComponent {
         signer
       );
       this.toastr.info('Exchange is on the go');
-      let tx = await otcContract['closeOTCCPosition'](this.viewedTrade.tradeId);
+
+      const feePlatform = getFeeForInternalPlatformId(
+        foundActiveNetwork!.interal_name_id
+      );
+      const parsedDecimals =
+        feePlatform * 10 ** foundActiveNetwork!.nativeCurrency.decimals;
+      let tx = await otcContract['closeOTCCPosition'](
+        this.viewedTrade.tradeId,
+        {
+          value: BigInt(parsedDecimals),
+        }
+      );
       this.utils.displayTransactionDialog(tx.hash);
       const receipt = await tx.wait();
       this.bsModal.hide();
       this.toastr.success('The trade has been completed!');
-      this.router.navigate(['/list']);
+      this.location.back();
     } catch (error: any) {
       this.toastr.error(error.reason);
       this.bsModal.hide();
@@ -138,7 +152,7 @@ export class CloseTradeComponent {
       const receipt = await tx.wait();
       this.bsModal.hide();
       this.toastr.success('The trade has been cancelled!');
-      this.router.navigate(['/list']);
+      this.location.back();
     } catch (error: any) {
       this.toastr.error(error.reason);
       this.bsModal.hide();
@@ -146,6 +160,6 @@ export class CloseTradeComponent {
   }
 
   public goBack() {
-    this.router.navigate(['/list']);
+    this.location.back();
   }
 }

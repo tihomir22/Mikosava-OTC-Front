@@ -121,7 +121,7 @@ export class SwapComponent {
         this.allowance = await this.coinService.getAllowanceERC20(aCoin);
 
         this.allowanceAllowed =
-          (formAmount.acoin * 10 ** (coinDecimalsA as any)).toString() <
+          (formAmount.acoin * 10 ** (coinDecimalsA as any)).toString() <=
           this.allowance.toString();
       });
   }
@@ -136,7 +136,7 @@ export class SwapComponent {
       return ErrorErc20.POSITION_IS_ZERO;
     }
     //Check if desired amount exceeds balance
-    if (aCoinAmount >= aCoinBalance) {
+    if (aCoinAmount > aCoinBalance) {
       return ErrorErc20.MORE_THAN_BALANCE;
     }
 
@@ -176,7 +176,7 @@ export class SwapComponent {
     );
     const decimals = await coinAContract['decimals']();
     let amountParsedA = BigInt(
-      this.formGroupERC20.value.acoin * 1.1 * 10 ** decimals
+      Math.ceil(this.formGroupERC20.value.acoin * 10 ** decimals)
     );
 
     let tx = await coinAContract['approve'](
@@ -189,7 +189,14 @@ export class SwapComponent {
     const receipt = await tx.wait();
     this.toastr.success('The amount has been approved!');
     this.modalService.hide();
+    const coinDecimalsA = await firstValueFrom(
+      this.coinService.getCoinDecimalsFromAddress(selectedACoin.address)
+    );
     this.allowance = await this.coinService.getAllowanceERC20(selectedACoin);
+    const toStringAllowance = this.allowance.toString();
+    const amountParsed =
+      this.formGroupERC20.value.acoin * 10 ** (coinDecimalsA as any);
+    this.allowanceAllowed = amountParsed.toString() <= toStringAllowance;
   }
 
   public async openNftTrade() {
@@ -223,9 +230,9 @@ export class SwapComponent {
     );
     this.toastr.info('Approving is on the go');
     const receipt = await approval.wait();
-    const fees =
-      getFeeForInternalPlatformId(foundActiveNetwork!.interal_name_id) *
-      10 ** foundActiveNetwork!.nativeCurrency.decimals;
+    // const fees =
+    //   getFeeForInternalPlatformId(foundActiveNetwork!.interal_name_id) *
+    //   10 ** foundActiveNetwork!.nativeCurrency.decimals;
     try {
       let trade = await otcContract['createOTCNPosition'](
         nftAContract.address,
@@ -233,10 +240,10 @@ export class SwapComponent {
         nftA.tokenId,
         nftB.tokenId,
         this.validUntil * 1000,
-        !this.privateTrade,
-        {
-          value: fees,
-        }
+        !this.privateTrade
+        // {
+        //   value: fees,
+        // }
       );
       this.toastr.info('The trade is pending...');
       this.utils.displayTransactionDialog(trade.hash);
@@ -278,11 +285,11 @@ export class SwapComponent {
     const decimalsCoinB = await coinBContract['decimals']();
 
     let amountParsedA = BigInt(
-      this.formGroupERC20.value.acoin * 10 ** decimals
+      Math.ceil(this.formGroupERC20.value.acoin * 10 ** decimals)
     );
 
     let amountParsedB = BigInt(
-      this.formGroupERC20.value.bcoin * 10 ** decimalsCoinB
+      Math.ceil(this.formGroupERC20.value.bcoin * 10 ** decimalsCoinB)
     );
 
     try {
@@ -292,12 +299,12 @@ export class SwapComponent {
         amountParsedA.toString(),
         amountParsedB.toString(),
         this.validUntil * 1000,
-        !this.privateTrade,
-        {
-          value:
-            getFeeForInternalPlatformId(foundActiveNetwork!.interal_name_id) *
-            10 ** foundActiveNetwork!.nativeCurrency.decimals,
-        }
+        !this.privateTrade
+        // {
+        //   value:
+        //     getFeeForInternalPlatformId(foundActiveNetwork!.interal_name_id) *
+        //     10 ** foundActiveNetwork!.nativeCurrency.decimals,
+        // }
       );
       this.utils.displayTransactionDialog(trade.hash);
       this.toastr.info('The trade is pending...');
@@ -311,6 +318,7 @@ export class SwapComponent {
         CoinsActions.selectCoinB({ selectBCoin: null as any })
       );
       this.formGroupERC20.reset();
+      this.providerService.triggerBalanceUpdate.next(null);
       this.router.navigate(['/list']);
     } catch (error: any) {
       this.toastr.error(error.reason);
@@ -334,7 +342,9 @@ export class SwapComponent {
     try {
       const deposit = await wrapContract['deposit']({
         value: BigInt(
-          this.formGroupERC20.controls['acoin'].getRawValue() * 10 ** decimals
+          Math.ceil(
+            this.formGroupERC20.controls['acoin'].getRawValue() * 10 ** decimals
+          )
         ).toString(),
       });
       this.toastr.info('Deposit is on the go');

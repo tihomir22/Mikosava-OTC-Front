@@ -37,7 +37,9 @@
           <div class="coin-name ellipsify">{{ coin.name }}</div>
         </div>
         <div class="right-side">
-          <span class="px-1">{{ coin.amountOfToken$ | async | number }}</span>
+          <span class="px-1">{{
+            coin.amountOfToken$ | async | number : "1.1-18"
+          }}</span>
           <span class="coin-symbol text-muted">{{
             toUpperCase(coin.symbol)
           }}</span>

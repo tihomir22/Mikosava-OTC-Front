@@ -5,7 +5,6 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { Nft, OwnedBaseNft } from 'alchemy-sdk';
 import { cloneDeep, groupBy, noop } from 'lodash';
 import { IconNamesEnum } from 'ngx-bootstrap-icons';
 import {
@@ -17,7 +16,6 @@ import {
   of,
   switchMap,
 } from 'rxjs';
-import { AlchemyService } from '../../services/alchemy.service';
 
 import { ethers } from 'ethers';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -29,8 +27,14 @@ import * as NftActions from '../../../actions/nfts.actions';
 export interface GroupedNft {
   [address: string]: MikosavaNft[];
 }
-export interface MikosavaNft extends Nft {
+export interface MikosavaNft {
   identicon: string;
+  tokenId: string;
+  contract: any;
+  media: any;
+  title: string;
+  description: string;
+  timeLastUpdated: string;
 }
 @Component({
   selector: 'app-list-nfts',
@@ -57,16 +61,15 @@ export class ListNftsComponent {
   public dynamicGroupedNft: GroupedNft = {};
 
   constructor(
-    private alchemyService: AlchemyService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
     private store: Store<State>
   ) {
-    this.getNftsByWallet().subscribe((data) => {
-      this.originalGroupErc721 = groupBy(data, 'contract.address');
-      this.filteredGroupErc721 = { ...this.originalGroupErc721 };
-      this.searchValue = '';
-    });
+    // this.getNftsByWallet().subscribe((data) => {
+    //   this.originalGroupErc721 = groupBy(data, 'contract.address');
+    //   this.filteredGroupErc721 = { ...this.originalGroupErc721 };
+    //   this.searchValue = '';
+    // });
     this.form = this.fb.group({
       selectionDisplay: ['wallet', []],
     });
@@ -88,17 +91,19 @@ export class ListNftsComponent {
   }
 
   private async tryToGetAsCollection(address: string) {
-    const nftsResponse =
-      await this.alchemyService.getAllNftsByCollectionADdress(address);
-    if (nftsResponse.nfts.length == 0) throw new Error('No collection nfts');
-    return nftsResponse.nfts;
+    // const nftsResponse =
+    //   await this.alchemyService.getAllNftsByCollectionADdress(address);
+    // if (nftsResponse.nfts.length == 0) throw new Error('No collection nfts');
+    // return nftsResponse.nfts;
+    return [];
   }
 
   private async tryToGetAsUserWallet(address: string) {
-    const nftsResponse =
-      await this.alchemyService.getAllNftsOwnedBySpecificUser(address);
+    // const nftsResponse =
+    //   await this.alchemyService.getAllNftsOwnedBySpecificUser(address);
 
-    return nftsResponse.ownedNfts;
+    // return nftsResponse.ownedNfts;
+    return [];
   }
 
   public async searchChanged(event: string) {
@@ -176,9 +181,10 @@ export class ListNftsComponent {
   }
 
   private getNftsByWallet() {
-    return from(this.alchemyService.getAllNftsOwnedByCurrentUser()).pipe(
-      map((entry) => this.mapIdenticon(entry.ownedNfts as any))
-    );
+    // return from(this.alchemyService.getAllNftsOwnedByCurrentUser()).pipe(
+    //   map((entry) => this.mapIdenticon(entry.ownedNfts as any))
+    // );
+    return from([]);
   }
 
   private mapIdenticon(nfts: MikosavaNft[]) {

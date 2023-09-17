@@ -1,0 +1,72 @@
+[
+  {
+    "id": "SMR",
+    "symbol": "SMR",
+    "name": "Shimmer",
+    "image": "/assets/icons/smr.png",
+    "address": "0x1074010000000000000000000000000000000000"
+  },
+  {
+    "id": "USDC",
+    "symbol": "fUSDC",
+    "name": "USD Coin (Faucet)",
+    "image": "https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png?1547042389",
+    "address": "0x01ee95C34AeCAE1948aB618e467A6806b25fe7e4"
+  },
+  {
+    "id": "BTC",
+    "symbol": "fBTC",
+    "name": "Bitcoin (Faucet)",
+    "image": "https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579",
+    "address": "0x0871e701E588A00f9ad6a4Fa771145370F1AaC86"
+  },
+  {
+    "id": "ETH",
+    "symbol": "fETH",
+    "name": "Ethereum (Faucet)",
+    "image": "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880",
+    "address": "0x2712B407834605dceaF32df1BF51e49CA073F469"
+  },
+  {
+    "id": "AVAX",
+    "symbol": "fAVAX",
+    "name": "Avalanche (Faucet)",
+    "image": "https://assets.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png?1670992574",
+    "address": "0x406F63B52b6A3183b7c4183194b37E994251556C"
+  },
+  {
+    "id": "BUSD",
+    "symbol": "fBUSD",
+    "name": "Binance USD",
+    "image": "https://assets.coingecko.com/coins/images/9576/small/BUSD.png?1568947766",
+    "address": "0x16E5462e554fECc48e089b84e569f8fAA289CD08"
+  },
+  {
+    "id": "IOTA",
+    "symbol": "fIOTA",
+    "name": "IOTA (Faucet)",
+    "image": "https://assets.coingecko.com/coins/images/692/small/IOTA_Swirl.png?1604238557",
+    "address": "0xEA2f30e43Aa8f2E563F8079aF36F2e29d5DF25B9"
+  },
+  {
+    "id": "VOID",
+    "symbol": "VOID",
+    "name": "Tangleswap",
+    "image": "/assets/icons/void.png",
+    "address": "0xa7505C5Fe40a77C6EFbfe344BBAcAC007abc3F3B"
+  },
+  {
+    "id": "WEN",
+    "symbol": "WEN",
+    "name": "WEN Token",
+    "image": "/assets/icons/question-mark.png",
+    "address": "0xA7B08819220811d0Cc7Fc8AF80E22Db106E97c40"
+  },
+  {
+    "id": "MOON",
+    "symbol": "MOON",
+    "name": "MOON Token",
+    "image": "/assets/icons/question-mark.png",
+    "address": "0x183f49200E633e344Aa3f25Ed06e74c9B3e68c1E"
+  }
+]

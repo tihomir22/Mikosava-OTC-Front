@@ -3,10 +3,35 @@ import { environment } from 'src/environments/environment';
 export enum ChainIds {
   MAINNET_POLYGON = 137,
   TESTNET_POLYGON = 80001,
-  SMR_EVM_TESTNET = 1076,
+  SMR_EVM_TESTNET = 1072,
 }
 
 export const list = [
+  {
+    chainId: ChainIds.SMR_EVM_TESTNET,
+    contracts: {
+      OTC_PROXY: '0xb1F7F78393E8164a0bAfa174725aE78472124706',
+      WRAP_ADDRESS: 'X',
+    },
+    name: 'Shimmer EVM Testnet',
+    interal_name_id: 'shimmer-evm-testnet',
+    testnet: true,
+    asset: '/assets/icons/smr.png',
+    explorer: 'https://explorer.evm.testnet.shimmer.network/tx/',
+    nativeCurrency: {
+      name: 'SMR',
+      decimals: 18,
+      symbol: 'DISABLED_SMR',
+      address: '0x0000000000000000000000000000000000000000',
+    },
+    //SMR IOTA USDC
+    easyAccessCoins: [
+      '0x1074010000000000000000000000000000000000',
+      '0xEA2f30e43Aa8f2E563F8079aF36F2e29d5DF25B9',
+      '0x01ee95C34AeCAE1948aB618e467A6806b25fe7e4',
+    ],
+    rpcs: ['https://json-rpc.evm.testnet.shimmer.network'],
+  },
   {
     chainId: ChainIds.TESTNET_POLYGON,
     contracts: {
@@ -17,7 +42,6 @@ export const list = [
     interal_name_id: 'polygon-mumbai',
     testnet: true,
     asset: '/assets/icons/matic.png',
-    platformName: 'polygon-pos',
     explorer: 'https://mumbai.polygonscan.com/tx/',
     nativeCurrency: {
       name: 'MATIC',
@@ -47,7 +71,6 @@ export const list = [
     testnet: false,
     asset: '/assets/icons/matic.png',
     explorer: 'https://polygonscan.com/tx/',
-    platformName: 'polygon-pos',
     nativeCurrency: {
       name: 'MATIC',
       decimals: 18,
@@ -83,6 +106,9 @@ export const getFeeForInternalPlatformId = (internalPlatformId: string) => {
       found.interal_name_id == 'polygon-mainnet'
     ) {
       return environment.MATIC_FEE;
+      //SMR
+    } else if (found.interal_name_id == 'shimmer-evm-testnet') {
+      return environment.SMR_FEE;
     }
   }
   return -1;

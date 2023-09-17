@@ -24,7 +24,6 @@ import { CoingeckoCoin } from '../../models/CoinGeckoCoin';
 import { ProviderService } from '../../services/provider.service';
 import * as CoinsActions from '../../../actions/coins.actions';
 import { CoinsService } from '../../services/coins.service';
-import { AlchemyService } from '../../services/alchemy.service';
 
 @Component({
   selector: 'app-list-coins',
@@ -62,7 +61,7 @@ export class ListCoinsComponent {
             .includes(coin.symbol.toUpperCase())
       ),
     ];
-
+    console.log(this.originalCoins)
     this.quickAccessCoins$ = this.generateActiveCoins();
     this.filteredCoins = [...this.originalCoins];
     if (resetSearchValue) this.searchValue = '';

@@ -10,7 +10,6 @@ import {
   isEmptyAddress,
 } from 'src/app/utils/utils';
 import { environment } from 'src/environments/environment';
-import { MikosavaTrade } from '../../models/MikosavaTrade';
 import { ShareModalComponent } from '../share-modal/share-modal.component';
 import MikosavaABI from '../../../../assets/MikosavaOTC.json';
 import { ToastrService } from 'ngx-toastr';
@@ -19,11 +18,9 @@ import {
   ListNftsComponent,
   MikosavaNft,
 } from '../list-nfts/list-nfts.component';
-import { AlchemyService } from '../../services/alchemy.service';
 import { UtilsService } from '../../services/utils.service';
 import { Store } from '@ngrx/store';
 import { Account, State } from 'src/app/reducers';
-import { debounceTime, firstValueFrom, lastValueFrom } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   FilterDialogListTradesComponent,
@@ -211,7 +208,6 @@ export class ListTradesComponent {
     private modalService: BsModalService,
     private toastr: ToastrService,
     private provider: ProviderService,
-    private alchemy: AlchemyService,
     private utils: UtilsService,
     private store: Store<State>,
     private fb: FormBuilder,
@@ -292,14 +288,14 @@ export class ListTradesComponent {
       let bsModalRef = this.modalService.show(ListNftsComponent, {
         class: 'modal-dialog-centered',
       });
-      const alchemyResponse = await this.alchemy.getTokenMetadata(
-        address,
-        tokenId
-      );
+      // const alchemyResponse = await this.alchemy.getTokenMetadata(
+      //   address,
+      //   tokenId
+      // );
       if (bsModalRef.content) {
         bsModalRef.content.heightList = 650;
         bsModalRef.content.allowToSelectNft = false;
-        bsModalRef.content.selectTempNft = alchemyResponse as MikosavaNft;
+        //bsModalRef.content.selectTempNft = alchemyResponse as MikosavaNft;
         bsModalRef.content.unSelectNft.subscribe(() =>
           this.modalService.hide()
         );
@@ -367,5 +363,9 @@ export class ListTradesComponent {
 
   public isEmptyDate(tradeCreatedDate: Date): boolean {
     return tradeCreatedDate.getFullYear() == 1970;
+  }
+
+  public rowDoubleClicked(row: { data: ListTradeItem }) {
+    this.clickTradeItem.emit(row.data);
   }
 }
