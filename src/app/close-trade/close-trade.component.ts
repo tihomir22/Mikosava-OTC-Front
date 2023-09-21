@@ -16,6 +16,7 @@ import { UtilsService } from '../shared/services/utils.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Location } from '@angular/common';
 import { getFeeForInternalPlatformId } from '../utils/chains';
+import { CoinsService } from '../shared/services/coins.service';
 
 @Component({
   selector: 'app-close-trade',
@@ -26,35 +27,41 @@ export class CloseTradeComponent {
   public resolveData$!: Observable<Data>;
   public viewedTrade!: MikosavaTrade;
   public account!: Account;
-  public allowance: BigInt = BigInt(0);
   public iconNames = IconNamesEnum;
 
   public getAccount = this.provider.getAccountStream().pipe(
     tap(async (account) => {
-      this.allowance = await this.calculateAllowance(
-        this.viewedTrade.coinCounterpart
-      );
+      this.calculateApproval();
     })
   );
   public getStatus = getStatus;
+  public shouldBeApproved = false;
 
   constructor(
     private route: ActivatedRoute,
-    private store: Store<State>,
     private toastr: ToastrService,
-    private router: Router,
     private provider: ProviderService,
     private utils: UtilsService,
     private bsModal: BsModalService,
-    private location: Location
+    private location: Location,
+    private coin: CoinsService
   ) {
     this.resolveData$ = this.route.data;
   }
 
   ngOnInit(): void {
-    this.resolveData$.subscribe(
-      (data: any) => (this.viewedTrade = data.idTrade)
+    this.resolveData$.subscribe((data: any) => {
+      this.viewedTrade = data.idTrade;
+      this.calculateApproval();
+    });
+  }
+
+  private async calculateApproval() {
+    const positionCounterPart = this.viewedTrade.amountPositionCounterpart;
+    const allowance = await this.coin.getAllowanceERC20(
+      this.viewedTrade.coinCounterpart
     );
+    this.shouldBeApproved = positionCounterPart > allowance;
   }
 
   public async exchange() {
@@ -110,29 +117,9 @@ export class CloseTradeComponent {
     this.toastr.info('Approving is on the go');
     this.utils.displayTransactionDialog(tx.hash);
     const receipt = await tx.wait();
+    await this.calculateApproval();
     this.toastr.success('The amount has been approved!');
     this.bsModal.hide();
-    this.allowance = await this.calculateAllowance(
-      this.viewedTrade.coinCounterpart
-    );
-  }
-
-  private async calculateAllowance(erc20Address: string): Promise<BigInt> {
-    const [provider, signer, account, foundActiveNetwork] =
-      await this.provider.getTools();
-    const coinAContract = returnERC20InstanceFromAddress(erc20Address, signer);
-    const otcContract = new ethers.Contract(
-      foundActiveNetwork.contracts.OTC_PROXY,
-      MikosavaABI.abi,
-      signer
-    );
-
-    let allowance = await coinAContract['allowance'](
-      await signer.getAddress(),
-      otcContract.address
-    );
-
-    return allowance;
   }
 
   public async cancell() {

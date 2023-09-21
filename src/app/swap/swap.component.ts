@@ -118,7 +118,9 @@ export class SwapComponent {
         const coinDecimalsA = await firstValueFrom(
           this.coinService.getCoinDecimalsFromAddress(aCoin.address)
         );
-        this.allowance = await this.coinService.getAllowanceERC20(aCoin);
+        this.allowance = await this.coinService.getAllowanceERC20(
+          aCoin.address
+        );
 
         this.allowanceAllowed =
           (formAmount.acoin * 10 ** (coinDecimalsA as any)).toString() <=
@@ -192,7 +194,9 @@ export class SwapComponent {
     const coinDecimalsA = await firstValueFrom(
       this.coinService.getCoinDecimalsFromAddress(selectedACoin.address)
     );
-    this.allowance = await this.coinService.getAllowanceERC20(selectedACoin);
+    this.allowance = await this.coinService.getAllowanceERC20(
+      selectedACoin.address
+    );
     const toStringAllowance = this.allowance.toString();
     const amountParsed =
       this.formGroupERC20.value.acoin * 10 ** (coinDecimalsA as any);

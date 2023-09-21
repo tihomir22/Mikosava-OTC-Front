@@ -2,17 +2,17 @@
   [viewedTrade]="[viewedTrade] | fromMTtoLTI : 'single'"
   [displayExchangeButton]="
     (getAccount | async)?.address != viewedTrade.creator &&
-    allowance >= viewedTrade.amountPositionCounterpart &&
+    !shouldBeApproved &&
     !viewedTrade.cancelled &&
     !viewedTrade.sold
   "
   [disableExchangeButton]="getStatus(viewedTrade) != 'Open'"
   [displayApproveButton]="
+    shouldBeApproved &&
     (getAccount | async)?.address != viewedTrade.creator &&
-    allowance < viewedTrade.amountPositionCounterpart &&
-    !viewedTrade.cancelled &&
-    !viewedTrade.sold &&
-    getStatus(viewedTrade) != 'Expired'
+      !viewedTrade.cancelled &&
+      !viewedTrade.sold &&
+      getStatus(viewedTrade) != 'Expired'
   "
   [disableApproveButton]="getStatus(viewedTrade) != 'Open'"
   [displayCancelButton]="

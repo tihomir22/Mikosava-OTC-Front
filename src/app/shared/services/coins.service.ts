@@ -166,11 +166,11 @@ export class CoinsService {
     );
   }
 
-  public async getAllowanceERC20(coin: CoingeckoCoin): Promise<BigInt> {
+  public async getAllowanceERC20(address: string): Promise<BigInt> {
     const [, signer, , foundActiveNetwork] =
       await this.providerService.getTools();
 
-    const coinAContract = returnERC20InstanceFromAddress(coin.address, signer);
+    const coinAContract = returnERC20InstanceFromAddress(address, signer);
 
     const otcContract = new ethers.Contract(
       foundActiveNetwork.contracts.OTC_PROXY,

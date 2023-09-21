@@ -61,7 +61,6 @@ export class ListCoinsComponent {
             .includes(coin.symbol.toUpperCase())
       ),
     ];
-    console.log(this.originalCoins)
     this.quickAccessCoins$ = this.generateActiveCoins();
     this.filteredCoins = [...this.originalCoins];
     if (resetSearchValue) this.searchValue = '';
