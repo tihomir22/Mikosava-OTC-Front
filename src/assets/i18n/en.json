@@ -21,6 +21,7 @@
     "OPEN_NEW_TRADE": "Open new trade",
     "AVAILABLE_TIME": "Activate timer",
     "PRIVATE_TRADE": "Private trade",
+    "PRIVATE_TRADE_BY_ADDRESS": "Only allow a specific address to close",
     "PRIVATE_TRADE_TOOLTIP": "This trade would be yours. And only can be found if the direct link is sent to it.",
     "MY_TRADES": "My trades",
     "ALL_TRADES": "All trades",

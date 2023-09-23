@@ -4,6 +4,8 @@ import {
 } from '../shared/models/MikosavaTrade';
 import Identicon, { IdenticonOptions } from 'identicon.js';
 import { ListTradeItem } from '../shared/components/list-trades/list-trades.component';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { ethers } from 'ethers';
 
 export const truncateAddress = (address: string, length = 5) => {
   let first = address.substring(0, length);
@@ -25,7 +27,9 @@ export const copyClipboard = (val: string) => {
   document.body.removeChild(selBox);
 };
 
-export const isExpired = (trade: MikosavaTrade | ListTradeItem | MikosavaNFTTRade) => {
+export const isExpired = (
+  trade: MikosavaTrade | ListTradeItem | MikosavaNFTTRade
+) => {
   return +new Date() * 1000 > +trade.validUntil && +trade.validUntil != 0;
 };
 
@@ -58,4 +62,12 @@ export const generateIdenticonB64 = (
 export const isEmptyAddress = (address: string) => {
   const emptyAddress = /^0x0+$/.test(address);
   return emptyAddress;
+};
+
+export const isAddressValidator = (control: AbstractControl) => {
+  const address = control.value;
+  if (!ethers.utils.isAddress(address)) {
+    return { invalidEthereumAddress: true };
+  }
+  return null;
 };

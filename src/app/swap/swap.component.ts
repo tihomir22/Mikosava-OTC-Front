@@ -37,6 +37,7 @@ import { UtilsService } from '../shared/services/utils.service';
 import { TranslateService } from '@ngx-translate/core';
 import { FromAddressToCgPipe } from '../shared/pipes/from-address-to-cg.pipe';
 import { cloneDeep } from 'lodash';
+import { isAddressValidator } from '../utils/utils';
 export type TradingType = 'erc20' | 'erc721' | 'mixed';
 export enum ErrorErc20 {
   NO_ERROR = 0,
@@ -56,6 +57,9 @@ export class SwapComponent {
     acoin: [null, [Validators.required, Validators.min(0)]],
     bcoin: [null, [Validators.required, Validators.min(0)]],
   });
+  public generalForm: FormGroup = this.fb.group({
+    privateClosingAddress: ['', [isAddressValidator]],
+  });
   public ACoin: Observable<CoingeckoCoin> = this.store.select(
     (store) => store.selectCoinA
   );
@@ -71,6 +75,8 @@ export class SwapComponent {
   public activeTradingType: TradingType = 'erc20';
   public validUntil: number = 0;
   public privateTrade = false;
+  public privateTradeByAddress = false;
+  public privateAddressInput = '';
   public errorStateERC20: ErrorErc20 = ErrorErc20.NO_ERROR;
   public ErrorErc20MAP = ErrorErc20;
   public ENVIRONMENT = environment;
@@ -304,7 +310,10 @@ export class SwapComponent {
         amountParsedB.toString(),
         this.validUntil * 1000,
         !this.privateTrade,
-        ethers.constants.AddressZero
+        !!this.generalForm.get('privateClosingAddress')?.value &&
+          this.generalForm.get('privateClosingAddress')?.value.length > 0
+          ? this.generalForm.get('privateClosingAddress')?.value
+          : ethers.constants.AddressZero
       );
       this.utils.displayTransactionDialog(trade.hash);
       this.toastr.info('The trade is pending...');

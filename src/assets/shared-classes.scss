@@ -44,7 +44,7 @@ modal-container {
   background-color: $ternary;
 }
 
-app-swap {
+app-erc20-swap {
   input[type="text"],
   input[type="number"] {
     height: 60px;
@@ -52,22 +52,6 @@ app-swap {
     color: $primary !important;
   }
 }
-.large-text {
-  font-size: $large-text;
-}
-
-ngx-skeleton-loader {
-  span {
-    margin: 0px !important;
-  }
-}
-
-ng-select {
-  input {
-    height: 100% !important;
-  }
-}
-
 app-swap {
   input {
     background-color: lighten($ternary, 10%) !important;
@@ -83,6 +67,21 @@ app-swap {
   /* Firefox */
   input[type="number"] {
     -moz-appearance: textfield;
+  }
+}
+.large-text {
+  font-size: $large-text;
+}
+
+ngx-skeleton-loader {
+  span {
+    margin: 0px !important;
+  }
+}
+
+ng-select {
+  input {
+    height: 100% !important;
   }
 }
 

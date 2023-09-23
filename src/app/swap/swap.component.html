@@ -1,7 +1,7 @@
 <div
   class="h-100 w-100 d-flex justify-content-center align-items-center wrapper-swap"
 >
-  <div class="card otc-card shadow" [formGroup]="formGroupERC20">
+  <div class="card otc-card shadow">
     <div class="card-body">
       <div class="d-flex justify-content-between w-100">
         <span class="text-primary">{{ "TRADE.OPEN_TRADE" | translate }}</span>
@@ -29,7 +29,11 @@
           </button>
         </div>
       </div>
-      <div class="erc20" *ngIf="activeTradingType == 'erc20'">
+      <div
+        class="erc20"
+        *ngIf="activeTradingType == 'erc20'"
+        [formGroup]="formGroupERC20"
+      >
         <app-erc20-swap [formERC20]="formGroupERC20"></app-erc20-swap>
       </div>
 
@@ -56,6 +60,31 @@
               ><i-bs [name]="iconNames.QuestionCircle"></i-bs
             ></span>
           </div>
+        </div>
+      </div>
+      <div
+        class="row justify-content-center py-2"
+        *ngIf="privateTrade"
+        [formGroup]="generalForm"
+      >
+        <div class="row">
+          <div class="custom-control custom-checkbox d-flex align-items-center">
+            <app-toggle-button
+              [(toggled)]="privateTradeByAddress"
+            ></app-toggle-button>
+            <span class="custom-control-description">{{
+              "TRADE.PRIVATE_TRADE_BY_ADDRESS" | translate
+            }}</span>
+          </div>
+        </div>
+        <div class="row" *ngIf="!!privateTradeByAddress">
+          <input
+            type="text"
+            class="form-control"
+            aria-describedby="helpId"
+            placeholder="0x..."
+            formControlName="privateClosingAddress"
+          />
         </div>
       </div>
 
