@@ -54,13 +54,13 @@ export class DashboardComponent {
         return clonedTrade;
       }
     );
-    this.nftTrades = (await otcContract['fetchAllNftTrades']()).map(
-      (entry: MikosavaNFTTRade) => {
-        let clonedTrade = { ...entry };
-        clonedTrade.sortNo = Number(clonedTrade.tradeId);
-        return clonedTrade;
-      }
-    );
+    // this.nftTrades = (await otcContract['fetchAllNftTrades']()).map(
+    //   (entry: MikosavaNFTTRade) => {
+    //     let clonedTrade = { ...entry };
+    //     clonedTrade.sortNo = Number(clonedTrade.tradeId);
+    //     return clonedTrade;
+    //   }
+    // );
     this.tradesLoaded = true;
   }
 

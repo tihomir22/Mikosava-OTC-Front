@@ -1,0 +1,54 @@
+<form class="p-5 form-dialog-wrapper" [formGroup]="formGroup">
+  <p>
+    You can write a feedback or an issue you find here. We will review it and
+    give you a response Soon™!
+  </p>
+  <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Name</label>
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Name"
+      formControlName="name"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label"
+      >Email address</label
+    >
+    <input
+      type="email"
+      class="form-control"
+      placeholder="name@example.com"
+      formControlName="email"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlTextarea1" class="form-label">Feedback</label>
+    <textarea
+      class="form-control"
+      rows="6"
+      formControlName="feedback"
+    ></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="formFile" class="form-label">Attachment</label>
+    <input
+      class="form-control"
+      type="file"
+      id="formFile"
+      (change)="handleFileInput($event)"
+      accept="image/*"
+    />
+  </div>
+  <div class="mb-3">
+    <button
+      type="button"
+      class="btn btn-primary btn-lg btn-block w-100"
+      [disabled]="formGroup.invalid"
+      (click)="sendFeedback()"
+    >
+      Submit
+    </button>
+  </div>
+</form>

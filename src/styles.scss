@@ -54,6 +54,13 @@ body {
   overflow: hidden;
 }
 
-.dropdown-menu{
+.dropdown-menu {
   width: fit-content !important;
+}
+
+.modal-dialog {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  height: fit-content;
 }

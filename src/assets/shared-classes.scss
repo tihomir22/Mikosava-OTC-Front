@@ -44,11 +44,13 @@ modal-container {
   background-color: $ternary;
 }
 
-input[type="text"],
-input[type="number"] {
-  height: 60px;
-  font-size: $large-text !important;
-  color: $primary !important;
+app-swap {
+  input[type="text"],
+  input[type="number"] {
+    height: 60px;
+    font-size: $large-text !important;
+    color: $primary !important;
+  }
 }
 .large-text {
   font-size: $large-text;
@@ -207,6 +209,6 @@ app-toggle-button {
 .badge-mikosava {
   padding: 0px 3px !important;
   height: 100%;
-  background-color:  $secondary !important;
+  background-color: $secondary !important;
   margin: 0px 2px !important;
 }

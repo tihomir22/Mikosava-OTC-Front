@@ -303,12 +303,8 @@ export class SwapComponent {
         amountParsedA.toString(),
         amountParsedB.toString(),
         this.validUntil * 1000,
-        !this.privateTrade
-        // {
-        //   value:
-        //     getFeeForInternalPlatformId(foundActiveNetwork!.interal_name_id) *
-        //     10 ** foundActiveNetwork!.nativeCurrency.decimals,
-        // }
+        !this.privateTrade,
+        ethers.constants.AddressZero
       );
       this.utils.displayTransactionDialog(trade.hash);
       this.toastr.info('The trade is pending...');

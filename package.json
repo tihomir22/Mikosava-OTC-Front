@@ -33,6 +33,7 @@
     "@ngx-translate/http-loader": "^7.0.0",
     "@popperjs/core": "^2.11.6",
     "@schematics/angular": "^15.0.2",
+    "@sentry/angular-ivy": "^7.70.0",
     "ag-grid-angular": "^30.1.0",
     "ag-grid-community": "^30.1.0",
     "angularx-qrcode": "^15.0.0",

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -30,6 +30,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { FromAddressToCgPipe } from './shared/pipes/from-address-to-cg.pipe';
 import { DecimalPipe } from '@angular/common';
+import * as Sentry from '@sentry/angular-ivy';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -76,7 +77,17 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     AgGridModule,
   ],
-  providers: [CookieService, FromAddressToCgPipe, DecimalPipe],
+  providers: [
+    CookieService,
+    FromAddressToCgPipe,
+    DecimalPipe,
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler({
+        showDialog: false,
+      }),
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

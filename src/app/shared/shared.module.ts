@@ -47,6 +47,7 @@ import { PairDisplayerComponent } from './components/pair-displayer/pair-display
 import { IconDisplayerRendererComponent } from './components/icon-displayer-renderer/icon-displayer-renderer.component';
 import { ProgressBarRendererComponent } from './components/progress-bar-renderer/progress-bar-renderer.component';
 import { TableActionsComponent } from './components/table-actions/table-actions.component';
+import { FeedbackDialogComponent } from './components/feedback-dialog/feedback-dialog.component';
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -80,6 +81,7 @@ import { TableActionsComponent } from './components/table-actions/table-actions.
     IconDisplayerRendererComponent,
     ProgressBarRendererComponent,
     TableActionsComponent,
+    FeedbackDialogComponent,
   ],
   imports: [
     CommonModule,
