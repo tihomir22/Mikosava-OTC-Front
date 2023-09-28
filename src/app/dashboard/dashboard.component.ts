@@ -47,13 +47,13 @@ export class DashboardComponent {
       MikosavaABI.abi,
       signer
     );
-    this.trades = (await otcContract['fetchAllCoinTrades']()).map(
-      (entry: MikosavaTrade) => {
+    this.trades = (await otcContract['fetchAllCoinTrades']())
+      .map((entry: MikosavaTrade) => {
         let clonedTrade = { ...entry };
         clonedTrade.sortNo = Number(clonedTrade.tradeId);
         return clonedTrade;
-      }
-    );
+      })
+      .filter((entry: MikosavaTrade) => !entry.cancelled);
     // this.nftTrades = (await otcContract['fetchAllNftTrades']()).map(
     //   (entry: MikosavaNFTTRade) => {
     //     let clonedTrade = { ...entry };

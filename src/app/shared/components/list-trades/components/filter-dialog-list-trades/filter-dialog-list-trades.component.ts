@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { IdenticonOptions } from 'identicon.js';
 import { interval } from 'rxjs';
 import { Account } from 'src/app/reducers';
+import { CoinsService } from 'src/app/shared/services/coins.service';
 import { ProviderService } from 'src/app/shared/services/provider.service';
 import {
   generateIdenticonB64,
@@ -39,12 +40,17 @@ export class FilterDialogListTradesComponent {
     background: [255, 255, 255, 0],
     margin: 0.2,
   };
+  public coins = this.coinService.getAllCoinsForCurrentNetwork();
   private account!: Account;
   private EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 
   @Output() onApplyFilter = new EventEmitter<FiltersDialogListTrades>();
 
-  constructor(private fb: FormBuilder, private provider: ProviderService) {
+  constructor(
+    private fb: FormBuilder,
+    private provider: ProviderService,
+    private coinService: CoinsService
+  ) {
     this.form = this.fb.group({
       sellerAddress: [null],
       buyerAddress: [null],
@@ -77,8 +83,8 @@ export class FilterDialogListTradesComponent {
         this.form.get('buyerAddress')?.patchValue(null);
       }
     });
-  }
 
+  }
 
   public applyFilter() {
     this.onApplyFilter.emit({

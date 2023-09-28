@@ -4,6 +4,7 @@ export enum ChainIds {
   MAINNET_POLYGON = 137,
   TESTNET_POLYGON = 80001,
   SMR_EVM_TESTNET = 1072,
+  SMR_EVN_MAINNET = 148,
 }
 
 export const list = [
@@ -16,7 +17,7 @@ export const list = [
     name: 'Shimmer EVM Testnet',
     interal_name_id: 'shimmer-evm-testnet',
     testnet: true,
-    asset: '/assets/icons/smr.png',
+    asset: '/assets/icons/smr-testnet.png',
     explorer: 'https://explorer.evm.testnet.shimmer.network/tx/',
     nativeCurrency: {
       name: 'SMR',
@@ -31,6 +32,31 @@ export const list = [
       '0x01ee95C34AeCAE1948aB618e467A6806b25fe7e4',
     ],
     rpcs: ['https://json-rpc.evm.testnet.shimmer.network'],
+  },
+  {
+    chainId: ChainIds.SMR_EVN_MAINNET,
+    contracts: {
+      OTC_PROXY: '0xb1F7F78393E8164a0bAfa174725aE78472124706',
+      WRAP_ADDRESS: 'X',
+    },
+    name: 'Shimmer EVM Mainnet',
+    interal_name_id: 'shimmer-evm-mainnet',
+    testnet: true,
+    asset: '/assets/icons/smr.png',
+    explorer: 'https://explorer.evm.shimmer.network/tx/',
+    nativeCurrency: {
+      name: 'SMR',
+      decimals: 18,
+      symbol: 'DISABLED_SMR',
+      address: '0x0000000000000000000000000000000000000000',
+    },
+    //SMR APEIN WSMR
+    easyAccessCoins: [
+      '0x1074010000000000000000000000000000000000',
+      '0x264F2e6142CE8bEA68e5C646f8C07db98A9E003A',
+      '0x6C890075406C5DF08b427609E3A2eAD1851AD68D',
+    ],
+    rpcs: ['https://json-rpc.evm.shimmer.network'],
   },
   // {
   //   chainId: ChainIds.TESTNET_POLYGON,
@@ -107,7 +133,10 @@ export const getFeeForInternalPlatformId = (internalPlatformId: string) => {
     ) {
       return environment.MATIC_FEE;
       //SMR
-    } else if (found.interal_name_id == 'shimmer-evm-testnet') {
+    } else if (
+      found.interal_name_id == 'shimmer-evm-testnet' ||
+      found.interal_name_id == 'shimmer-evm-mainnet'
+    ) {
       return environment.SMR_FEE;
     }
   }

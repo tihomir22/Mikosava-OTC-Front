@@ -17,6 +17,7 @@ import {
   Observable,
   of,
   switchMap,
+  tap,
 } from 'rxjs';
 import { Account, State } from 'src/app/reducers';
 import { getNetwork, list } from 'src/app/utils/chains';
@@ -53,14 +54,7 @@ export class ListCoinsComponent {
     const coins = await firstValueFrom(
       this.coins.getAllCoinsForCurrentNetwork()
     );
-    this.originalCoins = [
-      ...coins.filter(
-        (coin) =>
-          !this.tokensToAvoidSymbol
-            .map((entry) => entry.toUpperCase())
-            .includes(coin.symbol.toUpperCase())
-      ),
-    ];
+    this.originalCoins = [...coins];
     this.quickAccessCoins$ = this.generateActiveCoins();
     this.filteredCoins = [...this.originalCoins];
     if (resetSearchValue) this.searchValue = '';
@@ -79,7 +73,9 @@ export class ListCoinsComponent {
         const [account, provider] = data;
         let foundActiveNetwork = getNetwork(account.chainIdConnect);
         let activeCoins = this.originalCoins.filter((originalCoin) =>
-          foundActiveNetwork?.easyAccessCoins.includes(originalCoin.address)
+          foundActiveNetwork?.easyAccessCoins
+            .map((entry) => entry.toLowerCase())
+            .includes(originalCoin.address.toLowerCase())
         );
         return [activeCoins, account, provider];
       }),

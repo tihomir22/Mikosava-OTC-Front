@@ -26,7 +26,7 @@ import {
   FilterDialogListTradesComponent,
   FiltersDialogListTrades,
 } from './components/filter-dialog-list-trades/filter-dialog-list-trades.component';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, GridReadyEvent } from 'ag-grid-community';
 import { IdenticoinComponent } from '../identicoin/identicoin.component';
 import { StatusDisplayerRendererComponent } from '../status-displayer-renderer/status-displayer-renderer.component';
 import {
@@ -75,7 +75,7 @@ export class ListTradesComponent {
     return this.tradesFiltered;
   }
   public tradesFiltered: ListTradeItem[] = [];
-  private _originalTrades: ListTradeItem[] = [];
+  public _originalTrades: ListTradeItem[] = [];
   @Input() tradesLoaded: boolean = false;
   @Input() form!: FormGroup;
   public iconNames = IconNamesEnum;
@@ -103,7 +103,7 @@ export class ListTradesComponent {
   @Output() viewNftDetails = new EventEmitter<[string, string]>();
   @Output() tradeCancelledSuccessfully = new EventEmitter<ListTradeItem>();
   @Output() clickedFilter = new EventEmitter<void>();
-  private filterApplied!: FiltersDialogListTrades;
+  public filterApplied!: FiltersDialogListTrades;
 
   public account?: Account;
   public ENVIRONMENT = environment;
@@ -115,6 +115,7 @@ export class ListTradesComponent {
       resizable: true,
       sortable: true,
       flex: 1,
+      minWidth: 60,
     },
     {
       field: 'receiver',
@@ -122,18 +123,21 @@ export class ListTradesComponent {
       resizable: true,
       sortable: true,
       flex: 1,
+      minWidth: 60,
     },
     {
       cellRenderer: StatusDisplayerRendererComponent,
       resizable: true,
-      sortable: true,
+      sortable: false,
       headerName: 'Status',
       flex: 1,
+      minWidth: 120,
     },
     {
       cellRenderer: PairDisplayerComponent,
       flex: 2,
       headerName: 'Asset A',
+      minWidth: 200,
       cellRendererParams: {
         onViewNftDetailsClick: (tokenAddress: string, amount: BigInt) => {
           this.viewNftDetails.emit([tokenAddress, amount as any]);
@@ -153,6 +157,7 @@ export class ListTradesComponent {
       cellRenderer: PairDisplayerComponent,
       flex: 2,
       headerName: 'Asset B',
+      minWidth: 200,
       cellRendererParams: {
         onViewNftDetailsClick: (tokenAddress: string, amount: BigInt) => {
           this.viewNftDetails.emit([tokenAddress, amount as any]);
@@ -166,6 +171,7 @@ export class ListTradesComponent {
       resizable: true,
       flex: 1,
       sortable: true,
+      minWidth: 120,
       valueFormatter: (params) => {
         if (this.isEmptyDate(params.data.createdAt)) {
           return 'Not known';
@@ -183,11 +189,12 @@ export class ListTradesComponent {
       resizable: true,
       sortable: true,
       flex: 1,
+      minWidth: 150,
       cellRenderer: ProgressBarRendererComponent,
     },
     {
       flex: 1,
-      maxWidth: 80,
+      minWidth: 220,
       cellRenderer: TableActionsComponent,
       cellRendererParams: {
         clickTradeItem: (trade) => {

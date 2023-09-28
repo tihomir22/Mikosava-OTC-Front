@@ -1,5 +1,7 @@
 <div
-  class="badge badge-pill badge-secondary mx-1 coin-pill d-flex justify-content-end"
+  class="badge badge-pill badge-secondary mx-1 coin-pill d-flex {{
+    centerClass
+  }}"
   [ngClass]="{ 'bg-primary': !coinLabel }"
 >
   <img class="img-logo mx-2" #refImg [src]="src" *ngIf="src" />

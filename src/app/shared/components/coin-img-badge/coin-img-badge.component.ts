@@ -13,6 +13,7 @@ export class CoinImgBadgeComponent {
   @Input() coinAddress: string = null as any;
   @Input() defaultLabel: string | 'Loading...' = '';
   @Input() readOnly = false;
+  @Input() centerClass = 'justify-content-end';
   public defaultValueForLabel = 'Loading...';
 
   public iconNames = IconNamesEnum;

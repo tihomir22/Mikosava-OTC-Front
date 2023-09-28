@@ -35,6 +35,11 @@
         </div>
       </div>
       <div class="actions">
+        <span
+          *ngIf="tradesFiltered.length != _originalTrades.length"
+          class="text-primary"
+          >Filters being applied.</span
+        >
         <button class="btn" (click)="clickedFilter.emit()">
           <i-bs
             [name]="iconNames.Funnel"
@@ -57,10 +62,11 @@
     </div>
 
     <ag-grid-angular
-      style="width: 100%; height: 635px"
       class="ag-theme-alpine"
+      style="width: 100%; height: 100%"
       [pagination]="true"
-      [paginationPageSize]="15"
+      [paginationPageSize]="10"
+      [domLayout]="'autoHeight'"
       [columnDefs]="colDefs"
       [rowData]="trades | sort : 'sortNo' : 'DESC'"
       [rowHeight]="60"
@@ -70,4 +76,3 @@
     ></ag-grid-angular>
   </ng-container>
 </div>
-

@@ -84,6 +84,13 @@ ng-select {
     height: 100% !important;
   }
 }
+.ng-select .ng-select-container {
+  height: 50px;
+}
+
+.ng-select.ng-select-single .ng-select-container {
+  height: 50px;
+}
 
 .card-body {
   padding: 30px 30px 15px 30px !important;
@@ -129,16 +136,16 @@ app-coin-img-badge {
   }
 }
 
-app-list-trades {
-  app-coin-img-badge {
-    img {
-      display: none !important;
-      @include media-breakpoint-up(lg) {
-        display: block !important;
-      }
-    }
-  }
-}
+// app-list-trades {
+//   app-coin-img-badge {
+//     img {
+//       display: none !important;
+//       @include media-breakpoint-up(lg) {
+//         display: block !important;
+//       }
+//     }
+//   }
+// }
 
 .bs-datepicker-head {
   background-color: $secondary !important;

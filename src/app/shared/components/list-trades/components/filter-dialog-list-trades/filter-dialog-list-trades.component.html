@@ -111,11 +111,13 @@
 
       <div class="select-input">
         <ng-select
-          [items]="tokenAddressesSell"
+          [items]="coins | async"
           [searchable]="true"
           [clearable]="true"
           formControlName="sellingTokenAddress"
           placeholder="Selling token"
+          bindLabel="name"
+          bindValue="address"
         >
           <ng-template
             ng-option-tmp
@@ -124,17 +126,11 @@
             let-search="searchTerm"
           >
             <div>
-              <img
-                class="identicon"
-                tooltip="{{ item | translate }}"
-                container="body"
-                placement="bottom"
-                [src]="
-                  'data:image/png;base64,' +
-                  transformToIdenticoin(item, options)
-                "
-              />
-              {{ truncate(item, 10) }}
+              <app-coin-img-badge
+                [src]="item?.image ?? ''"
+                [coinLabel]="item?.name ?? ''"
+                [centerClass]="'justify-content-between'"
+              ></app-coin-img-badge>
             </div>
           </ng-template>
         </ng-select>
@@ -142,11 +138,13 @@
 
       <div class="select-input">
         <ng-select
-          [items]="tokenAddressesBuy"
+          [items]="coins | async"
           [searchable]="true"
           [clearable]="true"
           formControlName="buyingTokenAddress"
           placeholder="Buying token"
+          bindLabel="name"
+          bindValue="address"
         >
           <ng-template
             ng-option-tmp
@@ -155,24 +153,19 @@
             let-search="searchTerm"
           >
             <div>
-              <img
-                class="identicon"
-                tooltip="{{ item | translate }}"
-                container="body"
-                placement="bottom"
-                [src]="
-                  'data:image/png;base64,' +
-                  transformToIdenticoin(item, options)
-                "
-              />
-              {{ truncate(item, 10) }}
+              <app-coin-img-badge
+                [src]="item?.image ?? ''"
+                [coinLabel]="item?.name ?? ''"
+                [centerClass]="'justify-content-between'"
+              ></app-coin-img-badge>
             </div>
           </ng-template>
         </ng-select>
       </div>
     </div>
     <div class="w-100 p-2">
-      <button (click)="applyFilter()"
+      <button
+        (click)="applyFilter()"
         type="button"
         name=""
         id=""

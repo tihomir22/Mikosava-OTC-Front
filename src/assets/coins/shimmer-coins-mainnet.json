@@ -1,0 +1,51 @@
+[
+  {
+    "id": "SMR",
+    "symbol": "SMR",
+    "name": "Shimmer",
+    "image": "/assets/icons/smr.png",
+    "address": "0x1074010000000000000000000000000000000000"
+  },
+  {
+    "id": "wSMR",
+    "symbol": "wSMR",
+    "name": "Wrapper Shimmer",
+    "image": "/assets/icons/smr.png",
+    "address": "0x6C890075406C5DF08b427609E3A2eAD1851AD68D"
+  },
+  {
+    "id": "APEin",
+    "symbol": "APEin",
+    "name": "ApeDao",
+    "image": "/assets/icons/apein.png",
+    "address": "0x264F2e6142CE8bEA68e5C646f8C07db98A9E003A"
+  },
+  {
+    "id": "FISH",
+    "symbol": "FISH",
+    "name": "BigFish",
+    "image": "/assets/icons/bigfish.png",
+    "address": "0xe051d1af4b1149FfB314C41C87E3501CFb961a73"
+  },
+  {
+    "id": "CHIP",
+    "symbol": "CHIP",
+    "name": "Chip",
+    "image": "/assets/icons/question-mark.png",
+    "address": "0x591cBF44b2601bD755A40472DB753E74EE65A2A9"
+  },
+  {
+    "id": "SOON",
+    "symbol": "SOON",
+    "name": "Soonaverse (SOON)",
+    "image": "/assets/icons/question-mark.png",
+    "address": "0x11e7095794a5B14f5b10AE4659448A4B3281816C"
+  },
+  {
+    "id": "ASSMB",
+    "symbol": "ASSMB",
+    "name": "Assembly Meme Coin",
+    "image": "/assets/icons/assmb.png",
+    "address": "0x2F69dC2d27051493C775e4d36Be2bEBA5d7093E8"
+  }
+]

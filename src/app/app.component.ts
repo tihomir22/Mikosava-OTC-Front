@@ -10,6 +10,7 @@ import { ChainIds } from './utils/chains';
 import PolygonCoins from '../assets/coins/polygon-coins-v3.json';
 import PolygonTestnetCoins from '../assets/coins/polygon-testnet-coins.json';
 import ShimmerEvmTestnetCoins from '../assets/coins/shimmer-coins.json';
+import ShimmerEvmCoins from '../assets/coins/shimmer-coins-mainnet.json';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { FeedbackDialogComponent } from './shared/components/feedback-dialog/feedback-dialog.component';
 import { IconNamesEnum } from 'ngx-bootstrap-icons';
@@ -109,6 +110,12 @@ export class AppComponent {
       this.store.dispatch(
         CoinsActions.setAllCoins({
           newAllCoins: ShimmerEvmTestnetCoins,
+        })
+      );
+    } else if (chainId == ChainIds.SMR_EVN_MAINNET) {
+      this.store.dispatch(
+        CoinsActions.setAllCoins({
+          newAllCoins: ShimmerEvmCoins,
         })
       );
     }
